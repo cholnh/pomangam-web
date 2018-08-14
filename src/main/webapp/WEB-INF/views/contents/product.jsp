@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -27,37 +27,135 @@
   <link href="resources/css/custom.css" rel="stylesheet" type="text/css">
 	
 </head>
-<body>
+<body style="background-color: #FFF">
 
   <!-- Navbar -->
 
   <nav class="navbar px-navbar sticky">
     <div class="container">
       <div class="navbar-header">
-        <a href="index.html" class="scroll-to navbar-brand"><b>Mr. Porter</b></a>
+        <a href="./" class="scroll-to navbar-brand"><b>Mr. Porter</b></a>
       </div>
 
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false"><i class="navbar-toggle-icon"></i></button>
 
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="index.html" class="scroll-to">주문하기</a></li>
-          <li><a href="index.html" class="scroll-to">고객센터</a></li>
-          <li><a href="index.html" class="scroll-to">로그인</a></li>
+          <li><a href="./" class="scroll-to">주문하기</a></li>
+          <li><a href="./" class="scroll-to">고객센터</a></li>
+          <li><a href="./login.do" class="scroll-to">로그인</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-	<div class="container" style="margin-top:150px">
-
+	<div class="container center" style="margin-top:50px">
+		<!-- Target Info -->
+        <div class="n-center" style="margin-top:16px">
+            <a href="#" class="valign-middle n-noborder">
+                <img src="resources/img/menu/20.jpg" alt="엽기떡볶이" class="n-product-icon n-card" />
+            </a>
+            <div style="margin:12px">
+                <span style="font-size: 20px; font-weight: bold;">화이트 갈릭버거</span>
+            </div>
+            <a class="btn btn-primary " style="font-size:10px!important;padding:3px">57개 남음</a>
+            <div style="margin-top:18px">
+                
+                <input type="number" style="width:40px" min=0 value=1> 개
+                <span style="color: #f3753a; font-weight: bold; margin-left: 12px; font-size: 15px;">
+                    6,000원
+                </span>
+            </div>
+			<div class="n-margin">
+				<button class="btn border-round" style="background-color: darkgray; color:white">장바구니 담기</button>
+				<button class="btn btn-primary border-round">바로 주문</button>
+			</div>
+			
+        </div>
+		
+		<!-- Detail Description -->
+        <hr>
+		<div class="n-center" style="">
+			<div class="n-product-desc">
+				크림처럼 부드러운 화이트 갈릭 소스에<br>
+				프리미엄 더블햄과 통가슴살 패티까지<br>
+				하나에 다 담은 묵직한 버거!<br>
+			</div>
+			<div style="width:60%!important;margin-top:64px; display: inline-block;text-align: left">
+				<div class="n-on-pc">
+					<b>영양성분</b> (1일 영양소 기준치에 대한 비율)
+					<table class="table table-striped n-border">
+						<thead>
+							<tr>
+								<th>1회제공량(g)</th>
+								<th>칼로리(kcal)</th>
+								<th>나트륨(mg)</th>
+								<th>당류(g)</th>
+								<th>포화지방(g)</th>
+								<th>단백질(g)</th>
+								<th>세트중량</th>
+								<th>세트칼로리</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">247</th>
+								<td>572</td>
+								<td>911(46)</td>
+								<td>2</td>
+								<td>7(47)</td>
+								<td>38(69)</td>
+								<td>647</td>
+								<td>1022</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+            <div class="" style="margin-top:32px">
+                <h2 class="landing-heading text-xs-center">추천상품</h2>
+                <a href="#" class="valign-middle n-noborder">
+                    <img src="resources/img/menu/3.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                </a>
+                 <a href="#" class="valign-middle n-noborder">
+                    <img src="resources/img/menu/5.JPG" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                </a>
+                 <a href="#" class="valign-middle n-noborder">
+                    <img src="resources/img/menu/7.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                </a>
+                 <a href="#" class="valign-middle n-noborder">
+                    <img src="resources/img/menu/12.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                </a>
+            </div>
+		</div>
+       
+        <div class="n-menu-bottombtn n-on-mobile">
+            <button class="btn btn-primary border-round">17,000원 결제하기</button>
+        </div>
+        
 	</div>
 	
+	
   <!-- Footer -->
-
-  <div class="px-footer" style="position: fixed;bottom: 0; width: 100%">
-    <span class="text-muted">Copyright © 2017 Your Company. All rights reserved.</span>
+<footer class="n-footer">
+  <button type="button" class="btn btn-primary btn-3d" onclick="goTop()">
+	  <i class="fa fa-arrow-up" style="margin-right: 12px"></i>To the top
+  </button>
+  <div class=" " style="font-size:24px!important;margin-top:16px!important;margin-bottom:16px!important">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-envelope w3-hover-opacity"></i>
+    <i class="fa fa-bookmark w3-hover-opacity"></i>
   </div>
+  <p style="font-size:11px; color:darkgray">123-45 JANGDANG-DONG , GANGNAM-GU, SEOUL, KOREA<br>
+      TEL +82.10-5843-0627 / FAX +82.2.123.4567 / BUSSINESS NO. 546 05 00933<br>
+      REPRESENTATIVE. CHOI, EUN SEONG</p>
+  <p style="font-size:11px; color:black">
+      COPYRIGHT © <b>Mr.Porter Corp.</b>
+      ALL RIGHTS RESERVED.
+  </p>
+</footer>
 
   <!-- ==============================================================================
   |
@@ -72,125 +170,8 @@
   <script src="resources/js/bootstrap.min.js"></script>
   <script src="resources/js/pixeladmin.min.js"></script>
 
-  <!-- Landing page dependencies -->
-  <script src="resources/js/jquery.waypoints.min.js"></script>
-  <script src="resources/js/jquery.scrollTo.min.js"></script>
-  <script src="resources/js/lazysizes.min.js"></script>
+  <script src="resources/js/common.js"></script>
 
-  <!-- Landing page JS -->
-  <script src="resources/js/landing.js"></script>
-	
-  <script src="js/bootstrap-datepicker.min.js"></script>
-  <script src="js/bootstrap-datepicker.ko.min.js"></script>
-	
-<script>
-$(document).ready(function() {
-    
-    var navListItems = $('ul.setup-panel li a'),
-        allWells = $('.setup-content');
 
-    allWells.hide();
-
-    navListItems.click(function(e)
-    {
-        e.preventDefault();
-        var $target = $($(this).attr('href')),
-            $item = $(this).closest('li');
-        
-        if (!$item.hasClass('disabled')) {
-            navListItems.closest('li').removeClass('active');
-            $item.addClass('active');
-            allWells.hide();
-            $target.show();
-        }
-    });
-    
-    $('ul.setup-panel li.active a').trigger('click');
-    
-    // DEMO ONLY //
-    $('#activate-step-2').on('click', function(e) {
-        $('ul.setup-panel li:eq(1)').removeClass('disabled');
-        $('ul.setup-panel li a[href="#step-2"]').trigger('click');
-    });   
-	
-	$('#activate-step-3').on('click', function(e) {
-        $('ul.setup-panel li:eq(2)').removeClass('disabled');
-        $('ul.setup-panel li a[href="#step-3"]').trigger('click');
-    }); 
-	
-	$('#activate-step-2-back').on('click', function(e) {
-        $('ul.setup-panel li a[href="#step-1"]').trigger('click');
-    }); 	
-	
-	$('#activate-step-3-back').on('click', function(e) {
-        $('ul.setup-panel li a[href="#step-2"]').trigger('click');
-    }); 
-	
-	// tag
-	$(function() {
-    var $el = $('#bs-tagsinput-1');
-
-    $el.tagsinput({
-      itemValue: 'value',
-      itemText:  'text',
-	  tagClass: 'label label-default'
-    });
-	
-    $el.tagsinput('add', { value: 1,  text: '문제풀이',  continent: 'Europe' });
-    $el.tagsinput('add', { value: 4,  text: '보고서', continent: 'America' });
-    $el.tagsinput('add', { value: 7,  text: '자소서',     continent: 'Australia' });
-    $el.tagsinput('add', { value: 10, text: 'PPT',    continent: 'Asia' });
-    $el.tagsinput('add', { value: 13, text: '논문',      continent: 'Africa' });
-	
-		
-	// note
-	$(function() {
-      $('#summernote-base').summernote({
-        height: 200,
-        toolbar: [
-          ['parastyle', ['style']],
-          ['fontstyle', ['fontname', 'fontsize']],
-          ['style', ['bold', 'italic', 'underline', 'clear']],
-          ['font', ['strikethrough', 'superscript', 'subscript']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['height', ['height']],
-          ['insert', ['picture', 'link', 'video', 'table', 'hr']],
-          ['history', ['undo', 'redo']],
-          ['misc', ['codeview', 'fullscreen']],
-          ['help', ['help']]
-        ],
-      });
-    });
-  });
-	
-  $("#expdate").datepicker({
-		autoclose : true,
-		startDate : "+1d",
-		language : "ko",
-		todayHighlight : true
-  });	
-  $("#enddate").datepicker({
-		autoclose : true,
-		startDate : "+1d",
-		language : "ko",
-		todayHighlight : true
-  });
-  $('#expdate').datepicker();
-  $('#enddate').datepicker();
-});
-	
-function toggle(el) {
-	console.log(el);
-	$el = $(el);
-	if($el.hashasClass('active')) {
-		console.log('true');
-		$el.removeClass('active');
-	} else {
-		$el.addClass('active');
-	}
-	
-}
-</script>
 </body>
 </html>
