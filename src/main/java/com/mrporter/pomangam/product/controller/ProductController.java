@@ -1,4 +1,4 @@
-package com.mrporter.pomangam.target.controller;
+package com.mrporter.pomangam.product.controller;
 
 import java.io.IOException;
 
@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
-import com.mrporter.pomangam.target.dao.TargetCrudDAO;
-import com.mrporter.pomangam.target.vo.TargetBean;
+import com.mrporter.pomangam.product.dao.ProductCrudDAO;
+import com.mrporter.pomangam.product.vo.ProductBean;
 
 @Controller
-public class TargetController {
+public class ProductController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TargetController.class);
-	private static final String MAPPINGNAME = "target"; 
-	private static TargetCrudDAO defaultDAO = new TargetCrudDAO();
+	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+	private static final String MAPPINGNAME = "product"; 
+	private static ProductCrudDAO defaultDAO = new ProductCrudDAO();
 	
 	@RequestMapping(value = "/"+MAPPINGNAME+".do")
 	public ModelAndView openIndexPage() throws Exception {
 		
 		ModelAndView model = new ModelAndView();
 		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("fields", defaultDAO.getFields(TargetBean.class));
+		model.addObject("fields", defaultDAO.getFields(ProductBean.class));
 		return model;
 	}
 	

@@ -32,20 +32,111 @@
 	<nav id="nav" class="navbar px-navbar sticky">
 		<div class="container">
 			<div class="navbar-header">
-				<a href="./" class="scroll-to navbar-brand"><b>Mr.Porter</b></a>
+				<a id="header-home" href="./" class="scroll-to navbar-brand"><b>Mr. Porter</b></a>
+				<a id="header-back" href="javascript:history.back()" class="scroll-to navbar-brand" style="display:none">
+					<i class="fa fa-arrow-left" style="font-size:20px!important"></i>
+				</a>
 			</div>
-		
+
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target=".navbar-collapse"
 				aria-expanded="false">
 				<i class="navbar-toggle-icon"></i>
 			</button>
-		
+
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-right">
-          <li><a href="./" class="scroll-to">주문하기</a></li>
-          <li><a href="./" class="scroll-to">고객센터</a></li>
-          <li><a href="./login.do" class="scroll-to">로그인</a></li>
+					<li>
+						<div class="n-dropdown-hover n-transparent n-right n-on-pc" style="width:100px; text-align:center">
+							<a href="./cart.do" class="scroll-to">장바구니&nbsp;(3)</a>
+							<div class="n-dropdown-content n-card-4"
+								style="width: 350px; right: 0">
+								<div class="" style="text-align: center">
+									<h4><b>총 22,000원</b></h4>
+								</div>
+								
+								<div style="text-align:right; margin-right:12px">
+									<button class="btn btn-secondary n-small">전체삭제</button>
+								</div>
+								<div style="text-align: left;margin:12px">
+									<table class="table table-hover">
+										<thead>
+										</thead>
+										<colgroup>
+					                        <col style="width:70px">
+					                        <col style="width: 220px;">
+					                        <col style="width: 20px">
+					                    </colgroup>
+										<tbody>
+											<tr>
+												<td>
+													<a href="#" class="valign-middle n-noborder">
+						                                <img src="resources/img/restaurant/1.jpg" alt="화이트 갈릭버거" class="n-cart-icon" />
+													</a>
+												</td>
+												<td>
+													<div class="row" style="margin-left:12px">
+														<span><b>화이트 갈릭버거</b></span>
+													</div>
+													<div class="row" style="margin-left:12px">
+														<b>6,000원</b>
+														<input type="number" min=1 value=1 style="width:40px;margin-left:6px">
+													</div>
+												</td>
+												<td>
+													<i class="fa fa-remove"></i>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<a href="#" class="valign-middle n-noborder">
+						                                <img src="resources/img/restaurant/2.jpg" alt="화이트 갈릭버거" class="n-cart-icon" />
+													</a>
+												</td>
+												<td>
+													<div class="row" style="margin-left:12px">
+														<span><b>화이트 갈릭버거</b></span>
+													</div>
+													<div class="row" style="margin-left:12px">
+														<b>6,000원</b>
+														<input type="number" min=1 value=1 style="width:40px;margin-left:6px">
+													</div>
+												</td>
+												<td>
+													<i class="fa fa-remove"></i>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<a href="#" class="valign-middle n-noborder">
+						                                <img src="resources/img/restaurant/3.jpg" alt="화이트 갈릭버거" class="n-cart-icon" />
+													</a>
+												</td>
+												<td>
+													<div class="row" style="margin-left:12px">
+														<span><b>화이트 갈릭버거</b></span>
+													</div>
+													<div class="row" style="margin-left:12px">
+														<b>6,000원</b>
+														<input type="number" min=1 value=1 style="width:40px;margin-left:6px">
+													</div>
+												</td>
+												<td>
+													<i class="fa fa-remove"></i>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									
+									<div class="n-center" style="margin-top:32px;margin-bottom:32px">
+										<button class="btn btn-primary" style="width:60%;font-size:20px;font-weight:bold" 
+											onclick="location.href='./payment.do'">결제하기</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li><a href="./login.do" class="scroll-to">로그인</a></li>
 				</ul>
 			</div>
 		</div>

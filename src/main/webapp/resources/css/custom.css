@@ -1,5 +1,7 @@
 .n-container{padding:0.01em 16px; margin:12px}
 
+.n-restaurant-bottombtn{text-align: center!important; position:fixed;z-index: 1;background-color:white;width:100%;height:200px;}
+
 .n-login-container{padding:0.01em 3px; margin:6px}
 
 .n-card{box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
@@ -20,13 +22,25 @@
 
 .n-margin-right16{margin-right:16px}
 
+.n-product-desc{width:40%!important; text-align: left;display: inline-block}
+
 .n-subtitle{font-size:20px}
+
+.n-dropdown-hover{position:relative;display:inline-block;cursor:pointer}
+.n-dropdown-hover:hover .n-dropdown-content{display:block}
+.n-dropdown-hover:first-child,.n-dropdown-click:hover{background-color:#ccc;color:#000}
+.n-dropdown-hover:hover > .n-button:first-child,.n-dropdown-click:hover > .n-button:first-child{background-color:#ccc;color:#000}
+.n-dropdown-content{cursor:auto;color:#000;background-color:#fff;display:none;position:absolute;min-width:160px;margin:0;padding:0;z-index:1}
+
+.n-dropdown-hover, .n-dropdown-click{position:static;float:left}
+
+.n-target-detailinfo{width: 500px;left: 50%;transform: translate(-50%);z-index:2}
 
 .n-search{max-width: 500px; margin: 0 auto;}
 
 .n-content{max-width:980px;margin:auto}
 
-.n-main-icon{height:100px;width:80px;border:1px solid #000!important;padding:3px;}
+.n-main-icon{height:100px;width:80px;padding:3px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);margin:7px}
 
 .n-loginContent{max-width:1100px; margin-top:230px; margin-bottom:240px;}
 
@@ -34,9 +48,13 @@
 
 .center{margin: auto;width: 50%;padding: 10px;}
 
-.n-target-center{margin: auto;width: 70%;padding: 10px}
+.n-target-center{margin: auto;width: 70%}
+
+.n-restaurant-center{margin: auto;width: 80%;padding: 10px}
 
 .n-center .n-bar{display:inline-block;width:auto;text-align:center}
+
+.n-restaurant-layout{position:relative;min-height:1px;padding-left:11px;padding-right:11px}
 
 .n-container:after,.n-container:before,.n-panel:after,.n-panel:before,.n-row:after,.n-row:before,.n-row-padding:after,.n-row-padding:before,
 .n-cell-row:before,.n-cell-row:after,.n-clear:after,.n-clear:before,.n-bar:before,.n-bar:after{content:"";display:table;clear:both}
@@ -61,7 +79,13 @@
 
 .n-target-category{text-align:center!important;font-size: 12px;font-weight: bold;}
 
-.n-target-icon{height:80px;width:80px;border:1px solid #000!important;padding:3px;}
+.n-restaurant-icon{height:80px;width:80px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}
+
+.n-cart-icon{height:60px;width:60px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}
+
+.n-product-icon{height:150px;width:150px;padding:3px;}
+
+.n-target-icon{height:80px;width:80px;padding:3px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)}
 
 .n-target-title{font-size:15px;font-weight: bold}
 
@@ -73,17 +97,26 @@
 
 .n-kor{font-size: 13px;font-weight: 400;}
 
+.footertext{font-size:15px;margin:12px; text-decoration:none; !important; color:black; font-weight:bold}
+
 .n-mobile-head{margin-top:48px}
+
+.col-half-offset{margin-left:4.16666667%}
 
 .n-desktop-show{display:none}
 
 @media (min-width:601px){.n-twothird{width:66.66666%}.n-third{width:33.33333%}.n-half{width:49.99999%}}
 
-@media (min-width:769px){.n-desktop-show{display:block}.n-mobile-head{margin-top:200px}.n-mobilesupport{}.n-mobilesupport-form{padding-left:48px;padding-right:48px;margin-top:48px}.n-title-bigchar{font-size:72px}.n-number-bigchar{font-size:48px;font-weight: 600}.n-subtitle{font-size:12px}.n-target-category{font-size:15px}}
+@media (min-width:769px){.n-desktop-show{display:block}.n-target-mobilebtn{display:none}.n-payment-table{margin-left:20%}.n-mobile-head{margin-top:200px}.n-mobilesupport{}.n-mobilesupport-form{padding-left:48px;padding-right:48px;margin-top:48px}.n-title-bigchar{font-size:72px}.n-number-bigchar{font-size:48px;font-weight: 600}.n-subtitle{font-size:12px}.n-target-category{font-size:15px}.n-restaurant-layout{float:left}.n-on-mobile{display:none}.n-on-pc{display:block}.n-product-recommand{height:90px;width:90px;padding:3px;margin:12px}}
 
-@media (max-width:600px){.n-loginBtn{margin-top:20px;width:100%;padding-bottom: 6px;padding-top: 6px;}.n-signupBtn{margin-top:20px;width:100%;padding-bottom: 6px;padding-top: 6px;}}
 
-@media (max-width:768px){.n-loginContent{margin-top:24%;margin-bottom:100px}.center{width:100%}.n-target-center{width:100%}}
+
+@media (max-width:600px){.n-dropdown-hover.n-mobile .n-dropdown-content,.n-dropdown-click.n-mobile .n-dropdown-content{position:relative}.n-dropdown-hover.n-mobile,.n-dropdown-hover.n-mobile .n-btn,.n-dropdown-hover.n-mobile .n-button,.n-dropdown-click.n-mobile,.n-dropdown-click.n-mobile .n-btn,.n-dropdown-click.n-mobile .n-button{width:100%}.n-loginBtn{margin-top:20px;width:100%;padding-bottom: 6px;padding-top: 6px;}.n-signupBtn{margin-top:20px;width:100%;padding-bottom: 6px;padding-top: 6px;}}
+
+@media (max-width:768px){.n-target-mobilebtn{display:block;width:100%; left:0; bottom:0; position:fixed; z-index:3; height: 60px; background-color:white; text-align:center}.n-payment-table{margin-left:0px}.n-loginContent{margin-top:24%;margin-bottom:100px}.footertext{font-size:12px;margin:1px; text-decoration:none; !important; color:black; font-weight:bold}.n-target-detailinfo{width: 320px;font-size:11px;left: 50%;transform: translate(-50%);z-index:2}.center{width:90%}.n-target-center{width:100%}.n-restaurant-center{m=width: 100%}.col-half-offset-first{margin-left:0px}.n-restaurant-layout{width:33.333333%}.col-half-offset{margin-left:0px}.n-restaurant-icon{height:60px;width:60px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}.n-cart-icon{height:60px;width:60px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}.n-on-mobile{display:block}.n-on-pc{display:none}.n-product-icon{height:150px;width:150px;padding:3px;}.n-product-recommand{height:70px;width:70px;padding:3px;}.n-product-desc{width:90%!important; text-align: center;display: inline-block}}
+
+.n-right{float:right!important}
+.n-transparent,.n-hover-none:hover{background-color:transparent!important}
 
 .n-twothird,.n-third,.n-half{padding:0 8px}
 .n-margin{margin:16px!important}.n-margin-top{margin-top:16px!important}.n-margin-bottom{margin-bottom:16px!important}

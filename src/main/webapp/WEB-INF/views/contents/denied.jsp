@@ -5,7 +5,7 @@
 <head>
 </head>
 <body>
-	<%@ include file="../parts/header.jsp" %>
+	<jsp:include page="../parts/header.jsp" /> 
 	<center>
 		<br>
 		<h1>???</h1>

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="com.google.gson.Gson"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.n.org/TR/html4/loose.dtd">
 <html>
 <head>
 </head>
@@ -13,7 +13,7 @@
 	%>
 	
 	<!-- Navbar -->
-	<%@ include file="../parts/header.jsp" %> 
+	<jsp:include page="../parts/header.jsp" /> 
 
 	<!-- Content -->
 	<div class="n-content">
@@ -166,12 +166,12 @@
 	<script src='js/sha512.js'></script>
 	
 	<script>
-		function signup() {
-			$('#signup').fadeIn('slow');
-			var offset = $('#focusPanel').offset();
-        	$('html, body').animate({scrollTop : offset.top-100}, 400);
-			$('#input-id').focus();
-		}
+	function signup() {
+		$('#signup').fadeIn('slow');
+		var offset = $('#focusPanel').offset();
+       	$('html, body').animate({scrollTop : offset.top-100}, 400);
+		$('#input-id').focus();
+	}
 	</script>
 	<script>
 	 	$("#login-form").submit(function() {

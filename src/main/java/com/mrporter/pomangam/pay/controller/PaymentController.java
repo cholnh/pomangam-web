@@ -1,4 +1,4 @@
-package com.mrporter.pomangam.target.controller;
+package com.mrporter.pomangam.pay.controller;
 
 import java.io.IOException;
 
@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
-import com.mrporter.pomangam.target.dao.TargetCrudDAO;
-import com.mrporter.pomangam.target.vo.TargetBean;
+import com.mrporter.pomangam.pay.dao.PaymentCrudDAO;
+import com.mrporter.pomangam.pay.vo.PaymentBean;
 
 @Controller
-public class TargetController {
+public class PaymentController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TargetController.class);
-	private static final String MAPPINGNAME = "target"; 
-	private static TargetCrudDAO defaultDAO = new TargetCrudDAO();
+	private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
+	private static final String MAPPINGNAME = "payment";
+	private static PaymentCrudDAO defaultDAO = new PaymentCrudDAO();
 	
 	@RequestMapping(value = "/"+MAPPINGNAME+".do")
 	public ModelAndView openIndexPage() throws Exception {
 		
 		ModelAndView model = new ModelAndView();
 		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("fields", defaultDAO.getFields(TargetBean.class));
+		model.addObject("fields", defaultDAO.getFields(PaymentBean.class));
 		return model;
 	}
 	

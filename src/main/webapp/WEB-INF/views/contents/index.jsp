@@ -8,7 +8,7 @@
 <body>
 
 	<!-- Navbar -->
-	<%@ include file="../parts/header.jsp" %> 
+	<jsp:include page="../parts/header.jsp" /> 
 
   <!-- Hero block -->
 
@@ -43,12 +43,29 @@
       <div class="row">
 		<div class="col-md-4"></div>
         <div class="col-md-4">
+        	<!-- 
 			<form action="./target.do" class="input-group input-group-lg">
 				<input type="text" class="form-control" placeholder="어디로 배달해 드릴까요?" style="margin:10px">
 				<span class="input-group-btn">
 				  <button type="submit" class="btn btn-primary font-weight-semibold">검색</button>
 				</span>
 			</form>
+			-->
+			<!-- 
+			<div class="n-border" onclick="location.href='./target.do'" style="background-color:white">
+				<img class="lazyload image" src="resources/img/main/school.jpg" alt="kau" style="height:150px; width:100%">
+				<div class="n-container" >
+					<p style="font-size: 18px;">
+						<b>한국항공대학교</b>
+					</p>
+					<p class="" style="font-size: 11px;">
+						경기도 고양시 덕양구 항공대학로 76<br>누적 주문 수 <B>14,723건</B>
+					</p>
+				</div>
+			</div>
+			-->
+			<button class="btn btn-primary btn-3d btn-outline" onclick="location.href='./target.do'"
+				style="width:auto;font-size:20px;font-weight:bold">한국항공대학교 점 <br>바로가기</button>
 		</div>
       </div>
 		
@@ -464,6 +481,13 @@
     </div>
   </div>
 
+	<div class="n-target-mobilebtn n-on-mobile">
+		<button class="btn btn-primary" onclick="location.href='./cart.do'"
+		style="width:100%;height:100%;font-size:20px;font-weight:bold">
+			장바구니 (3)
+		</button>
+	</div>
+	
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
 

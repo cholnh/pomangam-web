@@ -8,7 +8,7 @@
 <body>
 
 	<!-- Navbar -->
-	<%@ include file="../parts/header.jsp" %>
+	<jsp:include page="../parts/header.jsp" /> 
 
 
 	<div class="container" style="margin-top:150px">

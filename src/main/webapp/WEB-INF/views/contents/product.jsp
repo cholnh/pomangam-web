@@ -8,13 +8,13 @@
 <body style="background-color: #FFF">
 
 	<!-- Navbar -->
-	<%@ include file="../parts/header.jsp" %>
+	<jsp:include page="../parts/header.jsp" /> 
 
 	<div class="container center" style="margin-top:50px">
 		<!-- Target Info -->
         <div class="n-center" style="margin-top:16px">
             <a href="#" class="valign-middle n-noborder">
-                <img src="resources/img/menu/20.jpg" alt="엽기떡볶이" class="n-product-icon n-card" />
+                <img src="resources/img/restaurant/20.jpg" alt="엽기떡볶이" class="n-product-icon n-card" />
             </a>
             <div style="margin:12px">
                 <span style="font-size: 20px; font-weight: bold;">화이트 갈릭버거</span>
@@ -28,8 +28,10 @@
                 </span>
             </div>
 			<div class="n-margin">
-				<button class="btn border-round" style="background-color: darkgray; color:white">장바구니 담기</button>
-				<button class="btn btn-primary border-round">바로 주문</button>
+				<button class="btn" onclick="goCart()"
+				style="background-color: darkgray; color:white;font-size:20px;font-weight:bold">장바구니 담기</button>
+				<button class="btn btn-primary" onclick="location.href='./payment.do?'"
+				style="font-size:20px;font-weight:bold">바로 주문</button>
 			</div>
 			
         </div>
@@ -77,25 +79,30 @@
             <div class="" style="margin-top:32px">
                 <h2 class="landing-heading text-xs-center">추천상품</h2>
                 <a href="#" class="valign-middle n-noborder">
-                    <img src="resources/img/menu/3.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                    <img src="resources/img/restaurant/3.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
                  <a href="#" class="valign-middle n-noborder">
-                    <img src="resources/img/menu/5.JPG" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                    <img src="resources/img/restaurant/5.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
                  <a href="#" class="valign-middle n-noborder">
-                    <img src="resources/img/menu/7.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                    <img src="resources/img/restaurant/7.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
                  <a href="#" class="valign-middle n-noborder">
-                    <img src="resources/img/menu/12.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                    <img src="resources/img/restaurant/12.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
             </div>
 		</div>
        
-        <div class="n-menu-bottombtn n-on-mobile">
-            <button class="btn btn-primary border-round">17,000원 결제하기</button>
-        </div>
+        <div class="n-target-mobilebtn">
+			<button class="btn btn-primary" onclick="location.href='./cart.do'"
+			style="width:100%;height:100%;font-size:20px;font-weight:bold">
+				<i class="fa fa-shopping-cart" style="margin-right:6px"></i>
+				장바구니 (3)
+			</button>
+		</div>
         
 	</div>
+	
 	
 	
 	<!-- Footer -->
@@ -111,5 +118,15 @@
 	
 	<script src="resources/js/common.js"></script>
 
+	<script>
+	$('#header-home').hide();
+	$('#header-back').show();
+	$('#header-back').prop('href', './restaurant.do?');
+	
+	function goCart() {
+		alert('추가되었습니다.');
+		location.href='./restaurant.do?';
+	}
+	</script>
 </body>
 </html>
