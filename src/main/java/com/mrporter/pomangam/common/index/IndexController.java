@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
+import com.mrporter.pomangam.payment.dao.PaymentCrudDAO;
+import com.mrporter.pomangam.target.dao.TargetCrudDAO;
 
 /**
  * Handles requests for the application home page.
@@ -23,15 +26,25 @@ public class IndexController {
 	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String openDefaultPage() {
+	public ModelAndView openDefaultPage() throws Exception {
 		logger.info("Welcome home!");
 		
-		return "contents/index";
+		ModelAndView model = new ModelAndView();
+		model.setViewName("contents/index");
+		
+		TargetCrudDAO targetDAO = new TargetCrudDAO();
+		PaymentCrudDAO paymentDAO = new PaymentCrudDAO();
+		
+		model.addObject("sumOrder", targetDAO.getSumOrder());
+		model.addObject("todayOrder", paymentDAO.getTodayOrder());
+		model.addObject("targetList", targetDAO.getBeanList());
+		
+		return model;
 	}
 	
 	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
-	public String openIndexPage() {
-		return "contents/index";
+	public ModelAndView openIndexPage() throws Exception {
+		return openDefaultPage();
 	}
 	
 	@ExceptionHandler

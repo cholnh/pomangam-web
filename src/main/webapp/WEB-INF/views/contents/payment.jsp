@@ -14,10 +14,10 @@
 		<!-- Target Info -->
         
 		<div class="n-center">
-			<h3>결제정보</h3>
+			<h3 class="n-font">결제정보</h3>
             <div class="n-payment-info">
             <div class="center n-border">
-            	<table>
+            	<table class="n-payment-table2">
             		<thead>
             		</thead>
             		<colgroup>
@@ -77,7 +77,7 @@
 		<!-- Detail Description -->
         <hr class="n-payment-hr">
         <div class="n-center" style="margin-top:64px">
-            <h3>배달정보</h3>
+            <h3 class="n-font">배달정보</h3>
             <div class="center">
 	            <table class="n-payment-table">
 	            	<thead>
@@ -158,8 +158,6 @@
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
-	
-	<script src="resources/js/common.js"></script>
 	
 	<script>
 	$('#header-home').hide();

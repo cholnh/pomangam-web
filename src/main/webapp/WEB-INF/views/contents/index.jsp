@@ -1,12 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="com.mrporter.pomangam.target.vo.TargetBean"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
 </head>
 <body>
-
+	<%	
+		int sumOrder = (int) request.getAttribute("sumOrder");
+		int todayOrder = (int) request.getAttribute("todayOrder");
+		
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<TargetBean> targetList = (List) request.getAttribute("targetList");
+	%>
+	
 	<!-- Navbar -->
 	<jsp:include page="../parts/header.jsp" /> 
 
@@ -35,8 +45,8 @@
 				감
 			</span>
 		</span>
-      <h2 class="font-weight-light" style="opacity: 0.5 !important">
-		  정해진 시간과 장소로 <b><u>무엇이든 배달</u></b>해 드립니다.
+      <h2 class="n-font" style="opacity: 0.5 !important">
+		  정해진 시간과 장소로 무엇이든 배달해 드립니다.
       </h2>
 		
       <!-- Buttons -->
@@ -64,7 +74,7 @@
 				</div>
 			</div>
 			-->
-			<button class="btn btn-primary btn-3d btn-outline" onclick="location.href='./target.do'"
+			<button class="btn btn-primary btn-3d btn-outline" onclick="location.href='./target.do?idx=1'"
 				style="width:auto;font-size:20px;font-weight:bold">한국항공대학교 점 <br>바로가기</button>
 		</div>
       </div>
@@ -74,7 +84,7 @@
 		  <div class="row" style="color:aliceblue">
 			<div class="col-md-4">
 				<div>
-					<span class="n-number-bigchar">1,373,102</span>
+					<span class="n-number-bigchar" id="ob-sumOrder">1,143,703</span>
 					<span style="font-size:32px">건</span>
 				</div>
 				<div style="margin-bottom: 16px;">
@@ -83,7 +93,7 @@
 			</div>
 			<div class="col-md-4">
 				<div>
-					<span class="n-number-bigchar">6,086</span>
+					<span class="n-number-bigchar" id="ob-todayOrder">3,206</span>
 					<span style="font-size:32px">건</span>
 				</div>
 				<div style="margin-bottom: 16px;">
@@ -92,7 +102,7 @@
 			</div>
 			<div class="col-md-4">
 				<div>
-					<span class="n-number-bigchar">13,417</span>
+					<span class="n-number-bigchar" id="ob-cntTarget">15</span>
 					<span style="font-size:32px">곳</span>
 				</div>
 				<div style="margin-bottom: 16px;">
@@ -109,27 +119,29 @@
   <a class="position-relative" name="features"></a>
   <div class="landing-section landing-features-grid bg-white b-y-1">
     <div class="container">
-		<div class="n-center n-padding-32 n-margin-bottom">
+		<div class="n-center n-padding-32">
 			<a class="n-hover-opacity" href="" style="text-decoration:none; !important">
-				<span class="n-xlarge n-bottombar n-padding-16"><span style="color:black;font-size:30px;font-weight: 700">포터가 가는 곳</span></span>
+				<span class="n-xlarge n-bottombar" style="padding:5px"><span style="color:black;font-size:30px;font-weight: 700">포터가 가는 곳</span></span>
 			</a>
 		</div>
-      <h3 class="landing-subheading text-xs-center text-muted ">Mr. Porter와 제휴를 맺어 배달이 가능한 곳입니다.</h3>
+		<div class="n-subtitle n-center">
+			Mr. Porter와 제휴를 맺어 배달이 가능한 곳입니다.
+		</div>
 	
 	   <div class="text-xs-center" style="margin-top:64px;margin-bottom: 12px">
-		<a href="#" style="margin:12px; text-decoration:none; !important; color:black"><b><u>전체</u></b></a>
-		<a href="#" style="margin:12px; text-decoration:none; !important; color:black">서울</a>
-		<a href="#" style="margin:12px; text-decoration:none; !important; color:black">경기</a>
-		<a href="#" style="margin:12px; text-decoration:none; !important; color:black">충청</a>
-		<a href="#" style="margin:12px; text-decoration:none; !important; color:black">강원</a>
-		<a href="#" style="margin:12px; text-decoration:none; !important; color:black">전라</a>
-		<a href="#" style="margin:12px; text-decoration:none; !important; color:black">경상</a>
-		<a href="#" style="margin:12px; text-decoration:none; !important; color:black">제주</a>
+		<a href="#" class="n-main-category"><b><u>전체</u></b></a>
+		<a href="#" class="n-main-category">서울</a>
+		<a href="#" class="n-main-category">경기</a>
+		<a href="#" class="n-main-category">충청</a>
+		<a href="#" class="n-main-category">강원</a>
+		<a href="#" class="n-main-category">전라</a>
+		<a href="#" class="n-main-category">경상</a>
+		<a href="#" class="n-main-category">제주</a>
 	  </div>
     
 	  <div class="row">
         <div class="col-md-4" >
-		  <div class="n-card n-hover-opacity" onclick="location.href='./target.do'">
+		  <div class="n-card n-hover-opacity" onclick="location.href='./target.do?idx=1'">
             <img class="n-school-img lazyload image" src="resources/img/main/school.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>한국항공대학교</b></p>
@@ -138,7 +150,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card n-hover-opacity" onclick="location.href='./target.do'">
+		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school3.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>경기대학교</b></p>
@@ -147,7 +159,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card n-hover-opacity" onclick="location.href='./target.do'">
+		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school2.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>강원대학교</b></p>
@@ -159,7 +171,7 @@
 
       <div class="row n-desktop-show">
         <div class="col-md-4" >
-		  <div class="n-card n-hover-opacity" onclick="location.href='./target.do'">
+		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school4.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>호서대학교</b></p>
@@ -168,7 +180,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card n-hover-opacity" onclick="location.href='./target.do'">
+		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school5.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>장안대학교</b></p>
@@ -177,7 +189,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card n-hover-opacity" onclick="location.href='./target.do'">
+		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school6.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>인천대학교</b></p>
@@ -187,6 +199,7 @@
         </div>
       </div>
 		
+		<!-- 
 		<div class="n-search">
 		  <form action="" class="input-group input-group-lg" style="margin-top:48px">
 			<input type="text" class="form-control" placeholder="찾으시는 학교가 없으신가요?">
@@ -195,6 +208,7 @@
 			</span>
 		  </form>
 		</div>
+		-->
     </div>
 	  
   </div>
@@ -212,15 +226,15 @@
 
       <div id="mobileTitle" class="n-mobile-head col-md-7">
 		  <div>
-			<h1 class="landing-heading text-xs-center">
+			<h1 class="n-font landing-heading text-xs-center">
 				<a href="javascript:void(0)" onclick="showMobileSupport()" style="color:#f3753a"><i class="fa fa-download" style="font-size:24px;"></i> 포만감 앱 받기</a>
 			</h1>
-			<h3 class="landing-subheading text-muted text-xs-center" style="margin-top:-40px">모바일을 통해 더 편리하게 배달을 받아보세요!</h3>
+			<h3 class="n-font landing-subheading text-muted text-xs-center" style="margin-top:-40px">모바일을 통해 더 편리하게 배달을 받아보세요!</h3>
 		  </div>
         <div class="panel-group p-t-3 font-size-14" id="mobileContents" style="display:none">
           <div class="panel">
 			  <div id="forfocus" class="container text-xs-center n-mobilesupport">
-			  	<h3>전화번호를 입력하시면<br><u>설치 주소</u>를 보내드립니다.</h3>
+			  	<h3 class="n-font">전화번호를 입력하시면<br><u>설치 주소</u>를 보내드립니다.</h3>
 				<div class="n-mobilesupport-form">
 				  <form action="" class="input-group input-group-md">
 					<input id="appinput" type="tel" class="form-control" placeholder="번호를 입력해주세요.">
@@ -228,7 +242,7 @@
 					  <button type="submit" class="btn btn-primary font-weight-semibold font-size-14 ">전송</button>
 					</span>
 				  </form>
-				  <input type="checkbox" style="margin:12px">개인정보 수집/이용에 동의 <a href="" style="margin-left:12px"><u>내용보기</u></a>
+				  <input type="checkbox" style="margin:12px">개인정보 수집/이용에 동의 <a style="margin-left:12px"><u>내용보기</u></a>
 				</div>
 			  </div>
 		  </div>
@@ -241,20 +255,21 @@
   <hr class="m-a-0">
 
   <!-- How to -->
+<!-- 
   <a class="position-relative" name="pricing"></a>
   <div class="landing-section bg-white">
     <div class="container">
 		<div class="n-center n-padding-32 n-margin-bottom">
 			<a class="n-hover-opacity" href="" style="text-decoration:none; !important">
-				<span class="n-xlarge n-bottombar n-padding-16">
+				<span class="n-xlarge n-bottombar" style="padding:5px">
 					<span style="color:black;font-size:30px;font-weight: 700">How To ?</span>
 				</span>
 			</a>
 		</div>
-      <h3 class="landing-subheading text-xs-center text-muted ">포만감을 이용하는 방법입니다.</h3>
+      <h3 class="n-font landing-subheading text-xs-center text-muted ">포만감을 이용하는 방법입니다.</h3>
 
 	  <div class="text-xs-center">
-        <!-- start -->
+        
 			<div class="container" style="margin-top:64px; padding:0px">
 				<div class="row form-group">
 					<div class="col-xs-12">
@@ -281,10 +296,9 @@
 				<div class="row setup-content" id="step-1">
 					<div class="col-xs-12">
 						<div class="col-md-12 well text-center">
-							<h2> 우선, 자신이 속한 <span style="color:#eb613e">학교</span>를 선택합니다.</h2>
+							<h2 class="n-font"> 우선, 자신이 속한 <span style="color:#eb613e">학교</span>를 선택합니다.</h2>
 							<br><hr>
 							<div class="bootstrap-tagsinput-lg" style="margin: auto;">
-								<!--<input type="text" class="form-control" id="bs-tagsinput-1">-->
 								<div style="margin-top: 32px; padding:12px">
 									<button type="button" class="btn btn-xl btn-danger btn-outline"
 											style="margin-bottom:8px" onclick="toggle(this)">한국항공대</button>
@@ -319,7 +333,7 @@
 				<div class="row setup-content" id="step-2">
 					<div class="col-xs-12">
 						<div class="col-md-12 well text-center">
-							<h2 class="text-center"> <span style="color:#eb613e">여러 업체</span>의 다양한 메뉴들을 골라 담습니다! </h2>
+							<h2 class="n-font text-center"> <span style="color:#eb613e">여러 업체</span>의 다양한 메뉴들을 골라 담습니다! </h2>
 							<br><hr>
 							<div style="margin-top: 32px; padding:12px; margin: auto; width:90%;">
 								<div id="owl-carousel-autoplay" class="owl-carousel" style="margin-top:24px;margin-bottom:24px">
@@ -347,7 +361,7 @@
 				<div class="row setup-content" id="step-3">
 					<div class="col-xs-12">
 						<div class="col-md-12 well text-center">
-							<h2 class="text-center">다양하고 <span style="color:#eb613e">간편한</span> 결제 수단을 선택합니다.</h2>
+							<h2 class="n-font text-center">다양하고 <span style="color:#eb613e">간편한</span> 결제 수단을 선택합니다.</h2>
 							<br><hr>
 							<div style="padding:12px; margin: auto; width:80%;">
 								<div class="panel-group p-t-3 font-size-14" id="accordion-example" >
@@ -401,7 +415,7 @@
 				<div class="row setup-content" id="step-4">
 					<div class="col-xs-12">
 						<div class="col-md-12 well text-center">
-							<h2 class="text-center"><span style="color:#eb613e">정해진 장소</span>로 <span style="color:#eb613e">정해진 시간</span>까지 Mr.Porter가 찾아갑니다. </h2>
+							<h2 class="n-font text-center"><span style="color:#eb613e">정해진 장소</span>로 <span style="color:#eb613e">정해진 시간</span>까지 Mr.Porter가 찾아갑니다. </h2>
 							<br><hr>
 							<div class="n-center" style="margin-top:64px">
 								<i class="fa fa-wpforms" style="font-size:128px;margin-right:32px"></i>
@@ -414,13 +428,13 @@
 					</div>
 				</div>
 			</div>
-		<!-- end -->  
+		 
       </div>
     </div>
   </div>
-
+-->
   <!-- Clients -->
-
+<!-- 
   <a class="position-relative" name="customers"></a>
   <div class="landing-section landing-clients bg-white">
     <div class="container">
@@ -480,7 +494,7 @@
       </div>
     </div>
   </div>
-
+ -->
 	<div class="n-target-mobilebtn n-on-mobile">
 		<button class="btn btn-primary" onclick="location.href='./cart.do'"
 		style="width:100%;height:100%;font-size:20px;font-weight:bold">
@@ -505,7 +519,16 @@
 	
 	<!-- Landing page JS -->
 	<script src="resources/js/landing.js"></script>
-	<script src="resources/js/common.js"></script>
+	
+	<script>
+		var targetList = <%=new Gson().toJson(targetList)%>;
+		
+		$('#ob-sumOrder').text(numberWithCommas(<%=sumOrder %>));
+		$('#ob-todayOrder').text(numberWithCommas(<%=todayOrder %>));
+		$('#ob-cntTarget').text(numberWithCommas(targetList.length));
+		
+	</script>
+	
 	<script>
 		$('#nav').removeClass('sticky');
 	
@@ -536,7 +559,6 @@
 			
 			$('#appinput').focus();
 		}
-
 	</script>
 	
 	<script>

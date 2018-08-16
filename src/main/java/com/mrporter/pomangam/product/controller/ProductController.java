@@ -2,7 +2,9 @@ package com.mrporter.pomangam.product.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
 import com.mrporter.pomangam.product.dao.ProductCrudDAO;
-import com.mrporter.pomangam.product.vo.ProductBean;
 
 @Controller
 public class ProductController {
@@ -25,11 +26,32 @@ public class ProductController {
 	private static ProductCrudDAO defaultDAO = new ProductCrudDAO();
 	
 	@RequestMapping(value = "/"+MAPPINGNAME+".do")
-	public ModelAndView openIndexPage() throws Exception {
+	public ModelAndView openIndexPage(
+			@RequestParam(value = "idx", required = false) Integer idx,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		HttpSession session = request.getSession();
+		
+		if(idx==null||idx<0) {
+			String curRestaurant = (String) session.getAttribute("curRestaurant");
+			response.sendRedirect("./restaurant.do?idx="+curRestaurant);
+			return null;
+		}
 		
 		ModelAndView model = new ModelAndView();
-		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("fields", defaultDAO.getFields(ProductBean.class));
+		String product = defaultDAO.getBean(idx);
+		
+		if(product.equals("[]")) { // is empty
+			String curRestaurant = (String) session.getAttribute("curRestaurant");
+			response.sendRedirect("./restaurant.do?idx="+curRestaurant);
+			return null;
+		} else {
+			model.setViewName("contents/" + MAPPINGNAME);
+			model.addObject("product", product);
+			
+			session.setAttribute("curProduct", idx+"");
+		}
 		return model;
 	}
 	

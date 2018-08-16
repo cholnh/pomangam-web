@@ -1,8 +1,12 @@
 package com.mrporter.pomangam.cart.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +65,65 @@ public class CartController {
 			bean = defaultDAO.getBean(column, value);
 		}
 		return bean;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/"+MAPPINGNAME+"/insert.do")
+	public @ResponseBody Status insert(
+			CartBean bean,
+			HttpServletRequest request) throws Exception {
+		
+		HttpSession session = request.getSession();
+		
+		List<CartBean> cartList = null;
+		Object obj = session.getAttribute("cartList");
+		
+		if(obj==null) {
+			cartList = new ArrayList<>();
+		} else {
+			cartList = (ArrayList<CartBean>) obj;
+		}
+		
+		for(CartBean c : cartList) {
+			if(c.getIdx_product().intValue() == bean.getIdx_product().intValue()) {
+				c.setAmount(c.getAmount().intValue() + bean.getAmount().intValue());
+				return new Status(200);
+			}
+		}
+		
+		bean.setIdx(cartList.size());
+		System.out.println(bean.getIdx());
+		cartList.add(bean);
+		session.setAttribute("cartList", cartList);
+		
+		return new Status(200);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/"+MAPPINGNAME+"/delete.do")
+	public @ResponseBody Status delete(
+			@RequestParam(value = "idx", required = true) Integer idx,
+			HttpServletRequest request) throws Exception {
+		
+		HttpSession session = request.getSession();
+		
+		List<CartBean> cartList = null;
+		Object obj = session.getAttribute("cartList");
+		
+		if(obj==null) {
+		} else {
+			cartList = (ArrayList<CartBean>) obj;
+			System.out.println(cartList);
+			for(CartBean c : cartList) {
+				System.out.println(c.getIdx().intValue() + " " + idx.intValue() + " " + (c.getIdx().intValue() == idx.intValue()));
+				if(c.getIdx().intValue() == idx.intValue()) {
+					System.out.println(cartList.remove(c));
+					session.setAttribute("cartList", cartList);
+					return new Status(200);
+				}
+			}
+		}
+		return new Status(200);
 	}
 	
 	@ExceptionHandler

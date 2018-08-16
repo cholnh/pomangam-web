@@ -16,7 +16,7 @@
 		<div class="n-center">
 			<div class="n-center n-padding-32 n-margin-bottom">
 				<a class="n-hover-opacity" href="" style="text-decoration:none; !important">
-					<span class="n-xlarge n-bottombar n-padding-16"><span style="color:black">장바구니</span></span>
+					<span class="n-xlarge n-bottombar" style="padding:5px"><span style="color:black">장바구니</span></span>
 				</a>
 			</div>
             <div class="center n-border">
@@ -94,7 +94,7 @@
 					</table>
 					
 					<div class="n-center" style="margin-top:32px;margin-bottom:32px">
-						<h3>총 <span id="total">22,000</span>원</h3>
+						<h3 class="n-font">총 <span id="total">22,000</span>원</h3>
 					</div>
 				</div>
             </div>
@@ -122,8 +122,6 @@
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
-	
-	<script src="resources/js/common.js"></script>
 	
 	<script>
 	$('#header-home').hide();

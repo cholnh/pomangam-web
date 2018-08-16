@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
  */
 @Data @AllArgsConstructor @NoArgsConstructor
 public class RestaurantBean {
-	Integer idx;
-	
+	Integer idx, idx_target;
+	String name, location, tel, description, imgpath;
+	Integer cnt_star, cnt_comment, sum_limit;
 }

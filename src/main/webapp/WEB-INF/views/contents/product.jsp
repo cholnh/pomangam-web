@@ -1,3 +1,7 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.mrporter.pomangam.cart.vo.CartBean"%>
+<%@page import="java.util.List"%>
+<%@page import="com.google.gson.Gson"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -6,7 +10,12 @@
 <head>	
 </head>
 <body style="background-color: #FFF">
-
+	<%
+		String curTarget = (String) session.getAttribute("curTarget");
+		String curRestaurant = (String) session.getAttribute("curRestaurant");
+		String curProduct = (String) request.getParameter("idx");
+	%>
+	
 	<!-- Navbar -->
 	<jsp:include page="../parts/header.jsp" /> 
 
@@ -22,13 +31,13 @@
             <a class="btn btn-primary " style="font-size:10px!important;padding:3px">57개 남음</a>
             <div style="margin-top:18px">
                 
-                <input type="number" style="width:40px" min=0 value=1> 개
+                <input id="ob-amount" type="number" style="width:40px" min=0 value=1> 개
                 <span style="color: #f3753a; font-weight: bold; margin-left: 12px; font-size: 15px;">
                     6,000원
                 </span>
             </div>
 			<div class="n-margin">
-				<button class="btn" onclick="goCart()"
+				<button class="btn" onclick="insertCartProduct()"
 				style="background-color: darkgray; color:white;font-size:20px;font-weight:bold">장바구니 담기</button>
 				<button class="btn btn-primary" onclick="location.href='./payment.do?'"
 				style="font-size:20px;font-weight:bold">바로 주문</button>
@@ -44,9 +53,9 @@
 				프리미엄 더블햄과 통가슴살 패티까지<br>
 				하나에 다 담은 묵직한 버거!<br>
 			</div>
-			<div style="width:60%!important;margin-top:64px; display: inline-block;text-align: left">
-				<div class="n-on-pc">
-					<b>영양성분</b> (1일 영양소 기준치에 대한 비율)
+			<div class="n-product-nutrient">
+				<b>영양성분</b> (1일 영양소 기준치에 대한 비율)
+				<div class="table-responsive">
 					<table class="table table-striped n-border">
 						<thead>
 							<tr>
@@ -77,7 +86,7 @@
 			</div>
 			
             <div class="" style="margin-top:32px">
-                <h2 class="landing-heading text-xs-center">추천상품</h2>
+                <h2 class="n-font landing-heading text-xs-center">추천상품</h2>
                 <a href="#" class="valign-middle n-noborder">
                     <img src="resources/img/restaurant/3.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
@@ -116,17 +125,15 @@
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
 	
-	<script src="resources/js/common.js"></script>
-
 	<script>
+	var curTarget = <%=curTarget%>;
+	var curRestaurant = <%=curRestaurant%>;
+	var curProduct = <%=curProduct%>;
+	
 	$('#header-home').hide();
 	$('#header-back').show();
-	$('#header-back').prop('href', './restaurant.do?');
+	$('#header-back').prop('href', './restaurant.do?idx='+curRestaurant);
 	
-	function goCart() {
-		alert('추가되었습니다.');
-		location.href='./restaurant.do?';
-	}
 	</script>
 </body>
 </html>

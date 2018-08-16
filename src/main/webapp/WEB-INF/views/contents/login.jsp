@@ -23,7 +23,7 @@
 					<div class="n-margin">
 						<div class="n-center n-padding-32 n-margin-bottom">
 							<a class="n-hover-opacity" href="" style="text-decoration:none; !important">
-								<span class="n-xlarge n-bottombar n-padding-16"><span style="color:black">LOGIN</span></span>
+								<span class="n-xlarge n-bottombar" style="padding:5px"><span style="color:black">LOGIN</span></span>
 							</a>
 						</div>
 						<form id="login-form">

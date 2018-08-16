@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
  */
 @Data @AllArgsConstructor @NoArgsConstructor
 public class CartBean {
-	Integer idx;
-	
+	Integer idx, idx_target, idx_restaurant, idx_product, amount;
 }

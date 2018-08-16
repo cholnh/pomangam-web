@@ -1,8 +1,11 @@
 package com.mrporter.pomangam.restaurant.controller;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
+import com.mrporter.pomangam.product.dao.ProductCrudDAO;
+import com.mrporter.pomangam.product.vo.ProductBean;
 import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
-import com.mrporter.pomangam.restaurant.vo.RestaurantBean;
 
 @Controller
 public class RestaurantController {
@@ -25,11 +29,34 @@ public class RestaurantController {
 	private static RestaurantCrudDAO defaultDAO = new RestaurantCrudDAO();
 	
 	@RequestMapping(value = "/"+MAPPINGNAME+".do")
-	public ModelAndView openIndexPage() throws Exception {
+	public ModelAndView openIndexPage(
+			@RequestParam(value = "idx", required = false) Integer idx,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		HttpSession session = request.getSession();
+		
+		if(idx==null||idx<0) {
+			String curTarget = (String) session.getAttribute("curTarget");
+			response.sendRedirect("./target.do?idx="+curTarget); 
+			return null;
+		}
 		
 		ModelAndView model = new ModelAndView();
-		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("fields", defaultDAO.getFields(RestaurantBean.class));
+		String restaurant = defaultDAO.getBean(idx);
+		List<ProductBean> productList = new ProductCrudDAO().getBeanList();
+		
+		if(restaurant.equals("[]")) { // is empty
+			String curTarget = (String) session.getAttribute("curTarget");
+			response.sendRedirect("./target.do?idx="+curTarget);
+			return null;
+		} else {
+			model.setViewName("contents/" + MAPPINGNAME);
+			model.addObject("restaurant", restaurant);
+			model.addObject("productList", productList);
+			
+			session.setAttribute("curRestaurant", idx+"");
+		}
 		return model;
 	}
 	

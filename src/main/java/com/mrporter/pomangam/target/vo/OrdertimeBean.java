@@ -1,19 +1,18 @@
-package com.mrporter.pomangam.product.vo;
+package com.mrporter.pomangam.target.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * ProductBean
+ * OrdertimeBean
  * 
  * @version 1.0 [2018. 8. 15.]
  * @author Choi
  */
 @Data @AllArgsConstructor @NoArgsConstructor
-public class ProductBean {
-	Integer idx, idx_restaurant, type;
-	String name;
-	Integer price;
-	String imgpath, description, cnt_limit;
+public class OrdertimeBean {
+	Integer idx, idx_target, type;
+	String start, end;
+	Integer status;
 }

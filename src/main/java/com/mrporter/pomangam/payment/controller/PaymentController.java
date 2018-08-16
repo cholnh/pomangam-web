@@ -1,4 +1,4 @@
-package com.mrporter.pomangam.pay.controller;
+package com.mrporter.pomangam.payment.controller;
 
 import java.io.IOException;
 
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
-import com.mrporter.pomangam.pay.dao.PaymentCrudDAO;
-import com.mrporter.pomangam.pay.vo.PaymentBean;
+import com.mrporter.pomangam.payment.dao.PaymentCrudDAO;
+import com.mrporter.pomangam.payment.vo.PaymentBean;
 
 @Controller
 public class PaymentController {

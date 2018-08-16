@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class TargetBean {
 	Integer idx;
-	
+	String name, location, imgpath, category, description;
+	Integer cnt_order, cnt_subscription;
 }

@@ -1,4 +1,4 @@
-package com.mrporter.pomangam.pay.vo;
+package com.mrporter.pomangam.payment.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,8 +1,11 @@
 package com.mrporter.pomangam.target.controller;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
+import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
+import com.mrporter.pomangam.restaurant.vo.RestaurantBean;
+import com.mrporter.pomangam.target.dao.DestinationCrudDAO;
+import com.mrporter.pomangam.target.dao.OrdertimeCrudDAO;
 import com.mrporter.pomangam.target.dao.TargetCrudDAO;
-import com.mrporter.pomangam.target.vo.TargetBean;
 
 @Controller
 public class TargetController {
@@ -25,11 +31,35 @@ public class TargetController {
 	private static TargetCrudDAO defaultDAO = new TargetCrudDAO();
 	
 	@RequestMapping(value = "/"+MAPPINGNAME+".do")
-	public ModelAndView openIndexPage() throws Exception {
+	public ModelAndView openIndexPage(
+			@RequestParam(value = "idx", required = false) Integer idx,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		HttpSession session = request.getSession();
+		
+		if(idx==null||idx<0) {
+			response.sendRedirect("./");
+			return null;
+		}
 		
 		ModelAndView model = new ModelAndView();
-		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("fields", defaultDAO.getFields(TargetBean.class));
+		String target = defaultDAO.getBean(idx);
+		List<RestaurantBean> restaurantList = new RestaurantCrudDAO().getBeanWithLimitCount(idx);
+		
+		if(target.equals("[]")) { // is empty
+			response.sendRedirect("./");
+			return null;
+		} else {
+			
+			model.setViewName("contents/" + MAPPINGNAME);
+			model.addObject("target", target);
+			model.addObject("destination", new DestinationCrudDAO().getListByIdx(idx));
+			model.addObject("ordertime", new OrdertimeCrudDAO().getListByIdx(idx));
+			model.addObject("restaurantList", restaurantList);
+			
+			session.setAttribute("curTarget", idx+"");
+		}
 		return model;
 	}
 	
