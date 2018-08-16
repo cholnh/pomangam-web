@@ -64,7 +64,7 @@
 					<div class="col-xs-4 col-sm-3">
 						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
 							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/restaurant/1.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
+								src="resources/img/product/1.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
 								style="margin-top: 3px" />
 
 							</a>
@@ -79,7 +79,7 @@
 					<div class="col-xs-4 col-sm-3">
 						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
 							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/restaurant/1.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
+								src="resources/img/product/2.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
 								style="margin-top: 3px" />
 
 							</a>
@@ -94,7 +94,7 @@
 					<div class="col-xs-4 col-sm-3">
 						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
 							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/restaurant/1.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
+								src="resources/img/product/3.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
 								style="margin-top: 3px" />
 
 							</a>
@@ -109,7 +109,7 @@
 					<div class="col-xs-4 col-sm-3">
 						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
 							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/restaurant/1.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
+								src="resources/img/product/4.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
 								style="margin-top: 3px" />
 
 							</a>
@@ -124,7 +124,7 @@
 					<div class="col-xs-4 col-sm-3">
 						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
 							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/restaurant/1.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
+								src="resources/img/product/5.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
 								style="margin-top: 3px" />
 
 							</a>

@@ -23,7 +23,7 @@
 		<!-- Target Info -->
         <div class="n-center" style="margin-top:16px">
             <a href="#" class="valign-middle n-noborder">
-                <img src="resources/img/restaurant/20.jpg" alt="엽기떡볶이" class="n-product-icon n-card" />
+                <img src="resources/img/product/20.jpg" alt="엽기떡볶이" class="n-product-icon n-card" />
             </a>
             <div style="margin:12px">
                 <span style="font-size: 20px; font-weight: bold;">화이트 갈릭버거</span>
@@ -88,16 +88,16 @@
             <div class="" style="margin-top:32px">
                 <h2 class="n-font landing-heading text-xs-center">추천상품</h2>
                 <a href="#" class="valign-middle n-noborder">
-                    <img src="resources/img/restaurant/3.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                    <img src="resources/img/product/3.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
                  <a href="#" class="valign-middle n-noborder">
-                    <img src="resources/img/restaurant/5.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                    <img src="resources/img/product/5.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
                  <a href="#" class="valign-middle n-noborder">
-                    <img src="resources/img/restaurant/7.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                    <img src="resources/img/product/7.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
                  <a href="#" class="valign-middle n-noborder">
-                    <img src="resources/img/restaurant/12.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
+                    <img src="resources/img/product/12.jpg" alt="엽기떡볶이" class="n-product-recommand n-card" />
                 </a>
             </div>
 		</div>
