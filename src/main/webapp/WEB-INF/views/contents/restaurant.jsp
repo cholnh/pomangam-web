@@ -20,7 +20,7 @@
 		
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<String> ordertime = (List) request.getAttribute("ordertime");
-		@SuppressWarnings({"unchecked", "rawtypes"})
+		@SuppressWarnings({"unchecked"})
 		List<ProductBean> productList = (List<ProductBean>) request.getAttribute("productList");
 		
 		String json = (String) request.getAttribute("restaurant");
@@ -73,17 +73,21 @@
 		<!-- Parter -->
 		<div>
 			<h2 class="n-font landing-heading text-xs-center">
-				주문 마감까지 <span id="ob-time" style="color:#eb613e"></span> 남았습니다.
+				주문 마감까지 <br><span id="ob-time" style="color:#eb613e"></span> 남았습니다.
 			</h2>
 			
 			<div class="container-fluid n-target-center" >
 				<div class="row">
 					<%
+					if(productList.isEmpty()) {%>
 					
+					<span>주문 가능한 메뉴가 없습니다.</span>
+					
+					<%}
 					for(int i=0; i<productList.size(); i++) {
 						ProductBean bean = productList.get(i);%>	
 
-					<div class="col-xs-4 col-sm-3">
+					<div class="col-xs-4 col-sm-3" style="padding:0px">
 						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=<%=bean.getIdx() %>'">
 							<a class="valign-middle n-noborder"> <img
 								src="<%=bean.getImgpath() %>" alt="<%=bean.getName() %>" class="n-restaurant-icon"
@@ -93,73 +97,16 @@
 							<div style="margin-top: 3px">
 								<b><%=bean.getName() %></b> <br> <%=bean.getPrice() %>원
 							</div>
+							<div style="height:25px">
 							<%if(bean.getCnt_limit() <= 5) {%>
 							<button class="btn btn-primary "
 								style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
 							<%} %>
+							</div>
 						</div>
 					</div>
 					<%} %>
-					<div class="col-xs-4 col-sm-3">
-						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
-							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/product/2.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
-								style="margin-top: 3px" />
-
-							</a>
-							<div style="margin-top: 3px">
-								<b>화이트 갈릭버거</b> <br> 6,000원
-							</div>
-							<button class="btn btn-primary "
-								style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
-
-						</div>
-					</div>
-					<div class="col-xs-4 col-sm-3">
-						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
-							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/product/3.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
-								style="margin-top: 3px" />
-
-							</a>
-							<div style="margin-top: 3px">
-								<b>화이트 갈릭버거</b> <br> 6,000원
-							</div>
-							<button class="btn btn-primary "
-								style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
-
-						</div>
-					</div>
-					<div class="col-xs-4 col-sm-3">
-						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
-							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/product/4.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
-								style="margin-top: 3px" />
-
-							</a>
-							<div style="margin-top: 3px">
-								<b>화이트 갈릭버거</b> <br> 6,000원
-							</div>
-							<button class="btn btn-primary "
-								style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
-
-						</div>
-					</div>
-					<div class="col-xs-4 col-sm-3">
-						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
-							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/product/5.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
-								style="margin-top: 3px" />
-
-							</a>
-							<div style="margin-top: 3px">
-								<b>화이트 갈릭버거</b> <br> 6,000원
-							</div>
-							<button class="btn btn-primary "
-								style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
-
-						</div>
-					</div>
+					
 				</div>
 			</div>
 

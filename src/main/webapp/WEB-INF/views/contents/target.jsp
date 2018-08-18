@@ -187,13 +187,12 @@
 		
 		<!-- Parter -->
 		<div>
-			<h2 class="n-font landing-heading text-xs-center">주문 마감까지  <span id="ob-time" style="color:#eb613e"></span> 남았습니다.</h2>
+			<h2 class="n-font landing-heading text-xs-center">주문 마감까지 <br> <span id="ob-time" style="color:#eb613e"></span> 남았습니다.</h2>
 			
 			
 			<ul class="list-group n-target-center">
 		<%
 		boolean tf = true;
-		System.out.println(restaurantList);
 		for(int i=0; i<restaurantList.size(); i++) {
 			RestaurantBean bean = restaurantList.get(i);
 			if(tf) {%>

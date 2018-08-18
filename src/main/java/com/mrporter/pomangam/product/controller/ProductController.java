@@ -49,7 +49,7 @@ public class ProductController {
 		} else {
 			model.setViewName("contents/" + MAPPINGNAME);
 			model.addObject("product", product);
-			
+			model.addObject("recommend", defaultDAO.getRecommend(idx));
 			session.setAttribute("curProduct", idx+"");
 		}
 		return model;

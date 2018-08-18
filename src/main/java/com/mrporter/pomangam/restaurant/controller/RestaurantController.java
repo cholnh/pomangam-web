@@ -45,17 +45,17 @@ public class RestaurantController {
 		
 		ModelAndView model = new ModelAndView();
 		String restaurant = defaultDAO.getBean(idx);
-		List<ProductBean> productList = new ProductCrudDAO().getBeanList();
+		List<ProductBean> productList = new ProductCrudDAO().getBeanList(idx);
 		
+		String curTarget = (String) session.getAttribute("curTarget");
 		if(restaurant.equals("[]")) { // is empty
-			String curTarget = (String) session.getAttribute("curTarget");
 			response.sendRedirect("./target.do?idx="+curTarget);
 			return null;
 		} else {
 			model.setViewName("contents/" + MAPPINGNAME);
 			model.addObject("restaurant", restaurant);
 			model.addObject("productList", productList);
-			model.addObject("ordertime", new OrdertimeCrudDAO().getTimeListByIdx(idx));
+			model.addObject("ordertime", new OrdertimeCrudDAO().getTimeListByIdx(Integer.parseInt(curTarget)));
 			session.setAttribute("curRestaurant", idx+"");
 		}
 		return model;
