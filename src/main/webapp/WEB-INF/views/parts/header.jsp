@@ -1,14 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="com.mrporter.pomangam.cart.vo.CartBean"%>
 <%@page import="com.mrporter.pomangam.product.vo.ProductBean"%>
 <%@page import="com.google.gson.reflect.TypeToken"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.mrporter.pomangam.target.dao.TargetCrudDAO"%>
 <%@page import="com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO"%>
 <%@page import="com.mrporter.pomangam.product.dao.ProductCrudDAO"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@page import="java.util.List"%>
-<%@page import="com.google.gson.Gson"%>
-<%@page import="com.mrporter.pomangam.cart.vo.CartBean"%>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -84,10 +84,10 @@
 								</div>
 								
 								<div style="text-align:right; margin-right:12px">
-									<button class="btn btn-secondary n-small">전체삭제</button>
+									<button class="btn btn-secondary n-small" onclick="removeAllCartProduct()">전체삭제</button>
 								</div>
 								<div style="text-align: left;margin:12px">
-									<table class="table table-hover">
+									<table id="cartTable" class="table table-hover">
 										<thead>
 										</thead>
 										<colgroup>
@@ -133,7 +133,7 @@
 													class="fa fa-remove fa-2x"></i>
 												</td>
 											</tr>	
-											<%}}%>
+											<%}}%> 
 
 										</tbody>
 									</table>
@@ -151,6 +151,13 @@
 			</div>
 		</div>
 	</nav>
+	
+	<div id="ob-mobileCartBtn" class="n-target-mobilebtn n-on-mobile">
+		<button class="btn btn-primary" onclick="location.href='./cart.do'"
+		style="width:100%;height:100%;font-size:20px;font-weight:bold">
+			장바구니 (<span id="ob-cartSize2"><%=cartList.size() %></span>)
+		</button>
+	</div>
 	
 	<script>
 		document.getElementById('ob-sumPrice').innerText = numberWithCommas(<%=sumPrice%>);

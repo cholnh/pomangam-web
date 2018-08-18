@@ -15,5 +15,6 @@ public class ProductBean {
 	Integer idx, idx_restaurant, type;
 	String name;
 	Integer price;
-	String imgpath, description, cnt_limit;
+	String imgpath, description;
+	Integer cnt_limit;
 }

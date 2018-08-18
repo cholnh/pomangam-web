@@ -38,7 +38,7 @@
 	<script src="js/bootstrap-datepicker.ko.min.js"></script>
 
 	<script>
-
+	$('#ob-mobileCartBtn').hide();
 	</script>
 </body>
 </html>

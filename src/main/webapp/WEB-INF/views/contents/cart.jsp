@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="com.mrporter.pomangam.cart.vo.CartBean"%>
+<%@page import="com.mrporter.pomangam.product.vo.ProductBean"%>
+<%@page import="com.google.gson.reflect.TypeToken"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.mrporter.pomangam.target.dao.TargetCrudDAO"%>
+<%@page import="com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO"%>
+<%@page import="com.mrporter.pomangam.product.dao.ProductCrudDAO"%>
 <!DOCTYPE html>
 
 <html>
@@ -7,6 +16,15 @@
 </head>
 <body style="background-color: #FFF">
 
+	<%	
+		List<CartBean> cartList = new ArrayList<>();
+		Object obj = session.getAttribute("cartList");
+		
+		if(obj != null) {
+			cartList = (ArrayList<CartBean>) obj;
+		}
+	%>
+	
 	<!-- Navbar -->
 	<jsp:include page="../parts/header.jsp" /> 
 
@@ -21,10 +39,10 @@
 			</div>
             <div class="center n-border">
             	<div style="text-align:right; margin-right:12px">
-					<button class="btn btn-secondary n-small" onclick="removeAllCart()">전체삭제</button>
+					<button class="btn btn-secondary n-small" onclick="removeAllCartProduct()">전체삭제</button>
 				</div>
 				<div style="text-align: left;margin:12px">
-					<table id="cartTable" class="table table-hover">
+					<table id="cartTable2" class="table table-hover">
 						<thead>
 						</thead>
 						<colgroup>
@@ -33,68 +51,48 @@
 	                        <col style="width: 20px">
 	                    </colgroup>
 						<tbody>
-							<tr>
-								<td>
-									<a href="#" class="valign-middle n-noborder">
-		                                <img src="resources/img/restaurant/1.jpg" alt="화이트 갈릭버거" class="n-cart-icon" />
-									</a>
-								</td>
-								<td>
-									<div class="row" style="margin-left:12px">
-										<span><b>화이트 갈릭버거</b></span>
-									</div>
-									<div class="row" style="margin-left:12px">
-										<b>6,000원</b>
-										<input type="number" min=1 value=1 style="width:40px;margin-left:6px">
-									</div>
-								</td>
-								<td>
-									<i class="fa fa-remove"></i>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<a href="#" class="valign-middle n-noborder">
-		                                <img src="resources/img/restaurant/2.jpg" alt="화이트 갈릭버거" class="n-cart-icon" />
-									</a>
-								</td>
-								<td>
-									<div class="row" style="margin-left:12px">
-										<span><b>화이트 갈릭버거</b></span>
-									</div>
-									<div class="row" style="margin-left:12px">
-										<b>6,000원</b>
-										<input type="number" min=1 value=1 style="width:40px;margin-left:6px">
-									</div>
-								</td>
-								<td>
-									<i class="fa fa-remove"></i>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<a href="#" class="valign-middle n-noborder">
-		                                <img src="resources/img/restaurant/3.jpg" alt="화이트 갈릭버거" class="n-cart-icon" />
-									</a>
-								</td>
-								<td>
-									<div class="row" style="margin-left:12px">
-										<span><b>화이트 갈릭버거</b></span>
-									</div>
-									<div class="row" style="margin-left:12px">
-										<b>6,000원</b>
-										<input type="number" min=1 value=1 style="width:40px;margin-left:6px">
-									</div>
-								</td>
-								<td>
-									<i class="fa fa-remove"></i>
-								</td>
-							</tr>
+							<%
+							int sumPrice = 0;
+							
+							if(cartList != null) {
+							for(CartBean cart : cartList) {
+								int idx_product = cart.getIdx_product();
+								
+								String json = new ProductCrudDAO().getBean(idx_product);
+								List<ProductBean> list = new Gson().fromJson(
+										json, 
+										new TypeToken<List<ProductBean>>() {}.getType());
+								ProductBean product = list.get(0);
+								sumPrice += (product.getPrice() * cart.getAmount());
+								
+								int totalPrice = product.getPrice()*cart.getAmount();
+							%>
+								<tr id="cart2-<%=cart.getIdx()%>">
+									<td>
+										<a href="./product.do?idx=<%=product.getIdx() %>" class="valign-middle n-noborder">
+			                                <img src="<%=product.getImgpath() %>" alt="<%=product.getName() %>" class="n-cart-icon" />
+										</a>
+									</td>
+									<td>
+										<div class="row" style="margin-left:12px">
+											<span><b><%=product.getName() %></b></span>
+										</div>
+										<div class="row" style="margin-left:12px">
+											<b><%=product.getPrice() %>원</b>
+											<input type="number" min=1 value=<%=cart.getAmount() %> style="width:40px;margin-left:6px">
+										</div>
+									</td>
+									<td>
+										<i onclick="removeCartProduct(<%=cart.getIdx()%>, <%=totalPrice %>)" 
+													class="fa fa-remove fa-2x"></i>
+									</td>
+								</tr>
+							<%}}%>
 						</tbody>
 					</table>
 					
 					<div class="n-center" style="margin-top:32px;margin-bottom:32px">
-						<h3 class="n-font">총 <span id="total">22,000</span>원</h3>
+						<h3 class="n-font">총 <span id="ob-sumPrice2">0</span>원</h3>
 					</div>
 				</div>
             </div>
@@ -126,14 +124,11 @@
 	<script>
 	$('#header-home').hide();
 	$('#header-back').show();
-	$('#header-back').prop('href', 'javascript:history.back()');
+	$('#header-back').prop('href', document.referrer);
 	
-	function removeAllCart() {
-		// do server part	
+	$('#ob-mobileCartBtn').hide();
+	$('#ob-sumPrice2').text(numberWithCommas(<%=sumPrice%>));
 	
-		$('#cartTable').empty();
-		$('#total').text('0');
-	}
 	</script>
 
 </body>

@@ -495,12 +495,7 @@
     </div>
   </div>
  -->
-	<div class="n-target-mobilebtn n-on-mobile">
-		<button class="btn btn-primary" onclick="location.href='./cart.do'"
-		style="width:100%;height:100%;font-size:20px;font-weight:bold">
-			장바구니 (3)
-		</button>
-	</div>
+
 	
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>

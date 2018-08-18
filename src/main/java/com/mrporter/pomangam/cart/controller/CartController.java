@@ -92,7 +92,6 @@ public class CartController {
 		}
 		
 		bean.setIdx(cartList.size());
-		System.out.println(bean.getIdx());
 		cartList.add(bean);
 		session.setAttribute("cartList", cartList);
 		
@@ -113,16 +112,24 @@ public class CartController {
 		if(obj==null) {
 		} else {
 			cartList = (ArrayList<CartBean>) obj;
-			System.out.println(cartList);
 			for(CartBean c : cartList) {
-				System.out.println(c.getIdx().intValue() + " " + idx.intValue() + " " + (c.getIdx().intValue() == idx.intValue()));
 				if(c.getIdx().intValue() == idx.intValue()) {
-					System.out.println(cartList.remove(c));
+					cartList.remove(c);
 					session.setAttribute("cartList", cartList);
 					return new Status(200);
 				}
 			}
 		}
+		return new Status(200);
+	}
+	
+	@RequestMapping(value = "/"+MAPPINGNAME+"/alldelete.do")
+	public @ResponseBody Status deleteAll(
+			HttpServletRequest request) throws Exception {
+		
+		HttpSession session = request.getSession();
+		session.removeAttribute("cartList");
+
 		return new Status(200);
 	}
 	
