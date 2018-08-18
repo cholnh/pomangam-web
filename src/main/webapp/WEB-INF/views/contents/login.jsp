@@ -166,6 +166,8 @@
 	<script src='js/sha512.js'></script>
 	
 	<script>
+	$('#ob-mobileCartBtn').hide();
+	
 	function signup() {
 		$('#signup').fadeIn('slow');
 		var offset = $('#focusPanel').offset();

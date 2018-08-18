@@ -31,4 +31,12 @@ public class OrdertimeCrudDAO extends Crud<OrdertimeBean> {
 		return gson.fromJson(gson.toJson(listOfMaps), 
 				new TypeToken<List<OrdertimeBean>>() {}.getType());
 	}
+	
+	public List<OrdertimeBean> getTimeListByIdx(Integer idx) throws Exception {
+		List<Map<String, Object>> listOfMaps;
+		listOfMaps = sqlQuery("SELECT end FROM " + TABLENAME + " WHERE idx_target=?", idx); 
+		Gson gson = new Gson();
+		return gson.fromJson(gson.toJson(listOfMaps), 
+				new TypeToken<List<OrdertimeBean>>() {}.getType());
+	}
 }

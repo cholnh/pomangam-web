@@ -13,6 +13,77 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function getTimeStamp() {
+	var d = new Date();
+	var s =
+		leadingZeros(d.getFullYear(), 4) + '-' +
+		leadingZeros(d.getMonth() + 1, 2) + '-' +
+		leadingZeros(d.getDate(), 2) + ' ' +
+
+		leadingZeros(d.getHours(), 2) + ':' +
+		leadingZeros(d.getMinutes(), 2) + ':' +
+		leadingZeros(d.getSeconds(), 2);
+
+	return s;
+}
+
+function leadingZeros(n, digits) {
+	var zero = '';
+	n = n.toString();
+
+	if (n.length < digits) {
+		for (i = 0; i < digits - n.length; i++)
+			zero += '0';
+	}
+	return zero + n;
+}
+
+function getRemainTime() {
+	var cur = new Date();
+	var makeHours = 60 * 60 * 1000;
+	var makeMinutes = 60 * 1000;
+	var makeSeconds = 1000;
+	
+	for(var i=0; i<=ordertime.length; i++) {
+		if(i==ordertime.length) {
+			var next = new Date();
+			next.setDate(next.getDate()+1);
+			next.setHours(ordertime[0].hour);
+			next.setMinutes(ordertime[0].minute);
+			next.setSeconds(0);
+			
+			var diff = next - cur;
+			var h = parseInt(diff/makeHours);
+			var diff2 = diff - (makeHours*h);
+			var m = parseInt(diff2/makeMinutes);
+			var s = parseInt((diff2 - (makeMinutes*m))/makeSeconds);
+			
+			return (h>0?h+'시간 ':'')+(m>0?m+'분 ':'')+s+'초';
+		}
+		
+		var o = new Date();
+		o.setHours(ordertime[i].hour);
+		o.setMinutes(ordertime[i].minute);
+		o.setSeconds(0);
+		if(cur > o) {
+			continue;
+		} else {
+			var diff = o - cur;
+			var h = parseInt(diff/makeHours);
+			var diff2 = diff - (makeHours*h);
+			var m = parseInt(diff2/makeMinutes);
+			var s = parseInt((diff2 - (makeMinutes*m))/makeSeconds);
+			
+			return (h>0?h+'시간 ':'')+(m>0?m+'분 ':'')+s+'초';
+		}
+	}
+}
+
+function realtimeClock() {
+	$('#ob-time').text(getRemainTime());
+	setTimeout("realtimeClock()", 1000);
+}
+
 function ajax(url, data, async, success, error) {
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -77,11 +148,52 @@ function removeCartProduct(idx, totalPrice) {
 					$('#cart-'+idx).fadeOut("slow", function(){
 						$('#cart-'+idx).remove();
 					});
+					if($('#cart2-'+idx).length > 0) {
+						$('#cart2-'+idx).fadeOut("slow", function(){
+							$('#cart2-'+idx).remove();
+						});
+					}
+					
 					var size = $('#ob-cartSize').text() - 1;
 					$('#ob-cartSize').text(size<0?0:size);
-					var pre = parseInt($('#ob-sumPrice').text().replace(',',''));
-					$('#ob-sumPrice').text(numberWithCommas(pre-totalPrice));
+					$('#ob-cartSize2').text(size<0?0:size);
 					
+					var pre = parseInt($('#ob-sumPrice').text().replace(',',''));
+					var cur = numberWithCommas(pre-totalPrice);
+					$('#ob-sumPrice').text(cur);
+					$('#ob-sumPrice2').text(cur);
+					
+				} else {
+					alert(status.message);
+				}
+			},
+			function() {
+				alert('네트워크 오류');
+			}
+		);
+}
+
+function removeAllCartProduct() {
+	ajax('./cart/alldelete.do', 
+			{
+			},
+			true,
+			function(status) {
+				if (status.code / 100 == 2) {
+					$('#cartTable').find("tr").each(function() {
+						$(this).fadeOut("slow", function(){
+							$(this).remove();
+						});
+					});
+					$('#cartTable2').find("tr").each(function() {
+						$(this).fadeOut("slow", function(){
+							$(this).remove();
+						});
+					});
+					$('#ob-sumPrice').text('0');
+					$('#ob-sumPrice2').text('0');
+					$('#ob-cartSize').text('0');
+					$('#ob-cartSize2').text('0');
 				} else {
 					alert(status.message);
 				}

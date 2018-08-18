@@ -187,12 +187,13 @@
 		
 		<!-- Parter -->
 		<div>
-			<h2 class="n-font landing-heading text-xs-center">주문 마감까지 <span style="color:#eb613e">35분</span> 남았습니다.</h2>
+			<h2 class="n-font landing-heading text-xs-center">주문 마감까지  <span id="ob-time" style="color:#eb613e"></span> 남았습니다.</h2>
 			
 			
 			<ul class="list-group n-target-center">
 		<%
 		boolean tf = true;
+		System.out.println(restaurantList);
 		for(int i=0; i<restaurantList.size(); i++) {
 			RestaurantBean bean = restaurantList.get(i);
 			if(tf) {%>
@@ -234,422 +235,11 @@
 				</li>
 			<%} tf = !tf;%>	
 		<%}%>
-		<!-- 
-				<li class="list-group-item n-noborder" style="padding:0px">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="box n-hover-opacity" onclick="location.href='./restaurant.do?idx=1'">
-								<a class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/1.png" alt="베스킨라빈스" class="n-target-icon" />
-								</a>
 
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<span class="box-cell valign-middle n-target-title">베스킨 라빈스</span>
-										</div>
-										<div class="box-row">
-											<a class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<span class="box-cell valign-middle n-target-subtitle">남은 수량 : <b>47개</b></span>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="box n-hover-opacity" onclick="location.href='./restaurant.do?idx=1'">
-								<a class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/2.png" alt="서브웨이" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a class="box-cell valign-middle n-nodec n-target-title">
-												서브웨이
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				</li>
-				
-				<li class="list-group-item n-noborder" style="padding:0px">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/3.png" alt="설빙" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												설빙
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/4.png" alt="할매순대국" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												큰맘 할매순대국
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				</li>
-				
-				<li class="list-group-item n-noborder" style="padding:0px">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/5.png" alt="피자스쿨" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												피자스쿨
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/6.png" alt="버거킹" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												버거킹
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				</li>
-				
-				<li class="list-group-item n-noborder" style="padding:0px">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/7.png" alt="KFC" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												KFC
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle 
-												   text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/8.jpg" alt="한솥 도시락" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												한솥 도시락
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				</li>
-
-				<li class="list-group-item n-noborder" style="padding:0px">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/9.png" alt="엽기떡볶이" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												엽기떡볶이
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle 
-												   text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/10.png" alt="교촌치킨" class="n-target-icon" />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												교촌치킨
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				</li>
-				
-				<li class="list-group-item n-noborder" style="padding:0px">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="box">
-								<a href="#" class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
-									<img src="resources/img/target/1/11.png" alt="도미노피자" class="n-target-icon " />
-								</a>
-
-								<div class="box-cell">
-									<div class="box-container">
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec n-target-title">
-												도미노피자
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<i class="pull-xs fa fa-star"></i>
-												4.7&nbsp;&nbsp;
-												<i class="pull-xs fa fa-commenting"></i>
-												132
-											</a>
-										</div>
-										<div class="box-row">
-											<a href="#" class="box-cell valign-middle n-nodec">
-												<span class="n-target-subtitle">남은 수량 : <b>47개</b></span>
-											</a>
-										</div>
-									</div>
-								</div>
-
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</div>
-
-					</div>
-				</li>
-				 -->
 			</ul>
 		</div>
 	</div>
-	
-	<div class="n-target-mobilebtn">
-		<button class="btn btn-primary" onclick="location.href='./cart.do'"
-		style="width:100%;height:100%;font-size:20px;font-weight:bold">
-			<i class="fa fa-shopping-cart" style="margin-right:6px"></i>
-			장바구니 (3)
-		</button>
-	</div>
-	
+
 	<div class="modal" id="modal1" tabindex="-1" role="dialog" style="top:30%">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -792,7 +382,25 @@
 			$('#modal2').modal();
 		});
 	} 
-		
+	
+	var tmp = <%=new Gson().toJson(ordertime) %>;
+	var ordertime = [];
+	tmp.forEach(function(e){
+		var time = {};
+		if(e.end.substring(0, 2) == '오전') {
+			var t = e.end.substring(3);
+			time.hour = parseInt(t.substring(0, t.indexOf(':')));
+			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
+		} else if(e.end.substring(0, 2) == '오후') {
+			var t = e.end.substring(3);
+			time.hour = parseInt(t.substring(0, t.indexOf(':'))) + 12;
+			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
+		}
+		ordertime.push(time);
+	});
+
+	realtimeClock();
+	
 	</script>
 	<script>
 	$(function() {

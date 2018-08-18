@@ -101,14 +101,7 @@
                 </a>
             </div>
 		</div>
-       
-        <div class="n-target-mobilebtn">
-			<button class="btn btn-primary" onclick="location.href='./cart.do'"
-			style="width:100%;height:100%;font-size:20px;font-weight:bold">
-				<i class="fa fa-shopping-cart" style="margin-right:6px"></i>
-				장바구니 (3)
-			</button>
-		</div>
+
         
 	</div>
 	

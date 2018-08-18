@@ -162,7 +162,9 @@
 	<script>
 	$('#header-home').hide();
 	$('#header-back').show();
-	$('#header-back').prop('href', 'javascript:history.back()');
+	$('#header-back').prop('href', document.referrer);
+	
+	$('#ob-mobileCartBtn').hide();
 	</script>
 
 </body>

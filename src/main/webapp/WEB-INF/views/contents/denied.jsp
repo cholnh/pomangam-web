@@ -11,9 +11,13 @@
 		<h1>???</h1>
 		<br>
 		<p>관리자에게 문의하세요.</p>
-		<button type="button" onclick="location = location.origin + '/' + location.pathname.split('/')[1]">홈</button>
+		<button type="button" onclick="location.href='./'">홈</button>
 		<button type="button" onclick="history.back()">뒤로</button>
 	</center>
 	<%@ include file="../parts/footer.jsp" %>
+	
+	<script>
+	$('#ob-mobileCartBtn').hide();
+	</script>
 </body>
 </html>

@@ -1,3 +1,7 @@
+<%@page import="com.mrporter.pomangam.target.vo.OrdertimeBean"%>
+<%@page import="com.mrporter.pomangam.product.vo.ProductBean"%>
+<%@page import="com.google.gson.reflect.TypeToken"%>
+<%@page import="com.mrporter.pomangam.restaurant.vo.RestaurantBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
@@ -13,6 +17,17 @@
 	<%
 		String curTarget = (String) session.getAttribute("curTarget");
 		String curRestaurant = (String) request.getParameter("idx");
+		
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<String> ordertime = (List) request.getAttribute("ordertime");
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<ProductBean> productList = (List<ProductBean>) request.getAttribute("productList");
+		
+		String json = (String) request.getAttribute("restaurant");
+		List<RestaurantBean> list = new Gson().fromJson(
+				json, 
+				new TypeToken<List<RestaurantBean>>() {}.getType());
+		RestaurantBean restaurant = list.get(0);
 	%>
 	
 	<!-- Navbar -->
@@ -24,7 +39,7 @@
 			<a href="" style="text-decoration:none; !important">
 				<span class="n-xlarge n-bottombar" style="padding:5px">
                     <span style="color:black">
-                        맘스터치 가라뫼점
+                        <%=restaurant.getName() %>
                     </span>
                 </span>
 			</a>
@@ -32,16 +47,16 @@
 		<div class="n-center" style="font-size:13px">
             <b>
             	<i class="pull-xs fa fa-star"></i>
-	            4.7&nbsp;&nbsp;
+	            <%=restaurant.getCnt_star() %>&nbsp;&nbsp;
 	            <i class="pull-xs fa fa-commenting"></i>
-	            132
+	            <%=restaurant.getCnt_comment() %>
             </b>
             <br>
             <i class="pull-xs fa fa-location-arrow"></i>
-            	가라뫼 사거리 32-15
+            	<%=restaurant.getLocation() %>
 	        <br>
 	        <span>
-	             <b>#</b>존맛탱 <b>#</b>친절 <b>#</b>맛집 <b>#</b>항공대
+	        	<%=restaurant.getDescription() %>
 	        </span>
 		</div>
 		
@@ -57,25 +72,34 @@
 		
 		<!-- Parter -->
 		<div>
-			<h2 class="n-font landing-heading text-xs-center">주문 마감까지 <span style="color:#eb613e">35분</span> 남았습니다.</h2>
+			<h2 class="n-font landing-heading text-xs-center">
+				주문 마감까지 <span id="ob-time" style="color:#eb613e"></span> 남았습니다.
+			</h2>
 			
 			<div class="container-fluid n-target-center" >
 				<div class="row">
+					<%
+					
+					for(int i=0; i<productList.size(); i++) {
+						ProductBean bean = productList.get(i);%>	
+
 					<div class="col-xs-4 col-sm-3">
-						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
-							<a href="#" class="valign-middle n-noborder"> <img
-								src="resources/img/product/1.jpg" alt="엽기떡볶이" class="n-restaurant-icon"
+						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=<%=bean.getIdx() %>'">
+							<a class="valign-middle n-noborder"> <img
+								src="<%=bean.getImgpath() %>" alt="<%=bean.getName() %>" class="n-restaurant-icon"
 								style="margin-top: 3px" />
 
 							</a>
 							<div style="margin-top: 3px">
-								<b>화이트 갈릭버거</b> <br> 6,000원
+								<b><%=bean.getName() %></b> <br> <%=bean.getPrice() %>원
 							</div>
+							<%if(bean.getCnt_limit() <= 5) {%>
 							<button class="btn btn-primary "
 								style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
-
+							<%} %>
 						</div>
 					</div>
+					<%} %>
 					<div class="col-xs-4 col-sm-3">
 						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=1'">
 							<a href="#" class="valign-middle n-noborder"> <img
@@ -142,13 +166,7 @@
 			
 		</div>
         
-		<div class="n-target-mobilebtn">
-			<button class="btn btn-primary" onclick="location.href='./cart.do'"
-			style="width:100%;height:100%;font-size:20px;font-weight:bold">
-				<i class="fa fa-shopping-cart" style="margin-right:6px"></i>
-				장바구니 (3)
-			</button>
-		</div>
+
 	</div>
 	
 	<!-- Footer -->
@@ -169,6 +187,25 @@
 	$('#header-home').hide();
 	$('#header-back').show();
 	$('#header-back').prop('href', './target.do?idx='+curTarget);
+	
+	var tmp = <%=new Gson().toJson(ordertime) %>;
+	var ordertime = [];
+	tmp.forEach(function(e){
+		var time = {};
+		if(e.end.substring(0, 2) == '오전') {
+			var t = e.end.substring(3);
+			time.hour = parseInt(t.substring(0, t.indexOf(':')));
+			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
+		} else if(e.end.substring(0, 2) == '오후') {
+			var t = e.end.substring(3);
+			time.hour = parseInt(t.substring(0, t.indexOf(':'))) + 12;
+			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
+		}
+		ordertime.push(time);
+	});
+
+	realtimeClock();
+	
 	</script>
 
 	
