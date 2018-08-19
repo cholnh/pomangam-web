@@ -9,6 +9,7 @@
 <%@page import="com.mrporter.pomangam.target.dao.TargetCrudDAO"%>
 <%@page import="com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO"%>
 <%@page import="com.mrporter.pomangam.product.dao.ProductCrudDAO"%>
+<%@page import="com.mrporter.pomangam.common.util.Number"%>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -79,13 +80,16 @@
 							<a href="./cart.do" class="scroll-to">장바구니&nbsp;(<span id="ob-cartSize"><%=cartList.size() %></span>)</a>
 							<div class="n-dropdown-content n-card-4"
 								style="width: 350px; right: 0">
+								<%
+								if(cartList != null && !cartList.isEmpty()) {
+								%>
 								<div class="" style="text-align: center">
 									<h4><b>총 <span id="ob-sumPrice">0</span>원</b></h4>
 								</div>
-								
 								<div style="text-align:right; margin-right:12px">
 									<button class="btn btn-secondary n-small" onclick="removeAllCartProduct()">전체삭제</button>
 								</div>
+								<%} %>
 								<div style="text-align: left;margin:12px">
 									<table id="cartTable" class="table table-hover">
 										<thead>
@@ -100,6 +104,14 @@
 											<%
 											int sumPrice = 0;
 											
+											if(cartList == null || cartList.isEmpty()) {
+											%>	
+											<tr style="text-align:center">
+												<td colspan=3>
+													장바구니가 비어있습니다.
+												</td>
+											</tr>
+											<%}
 											if(cartList != null) {
 											for(CartBean cart : cartList) {
 												int idx_product = cart.getIdx_product();
@@ -115,17 +127,22 @@
 											%>
 											<tr id="cart-<%=cart.getIdx()%>">
 												<td>
-													<a href="#" class="valign-middle n-noborder">
+													<a href="./product.do?idx=<%=product.getIdx() %>" class="valign-middle n-noborder">
 						                                <img src="<%=product.getImgpath() %>" alt="<%=product.getName() %>" class="n-cart-icon" />
 													</a>
 												</td>
 												<td>
 													<div class="row" style="margin-left:12px">
 														<span><b><%=product.getName() %></b></span>
+														<span style="font-weight:bold;margin-left:6px"></b>
+											            	<% out.print(Number.numberWithCommas(cart.getAmount())); %>개 
+											            </span>
 													</div>
 													<div class="row" style="margin-left:12px">
-														<b><%=product.getPrice() %></b>
-														<input type="number" min=1 value="<%=cart.getAmount()%>" style="width:40px;margin-left:6px">
+														
+														<b><% out.print(Number.numberWithCommas(product.getPrice())); %>원</b>
+														
+														<!-- <input type="number" min=1 value="" style="width:40px;margin-left:6px">개  -->
 													</div>
 												</td>
 												<td>
@@ -137,11 +154,14 @@
 
 										</tbody>
 									</table>
-									
+									<%
+									if(cartList != null && !cartList.isEmpty()) {
+									%>
 									<div class="n-center" style="margin-top:32px;margin-bottom:32px">
 										<button class="btn btn-primary" style="width:60%;font-size:20px;font-weight:bold" 
-											onclick="location.href='./payment.do'">결제하기</button>
+											onclick="location.href='./payment.do'">주문하기</button>
 									</div>
+									<%} %>
 								</div>
 							</div>
 						</div>
@@ -160,8 +180,10 @@
 	</div>
 	
 	<script>
-		document.getElementById('ob-sumPrice').innerText = numberWithCommas(<%=sumPrice%>);
-		
+	var ob = document.getElementById('ob-sumPrice');
+	if(ob) {
+		ob.innerText = numberWithCommas(<%=sumPrice%>);
+	}
 	</script>
 	
 </body>

@@ -215,7 +215,7 @@
 
   <!-- Mobile support -->
 
-  <div class="landing-section landing-features ">
+  <div class="landing-section landing-features">
     <div class="container">
       <div class="col-md-4 text-xs-center">
         <img data-src="resources/img/main/iphone.png" class="lazyload image">
@@ -495,7 +495,6 @@
     </div>
   </div>
  -->
-
 	
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>

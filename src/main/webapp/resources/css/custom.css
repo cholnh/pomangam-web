@@ -25,7 +25,7 @@ body {
 
 .n-mobilesupport{padding-bottom: 32px}
 
-.n-footer{padding:32px;color:#000!important;background-color:#f1f1f1!important;text-align:center!important;bottom:0;width:100%;}
+.n-footer{position: sticky;padding:32px;color:#000!important;background-color:#f1f1f1!important;text-align:center!important;top:100%;width:100%;}
 
 .n-title-bigchar{font-size:48px}
 

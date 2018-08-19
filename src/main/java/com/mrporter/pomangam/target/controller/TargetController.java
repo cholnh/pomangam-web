@@ -102,6 +102,13 @@ public class TargetController {
 				ioe.printStackTrace();
 			}
 		}
+		if(e.getClass().getSimpleName().equals("MethodArgumentTypeMismatchException")) {
+			try {
+				response.sendRedirect("./");
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
 		logger.info("Exception Handler - " + e.getMessage());
 		return new Status(400, "Exception handled!");
 	}

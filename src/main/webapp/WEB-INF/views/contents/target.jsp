@@ -1,12 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@page import="com.mrporter.pomangam.target.vo.OrdertimeBean"%>
 <%@page import="com.mrporter.pomangam.target.vo.DestinationBean"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.google.gson.reflect.TypeToken"%>
 <%@page import="com.mrporter.pomangam.target.vo.TargetBean"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mrporter.pomangam.restaurant.vo.RestaurantBean"%>
+<%@page import="com.mrporter.pomangam.common.util.Number"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -35,7 +36,7 @@
 	<jsp:include page="../parts/header.jsp" /> 
 	
 	<!-- Content -->
-	<div class="container center" style="margin-top:50px">
+	<div class="container center" style="margin-top:50px; margin-bottom: 1px">
 		<!-- Target Info -->
 		<div class="n-center n-padding-32 n-margin-bottom">
 			<a href="" style="text-decoration:none; !important">
@@ -47,7 +48,9 @@
 			</a>
 		</div>
 		<div class="n-center">
-			<span style="font-size:13px">누적 주문 수 : <b><%=target.getCnt_order() %></b>건<br>구독 회원 수 : <b>25</b>명
+			<span style="font-size:13px">
+				누적 주문 수 : <b><% out.print(Number.numberWithCommas(target.getCnt_order())); %></b>건 <br>
+				구독 회원 수 : <b>25</b>명
 			</span>
 		</div>
 		
@@ -213,13 +216,14 @@
 										<div class="box-row">
 											<a class="box-cell valign-middle n-nodec">
 												<i class="pull-xs fa fa-star"></i>
-												<%=bean.getCnt_star() %>&nbsp;&nbsp;
+												<% out.print(Number.numberWithCommas(bean.getCnt_star())); %>&nbsp;&nbsp;
 												<i class="pull-xs fa fa-commenting"></i>
-												<%=bean.getCnt_comment() %>
+												<% out.print(Number.numberWithCommas(bean.getCnt_comment())); %>
 											</a>
 										</div>
 										<div class="box-row">
-											<span class="box-cell valign-middle n-target-subtitle">남은 수량 : <b><%=bean.getSum_limit() %>개</b></span>
+											<span class="box-cell valign-middle n-target-subtitle">
+												남은 수량 : <b><% out.print(Number.numberWithCommas(bean.getSum_limit())); %>개</b></span>
 										</div>
 									</div>
 								</div>

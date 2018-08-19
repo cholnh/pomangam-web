@@ -33,8 +33,18 @@ public class ProductController {
 		
 		HttpSession session = request.getSession();
 		
+		@SuppressWarnings("unused")
+		Integer curTarget = null;
+		Integer curRestaurant = null;
+		try {
+			curTarget = Integer.parseInt(session.getAttribute("curTarget")+"");
+			curRestaurant = Integer.parseInt(session.getAttribute("curRestaurant")+"");
+		} catch(Exception e) {
+			response.sendRedirect("./");
+			return null;
+		}
+		
 		if(idx==null||idx<0) {
-			String curRestaurant = (String) session.getAttribute("curRestaurant");
 			response.sendRedirect("./restaurant.do?idx="+curRestaurant);
 			return null;
 		}
@@ -43,7 +53,6 @@ public class ProductController {
 		String product = defaultDAO.getBean(idx);
 		
 		if(product.equals("[]")) { // is empty
-			String curRestaurant = (String) session.getAttribute("curRestaurant");
 			response.sendRedirect("./restaurant.do?idx="+curRestaurant);
 			return null;
 		} else {
@@ -86,10 +95,19 @@ public class ProductController {
 	}
 	
 	@ExceptionHandler
-	public @ResponseBody Status handle(Exception e, HttpServletResponse response) {
+	public @ResponseBody Status handle(Exception e, HttpServletRequest request, HttpServletResponse response) {
 		if(e.getClass().getSimpleName().equals("AccessDeniedException")) {
 			try {
 				response.sendRedirect("./denied"); 
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+		if(e.getClass().getSimpleName().equals("MethodArgumentTypeMismatchException")) {
+			try {
+				HttpSession session = request.getSession();
+				String curRestaurant = (String) session.getAttribute("curRestaurant");
+				response.sendRedirect("./restaurant.do?idx="+curRestaurant);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}

@@ -137,6 +137,26 @@ function insertCartProduct() {
 	);
 }
 
+function updateCartProduct(idx, amount) {
+	ajax('./cart/update.do', 
+			{
+				idx : idx,
+				amount : amount
+			},
+			true,
+			function(status) {
+				if (status.code / 100 == 2) {
+					location.reload();
+				} else {
+					alert(status.message);
+				}
+			},
+			function() {
+				alert('네트워크 오류');
+			}
+		);
+}
+
 function removeCartProduct(idx, totalPrice) {
 	ajax('./cart/delete.do', 
 			{

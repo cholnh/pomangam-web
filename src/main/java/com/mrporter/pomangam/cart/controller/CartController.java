@@ -33,7 +33,6 @@ public class CartController {
 		
 		ModelAndView model = new ModelAndView();
 		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("fields", defaultDAO.getFields(CartBean.class));
 		return model;
 	}
 	
@@ -95,6 +94,33 @@ public class CartController {
 		cartList.add(bean);
 		session.setAttribute("cartList", cartList);
 		
+		return new Status(200);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/"+MAPPINGNAME+"/update.do")
+	public @ResponseBody Status update(
+			@RequestParam(value = "idx", required = true) Integer idx,
+			@RequestParam(value = "amount", required = true) Integer amount,
+			HttpServletRequest request) throws Exception {
+		
+		HttpSession session = request.getSession();
+		
+		List<CartBean> cartList = null;
+		Object obj = session.getAttribute("cartList");
+		
+		if(obj==null) {
+		} else {
+			cartList = (ArrayList<CartBean>) obj;
+			for(CartBean c : cartList) {
+				System.out.println(c);
+				if(c.getIdx().intValue() == idx.intValue()) {
+					c.setAmount(amount);
+					session.setAttribute("cartList", cartList);
+					return new Status(200);
+				}
+			}
+		}
 		return new Status(200);
 	}
 	

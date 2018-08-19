@@ -1,11 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@page import="com.google.gson.reflect.TypeToken"%>
 <%@page import="com.mrporter.pomangam.product.vo.ProductBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.mrporter.pomangam.cart.vo.CartBean"%>
 <%@page import="java.util.List"%>
 <%@page import="com.google.gson.Gson"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@page import="com.mrporter.pomangam.common.util.Number"%>
 <!DOCTYPE html>
 
 <html>
@@ -39,18 +40,20 @@
             <div style="margin:12px">
                 <span style="font-size: 20px; font-weight: bold;"><%=product.getName() %></span>
             </div>
-            <a class="btn btn-primary " style="font-size:10px!important;padding:3px"><%=product.getCnt_limit() %>개 남음</a>
+            <a class="btn-primary " style="font-size:12px!important;padding:5px"></b>
+            	<% out.print(Number.numberWithCommas(product.getCnt_limit())); %>개 남음
+            </a>
             <div style="margin-top:18px">
                 
                 <input id="ob-amount" type="number" style="width:40px" min=1 value=1> 개
                 <span style="color: #f3753a; font-weight: bold; margin-left: 12px; font-size: 15px;">
-                    	<%=product.getPrice() %>원
+                    	<% out.print(Number.numberWithCommas(product.getPrice())); %>원
                 </span>
             </div>
 			<div class="n-margin">
 				<button class="btn" onclick="insertCartProduct()"
 				style="background-color: darkgray; color:white;font-size:20px;font-weight:bold">장바구니 담기</button>
-				<button class="btn btn-primary" onclick="location.href='./payment.do?'"
+				<button class="btn btn-primary" onclick="goDirect()"
 				style="font-size:20px;font-weight:bold">바로 주문</button>
 			</div>
 			
@@ -63,7 +66,7 @@
 				<%=product.getDescription() %>
 			</div>
 			<div class="n-product-nutrient">
-				<b>영양성분</b> (1일 영양소 기준치에 대한 비율)
+				<b>영양성분</b> (1일 영양소 기준치에 대한 비율) <b>테스트 데이터 입니다.</b>
 				<div class="table-responsive">
 					<table class="table table-striped n-border">
 						<thead>
@@ -132,6 +135,11 @@
 	$('#header-home').hide();
 	$('#header-back').show();
 	$('#header-back').prop('href', './restaurant.do?idx='+curRestaurant);
+	
+	function goDirect() {
+		location.href='./payment.do?direct=true&amount='+$('#ob-amount').val();
+	}
+	
 	
 	</script>
 </body>

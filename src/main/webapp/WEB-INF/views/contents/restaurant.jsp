@@ -1,13 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@page import="com.mrporter.pomangam.target.vo.OrdertimeBean"%>
 <%@page import="com.mrporter.pomangam.product.vo.ProductBean"%>
 <%@page import="com.google.gson.reflect.TypeToken"%>
 <%@page import="com.mrporter.pomangam.restaurant.vo.RestaurantBean"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.mrporter.pomangam.cart.vo.CartBean"%>
 <%@page import="java.util.List"%>
 <%@page import="com.google.gson.Gson"%>
+<%@page import="com.mrporter.pomangam.common.util.Number"%>
 <!DOCTYPE html>
 
 <html>
@@ -47,9 +48,9 @@
 		<div class="n-center" style="font-size:13px">
             <b>
             	<i class="pull-xs fa fa-star"></i>
-	            <%=restaurant.getCnt_star() %>&nbsp;&nbsp;
+	            <% out.print(Number.numberWithCommas(restaurant.getCnt_star())); %>&nbsp;&nbsp;
 	            <i class="pull-xs fa fa-commenting"></i>
-	            <%=restaurant.getCnt_comment() %>
+	            <% out.print(Number.numberWithCommas(restaurant.getCnt_comment())); %>
             </b>
             <br>
             <i class="pull-xs fa fa-location-arrow"></i>
@@ -95,7 +96,7 @@
 
 							</a>
 							<div style="margin-top: 3px">
-								<b><%=bean.getName() %></b> <br> <%=bean.getPrice() %>원
+								<b><%=bean.getName() %></b> <br> <% out.print(Number.numberWithCommas(bean.getPrice())); %>원
 							</div>
 							<div style="height:25px">
 							<%if(bean.getCnt_limit() <= 5) {%>

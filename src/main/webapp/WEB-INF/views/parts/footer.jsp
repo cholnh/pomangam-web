@@ -4,8 +4,8 @@
 <head>
 </head>
 <body>
-	<footer class="n-footer">
-		<button type="button" class="btn btn-primary btn-3d" onclick="goTop()">
+	<div class="n-footer">
+		<button id="ob-footerBtn" type="button" class="btn btn-primary btn-3d" onclick="goTop()">
 			<i class="fa fa-arrow-up" style="margin-right: 12px"></i>To the top
 		</button>
 		<div style="font-size:24px!important;margin-top:16px!important;margin-bottom:12px!important">
@@ -28,6 +28,6 @@
 		<p style="font-size:11px; color:black">
 		      COPYRIGHT © <b>Mr.Porter Corp.</b>ALL RIGHTS RESERVED.
 		</p>
-	</footer>
+	</div>
 </body>
 </html>

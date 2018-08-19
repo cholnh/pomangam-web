@@ -37,8 +37,16 @@ public class RestaurantController {
 		
 		HttpSession session = request.getSession();
 		
+		Integer curTarget = null;
+		try {
+			Integer.parseInt(idx+"");
+			curTarget = Integer.parseInt(session.getAttribute("curTarget")+"");
+		} catch(Exception e) {
+			response.sendRedirect("./");
+			return null;
+		}
+		
 		if(idx==null||idx<0) {
-			String curTarget = (String) session.getAttribute("curTarget");
 			response.sendRedirect("./target.do?idx="+curTarget); 
 			return null;
 		}
@@ -47,7 +55,6 @@ public class RestaurantController {
 		String restaurant = defaultDAO.getBean(idx);
 		List<ProductBean> productList = new ProductCrudDAO().getBeanList(idx);
 		
-		String curTarget = (String) session.getAttribute("curTarget");
 		if(restaurant.equals("[]")) { // is empty
 			response.sendRedirect("./target.do?idx="+curTarget);
 			return null;
@@ -55,7 +62,7 @@ public class RestaurantController {
 			model.setViewName("contents/" + MAPPINGNAME);
 			model.addObject("restaurant", restaurant);
 			model.addObject("productList", productList);
-			model.addObject("ordertime", new OrdertimeCrudDAO().getTimeListByIdx(Integer.parseInt(curTarget)));
+			model.addObject("ordertime", new OrdertimeCrudDAO().getTimeListByIdx(curTarget));
 			session.setAttribute("curRestaurant", idx+"");
 		}
 		return model;
@@ -92,10 +99,19 @@ public class RestaurantController {
 	}
 	
 	@ExceptionHandler
-	public @ResponseBody Status handle(Exception e, HttpServletResponse response) {
+	public @ResponseBody Status handle(Exception e, HttpServletRequest request, HttpServletResponse response) {
 		if(e.getClass().getSimpleName().equals("AccessDeniedException")) {
 			try {
 				response.sendRedirect("./denied"); 
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+		if(e.getClass().getSimpleName().equals("MethodArgumentTypeMismatchException")) {
+			try {
+				HttpSession session = request.getSession();
+				String curTarget = (String )session.getAttribute("curTarget");
+				response.sendRedirect("./target.do?idx="+curTarget); 
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
