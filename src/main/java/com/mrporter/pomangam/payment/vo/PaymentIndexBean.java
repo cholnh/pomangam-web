@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class PaymentIndexBean {
 	Integer idx;
-	String idxes_payment, password;
+	String idxes_payment, password, timestamp;
+	Integer idx_box;
 }

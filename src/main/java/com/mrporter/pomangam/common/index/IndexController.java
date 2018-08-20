@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
-import com.mrporter.pomangam.payment.dao.PaymentCrudDAO;
+import com.mrporter.pomangam.payment.dao.PaymentIndexCrudDAO;
 import com.mrporter.pomangam.target.dao.TargetCrudDAO;
 
 /**
@@ -33,10 +33,10 @@ public class IndexController {
 		model.setViewName("contents/index");
 		
 		TargetCrudDAO targetDAO = new TargetCrudDAO();
-		PaymentCrudDAO paymentDAO = new PaymentCrudDAO();
+		PaymentIndexCrudDAO indexDAO = new PaymentIndexCrudDAO();
 		
 		model.addObject("sumOrder", targetDAO.getSumOrder());
-		model.addObject("todayOrder", paymentDAO.getTodayOrder());
+		model.addObject("todayOrder", indexDAO.getTodayOrder());
 		model.addObject("targetList", targetDAO.getBeanList());
 		
 		return model;

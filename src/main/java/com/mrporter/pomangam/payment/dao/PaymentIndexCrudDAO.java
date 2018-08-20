@@ -27,6 +27,17 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 		super(TABLENAME);
 	}
 	
+	public int getTodayOrder() throws Exception {
+		List<Map<String, Object>> lom 
+		= sqlQuery("SELECT count(*) FROM " + TABLENAME
+				+ " WHERE timestamp > '" + Date.getCurDay() + " 00:00' "
+				+ "AND timestamp < '" + Date.getCurDay() + " 24:00';");
+		if(lom==null||lom.isEmpty()) 
+			return 0;
+		else
+			return Integer.parseInt(lom.get(0).get("count(*)")+"");
+	}
+	
 	public boolean check(Integer idx, Integer PG_price) throws Exception {
 		String idxes = getIdxes(idx);
 		

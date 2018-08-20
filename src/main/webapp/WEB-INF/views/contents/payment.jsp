@@ -1,3 +1,6 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
 <%@page import="com.mrporter.pomangam.target.vo.OrdertimeBean"%>
 <%@page import="com.mrporter.pomangam.target.vo.DestinationBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -277,11 +280,15 @@
 		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 시간
 		            		</td>
 		            		<td>
+		            			<input class="datepicker" 
+		            				data-date-format="yyyy-mm-dd" 
+		            				data-date-start-date="0d"
+		            				data-date-end-date="+7d"
+		            				>
 		            			<select class="form-control n-payment-select" style="width:150px">
-			                        <option>오후 12:00</option>
-			                        <option>오후 1:00</option>
-			                        <option>오후 6:00</option>
-			                        <option>오후 9:45</option>
+		            				<option>
+		            					오전 11:00
+		            				</option>
 			                    </select>
 		            		</td>
 	            		</tr>
@@ -343,6 +350,9 @@
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
+	
+	<script src="resources/js/bootstrap-datepicker.js"></script>
+	<script src="resources/js/bootstrap-datepicker.kr.min.js"></script>
 	
 	<script>
 	var curTarget = <%=curTarget%>;
@@ -414,6 +424,18 @@
 				}
 		);
 	}
+	
+	$('.datepicker').datepicker({
+        autoclose : true,
+		format: 'yyyy-mm-dd',
+		language : 'kr',
+		todayHighlight : true
+	});
+	$('.datepicker').datepicker().on('changeDate', function(e) {
+    	console.log(e);
+    });
+	
+	$('.datepicker').datepicker('update', new Date());
 	</script>
 
 </body>

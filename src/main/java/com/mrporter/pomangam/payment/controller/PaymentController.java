@@ -140,7 +140,7 @@ public class PaymentController {
 	public @ResponseBody Status insert(
 			PaymentBean bean) throws Exception {
 		
-		bean.setTimestamp(Date.getCurDate());
+		//bean.setTimestamp(Date.getCurDate());
 		bean.setStatus(0); // 0 : 결제 대기, 1 : 결제 완료, 2 : 결제 실패
 		
 		Integer idx = defaultDAO.insert(bean);
@@ -159,6 +159,8 @@ public class PaymentController {
 		Random rand = new Random();
 		String pw = rand.nextInt(10) + "" + rand.nextInt(10);
 		bean.setPassword(pw);
+		bean.setTimestamp(Date.getCurDate());
+		//bean.setIdx_box(idx_box);
 		Integer idx = new PaymentIndexCrudDAO().insert(bean);
 		session.setAttribute("payNumber", idx);
 		
