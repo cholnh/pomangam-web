@@ -277,18 +277,21 @@
 	            	<tbody>
 	            		<tr>
 		            		<td>
+		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 날짜
+		            		</td>
+		            		<td>
+		            			<input class="datepicker form-control" style="padding-left:17px"
+		            				data-date-format="yyyy-mm-dd" 
+		            				data-date-start-date="0d"
+		            				data-date-end-date="+7d">
+		            		</td>
+	            		</tr>
+	            		<tr>
+		            		<td>
 		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 시간
 		            		</td>
 		            		<td>
-		            			<input class="datepicker" 
-		            				data-date-format="yyyy-mm-dd" 
-		            				data-date-start-date="0d"
-		            				data-date-end-date="+7d"
-		            				>
-		            			<select class="form-control n-payment-select" style="width:150px">
-		            				<option>
-		            					오전 11:00
-		            				</option>
+		            			<select class="form-control n-payment-select" style="width:150px" id="ob-time">
 			                    </select>
 		            		</td>
 	            		</tr>
@@ -357,6 +360,23 @@
 	<script>
 	var curTarget = <%=curTarget%>;
 	var cartList = <%=new Gson().toJson(cartList)%>;
+	var tmp = <%=new Gson().toJson(ordertime) %>;
+	var ordertime = [];
+	tmp.forEach(function(e){
+		var time = {};
+		if(e.end.substring(0, 2) == '오전') {
+			var t = e.end.substring(3);
+			time.hour = parseInt(t.substring(0, t.indexOf(':')));
+			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
+			time.text = e.end;
+		} else if(e.end.substring(0, 2) == '오후') {
+			var t = e.end.substring(3);
+			time.hour = parseInt(t.substring(0, t.indexOf(':'))) + 12;
+			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
+			time.text = e.end;
+		}
+		ordertime.push(time);
+	});
 	
 	$('#header-home').hide();
 	$('#header-back').show();
@@ -432,10 +452,42 @@
 		todayHighlight : true
 	});
 	$('.datepicker').datepicker().on('changeDate', function(e) {
-    	console.log(e);
+    	var dates = new Date(e.format('yyyy-mm-dd'));
+    	
+    	var cur = new Date();
+    	if(cur.getDate() == dates.getDate()) {
+    		
+    		for(var i=0; i<=ordertime.length; i++) {
+    			if(i==ordertime.length) {
+    				$('#ob-time').append($('<option>', {
+    				    text: '이용 가능한 시간이 없습니다.'
+    				}));
+    				return;
+    			}
+    			var o = new Date();
+    			o.setHours(ordertime[i].hour);
+    			o.setMinutes(ordertime[i].minute);
+    			o.setSeconds(0);
+    			if(cur > o) {
+    				continue;
+    			} else {
+    				$('#ob-time').append($('<option>', {
+    				    text: ordertime[i].text
+    				}));
+    			}
+    		}
+    	} else {
+    		ordertime.forEach(function(e) {
+    			$('#ob-time').append($('<option>', {
+    			    text: e.text
+    			}));
+    		});
+    		
+    	} 
     });
-	
 	$('.datepicker').datepicker('update', new Date());
+	
+	
 	</script>
 
 </body>
