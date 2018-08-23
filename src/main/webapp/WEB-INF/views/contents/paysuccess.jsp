@@ -8,26 +8,41 @@
 	<%
 		String payNumber = (String) request.getAttribute("payNumber");
 		String payPassword = (String) request.getAttribute("payPassword");
-		System.out.println(payNumber);
-		System.out.println(payPassword);
+		String boxNumber = (String) request.getAttribute("boxNumber");
+		
 	%>
 	<jsp:include page="../parts/header.jsp" /> 
-	<div style="margin-top:160px;margin-bottom:160px">
+	<div style="margin-top:100px;margin-bottom:160px">
 		<center>
 			
 			<div class="n-center n-padding-32 n-margin-bottom">
 				<a style="text-decoration:none; !important">
 					<span class="n-xlarge n-bottombar" style="padding:5px">
-						<span style="color:black; font-size:48px">
+						<span style="color:black; font-size:32px">
 							주문 완료
 						</span>
 					</span>
 				</a>
 			</div>
-			<h1 class="n-font">결제가 성공적으로 완료되었습니다.</h1>
-			
+			<div class="center">
+				<div style="text-align:left;margin:6px">
+						<span style="font-size:14px; color:gray">
+							주문번호 : no.<%=payNumber %>
+						</span>
+					</div>
+				<div class="n-border">
+					<br>
+					<span style="font-size:23px; font-weight: bold">아래 번호를 꼭 기억해 주세요.</span><br> 
+					<span style="font-size:13px">
+						※ 음식 교환 시 사용되는 번호입니다.
+					</span><br> 
+					<span style="margin-top:16px; font-size:128px; "> 
+						<%=boxNumber %>
+					</span>
+				</div>
+			</div>
 			<!-- <button class="btn btn-primary" type="button" onclick="location.href='./'">홈</button> -->
-			<button class="btn btn-primary" style="font-size:20px" type="button" onclick="location.href='./'">홈으로</button>
+			<button class="btn btn-primary" style="font-size:20px;margin-top:32px" type="button" onclick="location.href='./'">홈으로</button>
 		</center>
 	</div>
 	<%@ include file="../parts/footer.jsp" %>

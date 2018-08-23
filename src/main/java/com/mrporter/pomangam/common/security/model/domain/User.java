@@ -20,7 +20,8 @@ public class User implements UserDetails {
     
     private String regdate;
     private String moddate;
-
+    private String phonenumber;
+    
     private List<Role> authorities;
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;

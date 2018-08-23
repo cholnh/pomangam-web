@@ -18,15 +18,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mrporter.pomangam.cart.vo.CartBean;
 import com.mrporter.pomangam.common.pattern.vo.Status;
+import com.mrporter.pomangam.common.security.model.domain.User;
 import com.mrporter.pomangam.common.util.Date;
+import com.mrporter.pomangam.common.util.Ip;
 import com.mrporter.pomangam.payment.dao.PaymentCrudDAO;
 import com.mrporter.pomangam.payment.dao.PaymentIndexCrudDAO;
 import com.mrporter.pomangam.payment.vo.PaymentBean;
 import com.mrporter.pomangam.payment.vo.PaymentIndexBean;
 import com.mrporter.pomangam.target.dao.DestinationCrudDAO;
 import com.mrporter.pomangam.target.dao.OrdertimeCrudDAO;
+import com.mrporter.pomangam.target.dao.TargetCrudDAO;
 
 @Controller
 public class PaymentController {
@@ -71,7 +76,7 @@ public class PaymentController {
 		
 		ModelAndView model = new ModelAndView();
 		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("destination", new DestinationCrudDAO().getListByIdx(curTarget));
+		model.addObject("destination", new DestinationCrudDAO().getListGroupByIdx(curTarget));
 		model.addObject("ordertime", new OrdertimeCrudDAO().getListByIdx(curTarget));
 		
 		return model;
@@ -79,19 +84,24 @@ public class PaymentController {
 	
 	@RequestMapping(value = "/paysuccess.do")
 	public ModelAndView paysuccessPage(
-			HttpServletRequest request) throws Exception {
-		
-		HttpSession session = request.getSession();
-		Integer payNumber = (Integer) session.getAttribute("payNumber");
-		session.removeAttribute("payNumber");
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		
 		ModelAndView model = new ModelAndView();
-		try {
-		model.setViewName("contents/paysuccess");
-		model.addObject("payNumber", payNumber+"");
-		model.addObject("payPassword", new PaymentIndexCrudDAO().getPW(payNumber));
-		} catch (Exception e) {
-			e.printStackTrace();
+		
+		HttpSession session = request.getSession();
+		PaymentIndexCrudDAO indexDAO = new PaymentIndexCrudDAO();
+		
+		Integer payNumber = (Integer) session.getAttribute("payNumber");
+		if(payNumber == null || payNumber < 0) {
+			response.sendRedirect("./");
+			return null;
+		} else {
+			session.removeAttribute("payNumber");
+			model.setViewName("contents/paysuccess");
+			model.addObject("payNumber", payNumber+"");
+			model.addObject("boxNumber", indexDAO.getBoxNumber(payNumber)+"");
+			model.addObject("payPassword", indexDAO.getPW(payNumber));
 		}
 		return model;
 	}
@@ -141,7 +151,6 @@ public class PaymentController {
 			PaymentBean bean) throws Exception {
 		
 		//bean.setTimestamp(Date.getCurDate());
-		bean.setStatus(0); // 0 : 결제 대기, 1 : 결제 완료, 2 : 결제 실패
 		
 		Integer idx = defaultDAO.insert(bean);
 		
@@ -156,12 +165,23 @@ public class PaymentController {
 		
 		HttpSession session = request.getSession();
 		
+		PaymentIndexCrudDAO indexDAO = new PaymentIndexCrudDAO();
 		Random rand = new Random();
 		String pw = rand.nextInt(10) + "" + rand.nextInt(10);
 		bean.setPassword(pw);
 		bean.setTimestamp(Date.getCurDate());
-		//bean.setIdx_box(idx_box);
-		Integer idx = new PaymentIndexCrudDAO().insert(bean);
+		bean.setIdx_box(indexDAO.makeBoxNumber(bean.getReceive_date(), bean.getReceive_time()));
+		bean.setStatus(0); // 0 : 결제 대기, 1 : 결제 완료, 2 : 결제 실패
+		bean.setLocation("web [" + Ip.getInfo() + "]");
+		
+		Object obj = request.getSession().getAttribute("user");
+		if(obj != null) {
+			User user = new Gson().fromJson(obj+"", new TypeToken<User>() {}.getType());
+			bean.setUsername(user.getUsername());
+			bean.setPhonenumber(user.getPhonenumber());
+		}
+		
+		Integer idx = indexDAO.insert(bean);
 		session.setAttribute("payNumber", idx);
 		
 		return new Status(200);
@@ -178,10 +198,14 @@ public class PaymentController {
 		PaymentIndexCrudDAO indexDAO = new PaymentIndexCrudDAO();
 		
 		Integer idx = Integer.parseInt(session.getAttribute("payNumber")+"");
+		Integer curTarget = Integer.parseInt(session.getAttribute("curTarget")+"");
 		
 		if(indexDAO.check(idx, PG_price)) {
 			// 금액 일치
 			//response.sendRedirect("../paysuccess.do");
+			
+			indexDAO.setStatus(1, idx);
+			new TargetCrudDAO().addCountOrder(curTarget);
 			return new Status(200);
 		} else {
 			// 금액 불일치
@@ -213,5 +237,4 @@ public class PaymentController {
 		return new Status(400, "Exception handled!");
 	}
 	
-
 }

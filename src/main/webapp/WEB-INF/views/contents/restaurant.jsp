@@ -46,6 +46,7 @@
 			</a>
 		</div>
 		<div class="n-center" style="font-size:13px">
+			<!-- 
             <b>
             	<i class="pull-xs fa fa-star"></i>
 	            <% out.print(Number.numberWithCommas(restaurant.getCnt_star())); %>&nbsp;&nbsp;
@@ -53,6 +54,7 @@
 	            <% out.print(Number.numberWithCommas(restaurant.getCnt_comment())); %>
             </b>
             <br>
+             -->
             <i class="pull-xs fa fa-location-arrow"></i>
             	<%=restaurant.getLocation() %>
 	        <br>
@@ -89,23 +91,25 @@
 						ProductBean bean = productList.get(i);%>	
 
 					<div class="col-xs-4 col-sm-3" style="padding:0px">
-						<div class="box n-center n-hover-opacity" onclick="location.href='./product.do?idx=<%=bean.getIdx() %>'">
-							<a class="valign-middle n-noborder"> <img
-								src="<%=bean.getImgpath() %>" alt="<%=bean.getName() %>" class="n-restaurant-icon"
+						<div class="box n-center" onclick="location.href='./product.do?idx=<%=bean.getIdx() %>'">
+							<a class="valign-middle n-noborder" style="cursor: pointer;"> 
+							<img src="<%=bean.getImgpath() %>" alt="<%=bean.getName() %>" class="n-restaurant-icon"
 								style="margin-top: 3px" />
 
 							</a>
-							<div style="margin-top: 3px">
-								<b><%=bean.getName() %></b> <br> <% out.print(Number.numberWithCommas(bean.getPrice())); %>원
-							</div>
-							<div style="height:25px">
-							<%if(bean.getCnt_limit() <= 5) {%>
-							<button class="btn btn-primary "
-								style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
-							<%} %>
+							<div style="cursor: pointer;">
+								<div style="margin-top: 3px">
+									<b><%=bean.getName() %></b> <br> <% out.print(Number.numberWithCommas(bean.getPrice())); %>원
+								</div>
+								<div style="height:25px">
+								<%if(bean.getCnt_limit() <= 5) {%>
+								<button class="btn btn-primary "
+									style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
+								<%} %>
+								</div>
 							</div>
 						</div>
-					</div>
+					</div> 
 					<%} %>
 					
 				</div>
@@ -134,6 +138,7 @@
 	
 	$('#header-home').hide();
 	$('#header-back').show();
+	$('#header-center').show();
 	$('#header-back').prop('href', './target.do?idx='+curTarget);
 	
 	var tmp = <%=new Gson().toJson(ordertime) %>;

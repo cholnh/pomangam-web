@@ -27,6 +27,10 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 		super(TABLENAME);
 	}
 	
+	public void setStatus(Integer status, Integer idx) throws Exception {
+		sqlUpdate("UPDATE payment_index SET status = ? WHERE idx = ?", status, idx);
+	}
+	
 	public int getTodayOrder() throws Exception {
 		List<Map<String, Object>> lom 
 		= sqlQuery("SELECT count(*) FROM " + TABLENAME
@@ -36,6 +40,36 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 			return 0;
 		else
 			return Integer.parseInt(lom.get(0).get("count(*)")+"");
+	}
+	
+	public int makeBoxNumber(String receive_date, String receive_time) throws Exception {
+		List<Map<String, Object>> lom 
+		= super.sqlQuery(
+				"SELECT " +
+					"max(idx_box)+1 AS nextbn " + 
+				"FROM " +
+					"payment_index " +
+				"WHERE " +
+					"receive_date = ? AND receive_time = ?;", 
+				receive_date, receive_time);
+		Object obj = lom.get(0).get("nextbn");
+		if(obj == null) {
+			return 0;
+		} else {
+			return Integer.parseInt(obj+"");
+		}
+	}
+	
+	public int getBoxNumber(Integer idx) throws Exception {
+		List<Map<String, Object>> lom 
+		= super.sqlQuery(
+				"SELECT " +
+					"idx_box " + 
+				"FROM " +
+					"payment_index " +
+				"WHERE " +
+					"idx = ?;", idx);
+		return Integer.parseInt(lom.get(0).get("idx_box")+"");
 	}
 	
 	public boolean check(Integer idx, Integer PG_price) throws Exception {

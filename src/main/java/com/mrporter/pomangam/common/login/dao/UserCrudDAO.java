@@ -88,6 +88,10 @@ public class UserCrudDAO extends Crud<UserBean> {
 		}
 	}
 	
+	public void setTarget(String username, Integer idx_target) throws Exception {
+		sqlUpdate("UPDATE member SET idx_target = ? WHERE username = ?", idx_target, username);
+	}
+	
 	private String getBcryptCipher(String plaintext) {
 		SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
 		shaPasswordEncoder.setEncodeHashAsBase64(true);

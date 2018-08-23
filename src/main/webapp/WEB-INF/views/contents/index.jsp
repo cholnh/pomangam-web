@@ -12,6 +12,7 @@
 	<%	
 		int sumOrder = (int) request.getAttribute("sumOrder");
 		int todayOrder = (int) request.getAttribute("todayOrder");
+		int sumRestaurant = (int) request.getAttribute("sumRestaurant");
 		
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<TargetBean> targetList = (List) request.getAttribute("targetList");
@@ -120,7 +121,7 @@
   <div class="landing-section landing-features-grid bg-white b-y-1">
     <div class="container">
 		<div class="n-center n-padding-32">
-			<a class="n-hover-opacity" href="" style="text-decoration:none; !important">
+			<a class="" style="text-decoration:none; !important">
 				<span class="n-xlarge n-bottombar" style="padding:5px"><span style="color:black;font-size:30px;font-weight: 700">포터가 가는 곳</span></span>
 			</a>
 		</div>
@@ -141,7 +142,7 @@
     
 	  <div class="row">
         <div class="col-md-4" >
-		  <div class="n-card n-hover-opacity" onclick="location.href='./target.do?idx=1'">
+		  <div class="n-card" style="cursor: pointer;" onclick="location.href='./target.do?idx=1'">
             <img class="n-school-img lazyload image" src="resources/img/main/school.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>한국항공대학교</b></p>
@@ -150,7 +151,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school3.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>경기대학교</b></p>
@@ -159,7 +160,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school2.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>강원대학교</b></p>
@@ -171,7 +172,7 @@
 
       <div class="row n-desktop-show">
         <div class="col-md-4" >
-		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school4.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>호서대학교</b></p>
@@ -180,7 +181,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school5.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>장안대학교</b></p>
@@ -189,7 +190,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card n-hover-opacity" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school6.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>인천대학교</b></p>
@@ -519,7 +520,7 @@
 		
 		$('#ob-sumOrder').text(numberWithCommas(<%=sumOrder %>));
 		$('#ob-todayOrder').text(numberWithCommas(<%=todayOrder %>));
-		$('#ob-cntTarget').text(numberWithCommas(targetList.length));
+		$('#ob-cntTarget').text(numberWithCommas(<%=sumRestaurant %>));
 		
 	</script>
 	

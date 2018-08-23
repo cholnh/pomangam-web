@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mrporter.pomangam.common.login.dao.UserCrudDAO;
 import com.mrporter.pomangam.common.pattern.vo.Status;
+import com.mrporter.pomangam.common.security.model.domain.User;
 import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
 import com.mrporter.pomangam.restaurant.vo.RestaurantBean;
 import com.mrporter.pomangam.target.dao.DestinationCrudDAO;
@@ -58,6 +62,11 @@ public class TargetController {
 			model.addObject("ordertime", new OrdertimeCrudDAO().getListByIdx(idx));
 			model.addObject("restaurantList", restaurantList);
 			
+			Object obj = session.getAttribute("user");
+			if(obj != null) {
+				User user = new Gson().fromJson(obj+"", new TypeToken<User>() {}.getType()); 
+				new UserCrudDAO().setTarget(user.getUsername(), idx);
+			}
 			session.setAttribute("curTarget", idx+"");
 		}
 		return model;

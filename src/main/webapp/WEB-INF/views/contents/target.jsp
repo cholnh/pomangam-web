@@ -170,7 +170,7 @@
 		</div>
 			
 		
-		<!-- Category -->
+		<!-- Category 
 		<div class="n-center">
 			<hr>
 			<div id="owl-carousel-basic" class="owl-carousel" style="display: inline-block!important">
@@ -185,9 +185,10 @@
 				<div class="demo-item"><span class="n-target-category">야식</span></div>
 				<div class="demo-item"><span class="n-target-category">디저트</span></div>
 			</div>
-			<hr>
+			
 		</div>
-		
+		-->
+		<hr>
 		<!-- Parter -->
 		<div>
 			<h2 class="n-font landing-heading text-xs-center">주문 마감까지 <br> <span id="ob-time" style="color:#eb613e"></span> 남았습니다.</h2>
@@ -203,7 +204,7 @@
 					<div class="row">	
 			<%}%>
 						<div class="col-md-6">
-							<div class="box n-hover-opacity" onclick="location.href='./restaurant.do?idx=<%=bean.getIdx() %>'">
+							<div class="box" style="cursor: pointer;" onclick="location.href='./restaurant.do?idx=<%=bean.getIdx() %>'">
 								<a class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
 									<img src="<%=bean.getImgpath() %>" alt="<%=bean.getName() %>" class="n-target-icon" />
 								</a>
@@ -213,14 +214,16 @@
 										<div class="box-row">
 											<span class="box-cell valign-middle n-target-title"><%=bean.getName() %></span>
 										</div>
+										<!-- 
 										<div class="box-row">
-											<a class="box-cell valign-middle n-nodec">
+											<div class="box-cell valign-middle n-nodec">
 												<i class="pull-xs fa fa-star"></i>
 												<% out.print(Number.numberWithCommas(bean.getCnt_star())); %>&nbsp;&nbsp;
 												<i class="pull-xs fa fa-commenting"></i>
 												<% out.print(Number.numberWithCommas(bean.getCnt_comment())); %>
-											</a>
+											</div>
 										</div>
+										 -->
 										<div class="box-row">
 											<span class="box-cell valign-middle n-target-subtitle">
 												남은 수량 : <b><% out.print(Number.numberWithCommas(bean.getSum_limit())); %>개</b></span>
@@ -228,9 +231,9 @@
 									</div>
 								</div>
 
-								<a href="#" class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
+								<div class="box-cell col-xs-1 b-r-1 valign-middle text-xs-center font-size-24 n-noborder n-nodec">
 									<i class="fa fa-angle-right"></i>
-								</a>
+								</div>
 							</div>
 						</div>
 			<%if(!tf) {%>

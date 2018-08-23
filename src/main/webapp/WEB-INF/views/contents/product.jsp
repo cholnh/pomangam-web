@@ -134,6 +134,7 @@
 	
 	$('#header-home').hide();
 	$('#header-back').show();
+	$('#header-center').show();
 	$('#header-back').prop('href', './restaurant.do?idx='+curRestaurant);
 	
 	function goDirect() {

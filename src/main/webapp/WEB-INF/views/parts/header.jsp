@@ -10,6 +10,7 @@
 <%@page import="com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO"%>
 <%@page import="com.mrporter.pomangam.product.dao.ProductCrudDAO"%>
 <%@page import="com.mrporter.pomangam.common.util.Number"%>
+<%@page import="com.mrporter.pomangam.common.security.model.domain.User"%>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -43,12 +44,15 @@
 	<script src="resources/js/common.js"></script>
 	
 	<%	
-		List<CartBean> cartList = new ArrayList<>();
-		Object obj = session.getAttribute("cartList");
-		
-		if(obj != null) {
-			cartList = (ArrayList<CartBean>) obj;
-		}
+	List<CartBean> cartList = new ArrayList<>();
+	Object obj = session.getAttribute("cartList");
+	
+	if(obj != null) {
+		cartList = (ArrayList<CartBean>) obj;
+	}
+	
+	String userjson = (String) request.getSession().getAttribute("user");
+	User user = new Gson().fromJson(userjson, new TypeToken<User>() {}.getType());
 	%>
 
 </head>
@@ -62,7 +66,7 @@
 					<i class="fa fa-arrow-left" style="font-size:20px!important"></i>
 				</a>
 			</div>
-
+			<a id="header-center" href="./" class="n-header-center" style="display:none"><b>Mr. Porter</b></a>
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target=".navbar-collapse"
 				aria-expanded="false">
@@ -166,7 +170,13 @@
 							</div>
 						</div>
 					</li>
-					<li><a href="./login.do" class="scroll-to">로그인</a></li>
+					<li>
+						<%if(user==null){%>
+						<a href="./login.do" class="scroll-to">로그인</a>
+						<%} else {%>
+						<a href="./logout.do" class="scroll-to">로그아웃</a>
+						<%} %>
+					</li>
 				</ul>
 			</div>
 		</div>

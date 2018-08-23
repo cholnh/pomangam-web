@@ -29,4 +29,8 @@ public class TargetCrudDAO extends Crud<TargetBean> {
 		else
 			return Integer.parseInt(lom.get(0).get("sum(cnt_order)")+"");
 	}
+	
+	public void addCountOrder(Integer idx) throws Exception {
+		sqlUpdate("UPDATE target SET cnt_order = cnt_order + 1 WHERE idx = ?;", idx);
+	}
 }

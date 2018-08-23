@@ -15,5 +15,5 @@ public class UserBean {
 	Integer idx;
 	String username, password, name, nickname;
 	Integer targetidx, subscribeidx;
-	String regdate, moddate;
+	String regdate, moddate, phonenumber;
 }

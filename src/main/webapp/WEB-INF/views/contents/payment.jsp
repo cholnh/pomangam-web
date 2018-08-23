@@ -1,3 +1,4 @@
+<%@page import="com.mrporter.pomangam.common.security.model.domain.User"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
@@ -43,6 +44,9 @@
 				cartList = (ArrayList<CartBean>) obj;
 			}
 		}
+		
+		String userjson = (String) request.getSession().getAttribute("user");
+		User user = new Gson().fromJson(userjson, new TypeToken<User>() {}.getType());
 	%>
 
 	<!-- Navbar -->
@@ -267,6 +271,7 @@
         <div class="n-center" style="margin-top:64px">
             <h3 class="n-font">배달정보</h3>
             <div class="center">
+            	
 	            <table class="n-payment-table">
 	            	<thead>
 	            	</thead>
@@ -280,7 +285,7 @@
 		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 날짜
 		            		</td>
 		            		<td>
-		            			<input class="datepicker form-control" style="padding-left:17px"
+		            			<input class="datepicker form-control" style="padding-left:17px" id="ob-date"
 		            				data-date-format="yyyy-mm-dd" 
 		            				data-date-start-date="0d"
 		            				data-date-end-date="+7d">
@@ -301,7 +306,11 @@
 		            		</td>
 		            		<td>
 		            			<select class="form-control n-payment-select" style="width:150px">
-			                        <option>학생회관 앞</option>
+		            				<%
+		            				for(DestinationBean dest : destination) {
+		            				%>	
+		            					<option><%=dest.getDestination() %></option>
+		            				<%}%>
 			                    </select>
 		            		</td>
 	            		</tr>
@@ -320,8 +329,20 @@
 			                    </select>
 		            		</td>
 	            		</tr>
+	            		<%
+	            		if(user == null) {%>
+	            		<tr>
+		            		<td>
+		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 핸드폰 번호
+		            		</td>
+		            		<td>
+		            			<input class="form-control" type="tel" id="phoneNumber" required>
+		            		</td>
+	            		</tr>
+	            		<%} %>
 	            	</tbody>
 	            </table>
+	          
 	            <div class="center">
 	            	<label class="custom-control custom-checkbox" style="width:150px;padding:0px">
 	                    <input type="checkbox" class="custom-control-input" unchecked="">
@@ -380,12 +401,32 @@
 	
 	$('#header-home').hide();
 	$('#header-back').show();
+	$('#header-center').show();
 	$('#header-back').prop('href', './target.do?idx='+curTarget);
 	
 	$('#ob-mobileCartBtn').hide();
 	
 	function  pay() {
-		var idxList = [];
+		if(!$('#ob-time').val()) {
+			$('#ob-time').focus();
+			alert('배달시간을 확인해 주세요.');
+			return;
+		}
+		if($('#phoneNumber').length>0) {
+			if(!$('#phoneNumber').val()) {
+				$('#phoneNumber').focus();
+				alert('비회원은 핸드폰번호 입력이 필수입니다.');
+				return;
+			}
+			$('#phoneNumber').val($('#phoneNumber').val().replace(/-/g,''));
+			if($('#phoneNumber').val().length != 11) {
+				$('#phoneNumber').focus();
+				alert('잘못된 핸드폰번호 형식 입니다.');
+				return;
+			}
+		}
+		
+		var idxList = []; 
 		cartList.forEach(function(cart) {
 			ajax('./payment/insert.do', 
 					{
@@ -409,7 +450,12 @@
 		});
 		ajax('./payment/insertindex.do', 
 				{
-					idxes_payment : idxList.toString()
+					<%if(user == null) {%>
+					phonenumber : $('#phoneNumber').val(),
+					<%}%>
+					idxes_payment : idxList.toString(),
+					receive_date : $('#ob-date').val(),
+					receive_time : $('#ob-time').val()
 				},
 				false,
 				function(status) {
@@ -445,6 +491,7 @@
 		);
 	}
 	
+	changeTime();
 	$('.datepicker').datepicker({
         autoclose : true,
 		format: 'yyyy-mm-dd',
@@ -453,29 +500,10 @@
 	});
 	$('.datepicker').datepicker().on('changeDate', function(e) {
     	var dates = new Date(e.format('yyyy-mm-dd'));
-    	
     	var cur = new Date();
+    	$('#ob-time').text('');
     	if(cur.getDate() == dates.getDate()) {
-    		
-    		for(var i=0; i<=ordertime.length; i++) {
-    			if(i==ordertime.length) {
-    				$('#ob-time').append($('<option>', {
-    				    text: '이용 가능한 시간이 없습니다.'
-    				}));
-    				return;
-    			}
-    			var o = new Date();
-    			o.setHours(ordertime[i].hour);
-    			o.setMinutes(ordertime[i].minute);
-    			o.setSeconds(0);
-    			if(cur > o) {
-    				continue;
-    			} else {
-    				$('#ob-time').append($('<option>', {
-    				    text: ordertime[i].text
-    				}));
-    			}
-    		}
+    		changeTime();
     	} else {
     		ordertime.forEach(function(e) {
     			$('#ob-time').append($('<option>', {
@@ -487,6 +515,33 @@
     });
 	$('.datepicker').datepicker('update', new Date());
 	
+	function changeTime() {
+		var cur = new Date();
+		var tf = true;
+		for(var i=0; i<=ordertime.length; i++) {
+			if(tf && i==ordertime.length) {
+				$('#ob-time').append($('<option>', {
+				    text: '이용 가능한 시간이 없습니다.',
+				    disabled : true
+				}));
+				return;
+			}
+			if(ordertime[i]) {
+				var o = new Date();
+    			o.setHours(ordertime[i].hour);
+    			o.setMinutes(ordertime[i].minute);
+    			o.setSeconds(0);
+    			if(cur > o) {
+    				continue;
+    			} else {
+    				tf = false;
+    				$('#ob-time').append($('<option>', {
+    				    text: ordertime[i].text
+    				}));
+    			}
+			}
+		}
+	}
 	
 	</script>
 

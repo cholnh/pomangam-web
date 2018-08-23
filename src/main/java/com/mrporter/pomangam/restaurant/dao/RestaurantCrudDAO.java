@@ -43,4 +43,5 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 		}
 		return result;
 	}
+	
 }

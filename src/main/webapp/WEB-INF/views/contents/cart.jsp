@@ -165,6 +165,7 @@
 	
 	$('#header-home').hide();
 	$('#header-back').show();
+	$('#header-center').show();
 	$('#header-back').prop('href', (curTarget?'./target.do?idx='+curTarget:'./'));
 	
 	$('#ob-mobileCartBtn').hide();

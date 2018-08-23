@@ -32,4 +32,12 @@ public class DestinationCrudDAO extends Crud<DestinationBean> {
 				new TypeToken<List<DestinationBean>>() {}.getType());
 	}
 	
+	public List<DestinationBean> getListGroupByIdx(Integer idx) throws Exception {
+		List<Map<String, Object>> listOfMaps;
+		listOfMaps = sqlQuery("SELECT * FROM " + TABLENAME + " WHERE idx_target=? GROUP BY destination", idx); 
+		Gson gson = new Gson();
+		return gson.fromJson(gson.toJson(listOfMaps), 
+				new TypeToken<List<DestinationBean>>() {}.getType());
+	}
+	
 }

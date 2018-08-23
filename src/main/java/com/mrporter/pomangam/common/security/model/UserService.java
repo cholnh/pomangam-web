@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
         	user.setSubscribeidx(userBean.getSubscribeidx());
         	user.setModdate(userBean.getModdate());
         	user.setRegdate(userBean.getRegdate());
-        	
+        	user.setPhonenumber(userBean.getPhonenumber());
         	
         	List<Role> roles = new ArrayList<Role>();
         	
