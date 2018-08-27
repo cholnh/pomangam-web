@@ -1,5 +1,7 @@
 package com.mrporter.pomangam.common.login.vo;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class UserBean {
 	Integer idx;
 	String username, password, name, nickname;
-	Integer targetidx, subscribeidx;
-	String regdate, moddate, phonenumber;
+	Integer idx_target, idx_subscribe;
+	String regdate, moddate, tel, session_key;
+	Date session_limit;
 }

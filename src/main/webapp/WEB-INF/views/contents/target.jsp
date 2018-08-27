@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="com.mrporter.pomangam.target.vo.OrdertimeBean"%>
-<%@page import="com.mrporter.pomangam.target.vo.DestinationBean"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.google.gson.reflect.TypeToken"%>
 <%@page import="com.mrporter.pomangam.target.vo.TargetBean"%>
@@ -18,10 +16,6 @@
 	<%	
 		String curTarget = (String) request.getParameter("idx");
 		
-		@SuppressWarnings({"unchecked", "rawtypes"})
-		List<DestinationBean> destination = (List) request.getAttribute("destination");
-		@SuppressWarnings({"unchecked", "rawtypes"})
-		List<OrdertimeBean> ordertime = (List) request.getAttribute("ordertime");
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<RestaurantBean> restaurantList = (List) request.getAttribute("restaurantList");
 		
@@ -78,40 +72,6 @@
 							<a id="hoverBtn2" class="btn btn-primary">배달 장소 / 시간</a>
 							<div class="n-dropdown-content n-card-4 n-target-detailinfo hoverContents">
 								<div class="n-container" style="padding:0px">
-									<h3 class="n-font">주문 마감</h3>
-									
-									<table class="table table-hover" style="text-align:left">
-										<tbody>
-											<tr>
-												<th>
-													점심 주문
-												</th>
-												<th>
-													저녁 주문
-												</th>
-												<th>
-													야식 주문
-												</th>
-											</tr>
-											<tr>
-												<td>
-													<%=ordertime.get(0).getEnd() %>
-													마감
-												</td>
-												<td>
-													<%=ordertime.get(1).getEnd() %>
-													마감
-												</td>
-												<td>
-													<%=ordertime.get(2).getEnd() %>
-													마감
-												</td>
-											</tr>
-										</tbody>
-									</table>
-									
-									<br>
-									
 									<h3 class="n-font">배달 도착</h3>
 									<table class="table table-hover" style="text-align:left">
 										<tbody>
@@ -120,45 +80,47 @@
 													장소
 												</th>
 												<th>
-													점심
+													도착 시간
 												</th>
 												<th>
-													저녁
-												</th>
-												<th>
-													야식
+													배차 간격
 												</th>
 											</tr>
 											<tr>
 												<td>
-													<%=destination.get(0).getDestination() %>
+													학생회관 앞
 												</td>
 												<td>
-													<%=destination.get(0).getArrival() %>
+													오후 12시 부터 ~ 오후 10시 까지 
 												</td>
 												<td>
-													<%=destination.get(1).getArrival() %>
-												</td>
-												<td>
-													<%=destination.get(2).getArrival() %>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<%=destination.get(3).getDestination() %>
-												</td>
-												<td>
-													<%=destination.get(3).getArrival() %>
-												</td>
-												<td>
-													<%=destination.get(4).getArrival() %>
-												</td>
-												<td>
-													<%=destination.get(5).getArrival() %>
+													1시간 간격
 												</td>
 											</tr>
 										</tbody>
 									</table>
+									
+									<br>
+									
+									<h3 class="n-font">주문 설명</h3>
+									
+									<span>
+										<b>배달 도착 30분 전에 주문이 마감됩니다.</b><br>
+										그 후로 들어온 주문은 자동으로 <u>다음 배달 도착시간</u>에 배정됩니다!<br>
+										예시1) 11시 10분 주문 시 12시에 배달<br>
+										예시2) 11시 31분 주문 시 1시에 배달<br>
+										<hr style="width:50%">
+										주문 대기시간에 따라 도착 시간이 달라질 수 있습니다.<br>
+										예시1) 11시 00분 주문 가능 수량 : 20개<br>
+										예시2) 11시 29분 주문 가능 수량 : 1개<br>
+										<hr style="width:50%">
+										또한 주문 사정에 따라 주문 가능 수량이 달라질 수 있습니다!
+										
+									</span>
+									
+									<br>
+									<br>
+									
 								</div>
 							</div>
 						</div>
@@ -191,8 +153,9 @@
 		<hr>
 		<!-- Parter -->
 		<div>
+			<!-- 
 			<h2 class="n-font landing-heading text-xs-center">주문 마감까지 <br> <span id="ob-time" style="color:#eb613e"></span> 남았습니다.</h2>
-			
+			 -->
 			
 			<ul class="list-group n-target-center">
 		<%
@@ -223,11 +186,13 @@
 												<% out.print(Number.numberWithCommas(bean.getCnt_comment())); %>
 											</div>
 										</div>
-										 -->
+										
 										<div class="box-row">
 											<span class="box-cell valign-middle n-target-subtitle">
-												남은 수량 : <b><% out.print(Number.numberWithCommas(bean.getSum_limit())); %>개</b></span>
+												남은 수량 : <b><% //out.print(Number.numberWithCommas(bean.getSum_limit())); %>개</b>
+											</span>
 										</div>
+										 -->
 									</div>
 								</div>
 
@@ -277,31 +242,31 @@
 				
 				<div class="modal-body" style="padding:0px">
 					<div style="text-align:center; margin-top:32px;margin-bottom:12px">
-						<span style="font-weight:bold;font-size:13px;">주문 마감</span>
+						<span style="font-weight:bold;font-size:18px;">배달 도착</span>
 					</div>
 					
-					<table class="table table-hover" style="text-align:left;font-size:11px;">
+					<table class="table table-hover" style="text-align:left">
 						<tbody>
 							<tr>
 								<th>
-									점심 주문
+									장소
 								</th>
 								<th>
-									저녁 주문
+									도착 시간
 								</th>
 								<th>
-									야식 주문
+									배차 간격
 								</th>
 							</tr>
 							<tr>
 								<td>
-									오전 11:00 마감
+									학생회관 앞
 								</td>
 								<td>
-									오후 5:00 마감
+									오후 12시 부터 ~ 오후 10시 까지 
 								</td>
 								<td>
-									오후 8:45 마감
+									1시간 간격
 								</td>
 							</tr>
 						</tbody>
@@ -310,54 +275,27 @@
 					<br>
 					
 					<div style="text-align:center;margin-bottom:12px">
-						<span style="font-weight:bold;font-size:13px">배달 도착</span>
+						<span style="font-weight:bold;font-size:18px">주문 설명</span>
 					</div>
-					<table class="table table-hover" style="text-align:left;font-size:11px;">
-						<tbody>
-							<tr>
-								<th>
-									장소
-								</th>
-								<th>
-									점심
-								</th>
-								<th>
-									저녁
-								</th>
-								<th>
-									야식
-								</th>
-							</tr>
-							<tr>
-								<td>
-									학생회관 앞
-								</td>
-								<td>
-									오후 12:00
-								</td>
-								<td>
-									오후 6:00
-								</td>
-								<td>
-									오후 9:45
-								</td>
-							</tr>
-							<tr>
-								<td>
-									도서관 앞
-								</td>
-								<td>
-									오후 12:25
-								</td>
-								<td>
-									오후 6:25
-								</td>
-								<td>
-									오후 10:00
-								</td>
-							</tr>
-						</tbody>
-					</table>
+					<div style="text-align:center">
+						<span>
+							<b>배달 도착 30분 전에 주문이 마감됩니다.</b><br>
+							그 후로 들어온 주문은 자동으로 <u>다음 배달 도착시간</u>에 배정됩니다!<br>
+							예시1) 11시 10분 주문 시 12시에 배달<br>
+							예시2) 11시 31분 주문 시 1시에 배달<br>
+							<hr style="width:50%">
+							주문 대기시간에 따라 도착 시간이 달라질 수 있습니다.<br>
+							예시1) 11시 00분 주문 가능 수량 : 20개<br>
+							예시2) 11시 29분 주문 가능 수량 : 1개<br>
+							<hr style="width:50%">
+							또한 주문 사정에 따라 주문 가능 수량이 달라질 수 있습니다!
+							
+						</span>
+					</div>
+					
+					<br>
+					<br>							
+									
 				</div>
 
 			</div>
@@ -367,10 +305,6 @@
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
 
-
-	<!-- jQuery -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
@@ -388,24 +322,6 @@
 			$('#modal2').modal();
 		});
 	} 
-	
-	var tmp = <%=new Gson().toJson(ordertime) %>;
-	var ordertime = [];
-	tmp.forEach(function(e){
-		var time = {};
-		if(e.end.substring(0, 2) == '오전') {
-			var t = e.end.substring(3);
-			time.hour = parseInt(t.substring(0, t.indexOf(':')));
-			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
-		} else if(e.end.substring(0, 2) == '오후') {
-			var t = e.end.substring(3);
-			time.hour = parseInt(t.substring(0, t.indexOf(':'))) + 12;
-			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
-		}
-		ordertime.push(time);
-	});
-
-	realtimeClock();
 	
 	</script>
 	<script>

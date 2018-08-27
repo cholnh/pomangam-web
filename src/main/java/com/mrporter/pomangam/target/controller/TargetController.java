@@ -23,8 +23,6 @@ import com.mrporter.pomangam.common.pattern.vo.Status;
 import com.mrporter.pomangam.common.security.model.domain.User;
 import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
 import com.mrporter.pomangam.restaurant.vo.RestaurantBean;
-import com.mrporter.pomangam.target.dao.DestinationCrudDAO;
-import com.mrporter.pomangam.target.dao.OrdertimeCrudDAO;
 import com.mrporter.pomangam.target.dao.TargetCrudDAO;
 
 @Controller
@@ -58,8 +56,6 @@ public class TargetController {
 			
 			model.setViewName("contents/" + MAPPINGNAME);
 			model.addObject("target", target);
-			model.addObject("destination", new DestinationCrudDAO().getListByIdx(idx));
-			model.addObject("ordertime", new OrdertimeCrudDAO().getListByIdx(idx));
 			model.addObject("restaurantList", restaurantList);
 			
 			Object obj = session.getAttribute("user");

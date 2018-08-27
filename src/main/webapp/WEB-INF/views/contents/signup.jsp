@@ -5,8 +5,11 @@
 <head>
 </head>
 <body>
-	<jsp:include page="../parts/header.jsp" />
-	
+	<%
+	String username = (String) request.getAttribute("username");
+	String name = (String) request.getAttribute("name");
+	%>
+	<jsp:include page="../parts/header.jsp" /> 
 	<div style="margin-top:160px;margin-bottom:160px">
 		<center>
 			
@@ -14,18 +17,17 @@
 				<a style="text-decoration:none; !important">
 					<span class="n-xlarge n-bottombar" style="padding:5px">
 						<span style="color:black; font-size:48px">
-							접근 거부
+							회원가입 완료
 						</span>
 					</span>
 				</a>
 			</div>
-			<h1 class="n-font">페이지 접근 권한이 없습니다.</h1>
+			<h1 class="n-font"><%=name %> 회원님, 포만감 가입을 축하드립니다!</h1>
 			
 			<!-- <button class="btn btn-primary" type="button" onclick="location.href='./'">홈</button> -->
-			<button class="btn btn-primary" style="font-size:20px" type="button" onclick="history.back()">뒤로 가기</button>
+			<button class="btn btn-primary" style="font-size:20px" type="button" onclick="location.href='./login.do?username=<%=username%>'">로그인</button>
 		</center>
 	</div>
-	
 	<%@ include file="../parts/footer.jsp" %>
 	
 	<script>
@@ -33,5 +35,6 @@
 	$('#ob-footerBtn').hide();
 	
 	</script>
+	
 </body>
 </html>

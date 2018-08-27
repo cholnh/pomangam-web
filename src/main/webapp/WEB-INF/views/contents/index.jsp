@@ -499,9 +499,6 @@
 	
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
-
-	<!-- jQuery -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>

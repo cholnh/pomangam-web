@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="com.mrporter.pomangam.target.vo.OrdertimeBean"%>
 <%@page import="com.mrporter.pomangam.product.vo.ProductBean"%>
 <%@page import="com.google.gson.reflect.TypeToken"%>
 <%@page import="com.mrporter.pomangam.restaurant.vo.RestaurantBean"%>
@@ -19,8 +18,6 @@
 		String curTarget = (String) session.getAttribute("curTarget");
 		String curRestaurant = (String) request.getParameter("idx");
 		
-		@SuppressWarnings({"unchecked", "rawtypes"})
-		List<String> ordertime = (List) request.getAttribute("ordertime");
 		@SuppressWarnings({"unchecked"})
 		List<ProductBean> productList = (List<ProductBean>) request.getAttribute("productList");
 		
@@ -75,10 +72,11 @@
 		
 		<!-- Parter -->
 		<div>
+			<!-- 
 			<h2 class="n-font landing-heading text-xs-center">
 				주문 마감까지 <br><span id="ob-time" style="color:#eb613e"></span> 남았습니다.
 			</h2>
-			
+			 -->
 			<div class="container-fluid n-target-center" >
 				<div class="row">
 					<%
@@ -102,10 +100,10 @@
 									<b><%=bean.getName() %></b> <br> <% out.print(Number.numberWithCommas(bean.getPrice())); %>원
 								</div>
 								<div style="height:25px">
-								<%if(bean.getCnt_limit() <= 5) {%>
+								<!-- 
 								<button class="btn btn-primary "
 									style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
-								<%} %>
+								 -->
 								</div>
 							</div>
 						</div>
@@ -124,10 +122,6 @@
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
 
-
-	<!-- jQuery -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
@@ -140,24 +134,6 @@
 	$('#header-back').show();
 	$('#header-center').show();
 	$('#header-back').prop('href', './target.do?idx='+curTarget);
-	
-	var tmp = <%=new Gson().toJson(ordertime) %>;
-	var ordertime = [];
-	tmp.forEach(function(e){
-		var time = {};
-		if(e.end.substring(0, 2) == '오전') {
-			var t = e.end.substring(3);
-			time.hour = parseInt(t.substring(0, t.indexOf(':')));
-			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
-		} else if(e.end.substring(0, 2) == '오후') {
-			var t = e.end.substring(3);
-			time.hour = parseInt(t.substring(0, t.indexOf(':'))) + 12;
-			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
-		}
-		ordertime.push(time);
-	});
-
-	realtimeClock();
 	
 	</script>
 

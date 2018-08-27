@@ -41,6 +41,8 @@
 	<!-- Icon -->
 	<link href="images/favicon.ico" rel="shortcut icon">
 	
+	<!-- jQuery -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="resources/js/common.js"></script>
 	
 	<%	
@@ -89,13 +91,16 @@
 								%>
 								<div class="" style="text-align: center">
 									<h4><b>총 <span id="ob-sumPrice">0</span>원</b></h4>
+									<span>
+										( 배달 <span class="ob-time-max"></span>도착 )
+									</span>
 								</div>
 								<div style="text-align:right; margin-right:12px">
 									<button class="btn btn-secondary n-small" onclick="removeAllCartProduct()">전체삭제</button>
 								</div>
 								<%} %>
 								<div style="text-align: left;margin:12px">
-									<table id="cartTable" class="table table-hover">
+									<table id="cartTable" class="table"> 
 										<thead>
 										</thead>
 										<colgroup>
@@ -136,22 +141,26 @@
 													</a>
 												</td>
 												<td>
-													<div class="row" style="margin-left:12px">
+													<div class="row" style="margin-left:12px;margin-top:8px;">
 														<span><b><%=product.getName() %></b></span>
-														<span style="font-weight:bold;margin-left:6px"></b>
+														<span style="font-size:13px!important" >
+										            		(<span class="ob-time-<%=idx_product %>"></span> 도착)
+										            	</span>
+													</div>
+													
+													<div class="row" style="margin-left:12px">
+														<span style="font-weight:bold"></b>
 											            	<% out.print(Number.numberWithCommas(cart.getAmount())); %>개 
 											            </span>
-													</div>
-													<div class="row" style="margin-left:12px">
-														
-														<b><% out.print(Number.numberWithCommas(product.getPrice())); %>원</b>
-														
+														<span style="margin-left:12px">
+															<b><% out.print(Number.numberWithCommas(product.getPrice())); %>원</b>
+														</span>
 														<!-- <input type="number" min=1 value="" style="width:40px;margin-left:6px">개  -->
 													</div>
 												</td>
 												<td>
 													<i onclick="removeCartProduct(<%=cart.getIdx()%>, <%=totalPrice %>)" 
-													class="fa fa-remove fa-2x"></i>
+													class="fa fa-remove fa-2x" style="margin-top:16px"></i>
 												</td>
 											</tr>	
 											<%}}%> 
@@ -163,7 +172,7 @@
 									%>
 									<div class="n-center" style="margin-top:32px;margin-bottom:32px">
 										<button class="btn btn-primary" style="width:60%;font-size:20px;font-weight:bold" 
-											onclick="location.href='./payment.do'">주문하기</button>
+											onclick="goPayment()">주문하기</button>
 									</div>
 									<%} %>
 								</div>
@@ -171,7 +180,7 @@
 						</div>
 					</li>
 					<li>
-						<%if(user==null){%>
+						<%if(user==null) {%>
 						<a href="./login.do" class="scroll-to">로그인</a>
 						<%} else {%>
 						<a href="./logout.do" class="scroll-to">로그아웃</a>
@@ -193,6 +202,35 @@
 	var ob = document.getElementById('ob-sumPrice');
 	if(ob) {
 		ob.innerText = numberWithCommas(<%=sumPrice%>);
+	}
+	
+	<%
+	if(cartList != null) {
+	for(CartBean cart : cartList) {
+	%>
+		getTime2(<%=cart.getIdx_product()%>, <%=cart.getAmount()%>, true);
+		setTimeout("getTime2(<%=cart.getIdx_product()%>, <%=cart.getAmount()%>, true)", 1000*60);
+	<%}}%>
+	
+	var maxtime = 0;
+	function getTime2(idx_product, amount, tf) {
+		ajax('./product/gettime.do', 
+				{
+					idx_product : idx_product,
+					amount : amount
+				},
+				tf,
+				function(t) {
+					maxtime = maxtime < t ? t : maxtime;
+					var d = new Date(t);
+					$('.ob-time-'+idx_product).text(d.getHours()+'시 '+ (d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
+					var max = new Date(maxtime);
+					$('.ob-time-max').text(max.getHours()+'시 '+(max.getMinutes() > 0 ? max.getMinutes()+'분' : ''))
+				},
+				function() {
+					alert('네트워크 오류');
+				}
+		);
 	}
 	</script>
 	

@@ -27,7 +27,6 @@
 	</div>
 	<%@ include file="../parts/footer.jsp" %>
 	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script>
 	$('#ob-mobileCartBtn').hide();
 	$('#ob-footerBtn').hide();

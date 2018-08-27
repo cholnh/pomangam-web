@@ -2,8 +2,6 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
-<%@page import="com.mrporter.pomangam.target.vo.OrdertimeBean"%>
-<%@page import="com.mrporter.pomangam.target.vo.DestinationBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
@@ -28,10 +26,6 @@
 		String curTarget = (String) session.getAttribute("curTarget");
 	
 		@SuppressWarnings({"unchecked", "rawtypes"})
-		List<DestinationBean> destination = (List) request.getAttribute("destination");
-		@SuppressWarnings({"unchecked", "rawtypes"})
-		List<OrdertimeBean> ordertime = (List) request.getAttribute("ordertime");
-		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<CartBean> directList = (List) request.getAttribute("directList");
 
 		List<CartBean> cartList = new ArrayList<>();
@@ -44,6 +38,9 @@
 				cartList = (ArrayList<CartBean>) obj;
 			}
 		}
+		
+		String time_start = (String) request.getAttribute("time_start");
+		String time_end = (String) request.getAttribute("time_end");
 		
 		String userjson = (String) request.getSession().getAttribute("user");
 		User user = new Gson().fromJson(userjson, new TypeToken<User>() {}.getType());
@@ -75,6 +72,7 @@
 								<th>합계</th>
 							</tr>
 						<%
+						String products = "";
 						int sumPrice = 0;
 						int sumAmount = 0;
 						if(cartList != null) {
@@ -89,6 +87,8 @@
 							sumPrice += (product.getPrice() * cart.getAmount());
 							sumAmount += cart.getAmount();
 							int totalPrice = product.getPrice()*cart.getAmount();
+							
+							products += idx_product+"-"+cart.getAmount()+",";
 						%>
 							<tr>
 								<th>
@@ -117,81 +117,6 @@
 		</div>
 	</div>
 	
-	<!-- Modal2 -->	
-	<div class="modal" id="modal2" tabindex="-1" role="dialog" style="top:30%">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<span style="font-weight:bold;font-size:15px">배달 가격 상세</span>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				
-				<div class="modal-body" style="padding:0px">
-					
-					<table class="table table-hover" style="text-align:center;font-size:11px;">
-						<tbody>
-							<tr>
-								<th>종류</th>
-								<th>가격</th> 
-								<th>수량</th>
-								<th>합계</th>
-							</tr>
-							<tr>
-								<th>
-									기본료
-								</th>
-								<th>
-									-
-								</th>
-								<th>
-									-
-								</th>
-								<th>
-									2,000원
-								</th>
-							</tr>
-							<tr>
-								<%
-									int tamount = sumAmount>1?sumAmount-1:0;
-									int tmp = tamount*500;
-									int tprice = tmp > 2000 ? 2000 : tmp;
-									int total = tprice + 2000;
-								%>
-								<th>
-									메뉴추가
-								</th>
-								<th>
-								<%	if(tamount>0) { %>
-									500원
-								<%	} else {%>
-									-
-								<%	} %>
-								</th>
-								<th>
-								<%	if(tamount>0) { %>
-									<%=tamount %>개
-								<%	} else {%>
-									-
-								<%	} %>
-								</th>
-								<th>
-									<% out.print(Number.numberWithCommas(tprice)); %>원
-								</th>
-							</tr>
-							
-						</tbody>
-					</table>
-					<div style="text-align:center;margin-bottom:12px">
-						<h3>합계 : <span><% out.print(Number.numberWithCommas(total)); %></span>원</h3>
-						<span style="color:gray">※ 배달료는 최대 4,000원까지 만 부과됩니다.</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<div class="container center" style="margin-top:50px">
 		<!-- Target Info -->
@@ -203,9 +128,9 @@
             		<thead>
             		</thead>
             		<colgroup>
-		        		<col style="width:150px">
-		                <col style="width: 150px;">
-		                <col style="width: 50px;">
+		        		 <col style="width:150px">
+                        <col style="width: 150px;">
+                        <col style="width: 50px">
 	            	</colgroup>
             		<tbody>
             			<tr>
@@ -217,19 +142,7 @@
             				</td>
             				<td>
             					<button class="btn btn-primary" data-toggle="modal" data-target="#modal"
-            						style="font-size:8px!important;padding:2px;margin-left:12px;margin-bottom:4px">상세</button>
-            				</td>
-            			</tr>
-            			<tr>
-            				<td>
-            					배달 금액 :
-            				</td>
-            				<td>
-            					<% out.print(Number.numberWithCommas(total)); %>원
-            				</td>
-            				<td>
-            					<button class="btn btn-primary" data-toggle="modal" data-target="#modal2"
-            						style="font-size:8px!important;padding:2px;margin-left:12px;margin-bottom:4px">상세</button>
+            						style="font-size:13px!important;padding:4px;margin-left:12px;margin-bottom:4px">상세</button>
             				</td>
             			</tr>
             			<!-- 
@@ -255,8 +168,7 @@
             				</td>
             				<td >
             					<% 
-            						int finalPrice2 = sumPrice + total;
-            						String finalPrice = Number.numberWithCommas(sumPrice + total); %>
+            						String finalPrice = Number.numberWithCommas(sumPrice); %>
             					<b><%=finalPrice %>원</b>
             				</td>
             			</tr>
@@ -285,10 +197,8 @@
 		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 날짜
 		            		</td>
 		            		<td>
-		            			<input class="datepicker form-control" style="padding-left:17px" id="ob-date"
-		            				data-date-format="yyyy-mm-dd" 
-		            				data-date-start-date="0d"
-		            				data-date-end-date="+7d">
+		            			<select class="form-control n-payment-select" style="width:150px" id="ob-date">
+			                    </select>
 		            		</td>
 	            		</tr>
 	            		<tr>
@@ -306,11 +216,7 @@
 		            		</td>
 		            		<td>
 		            			<select class="form-control n-payment-select" style="width:150px">
-		            				<%
-		            				for(DestinationBean dest : destination) {
-		            				%>	
-		            					<option><%=dest.getDestination() %></option>
-		            				<%}%>
+		            				<option>학생회관 앞</option>
 			                    </select>
 		            		</td>
 	            		</tr>
@@ -366,38 +272,17 @@
             </button>
         </div>
 	</div>
-
-
-	<!-- jQuery -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
-	
+	<!-- 
 	<script src="resources/js/bootstrap-datepicker.js"></script>
-	<script src="resources/js/bootstrap-datepicker.kr.min.js"></script>
-	
+	<script src="resources/js/bootstrap-datepicker.ko.min.js"></script>
+	-->
 	<script>
 	var curTarget = <%=curTarget%>;
 	var cartList = <%=new Gson().toJson(cartList)%>;
-	var tmp = <%=new Gson().toJson(ordertime) %>;
-	var ordertime = [];
-	tmp.forEach(function(e){
-		var time = {};
-		if(e.end.substring(0, 2) == '오전') {
-			var t = e.end.substring(3);
-			time.hour = parseInt(t.substring(0, t.indexOf(':')));
-			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
-			time.text = e.end;
-		} else if(e.end.substring(0, 2) == '오후') {
-			var t = e.end.substring(3);
-			time.hour = parseInt(t.substring(0, t.indexOf(':'))) + 12;
-			time.minute = 	parseInt(t.substring(t.indexOf(':')+1));
-			time.text = e.end;
-		}
-		ordertime.push(time);
-	});
 	
 	$('#header-home').hide();
 	$('#header-back').show();
@@ -405,11 +290,13 @@
 	$('#header-back').prop('href', './target.do?idx='+curTarget);
 	
 	$('#ob-mobileCartBtn').hide();
+	changeTime();
+	
 	
 	function  pay() {
 		if(!$('#ob-time').val()) {
 			$('#ob-time').focus();
-			alert('배달시간을 확인해 주세요.');
+			alert('받는 시간을 확인해 주세요.');
 			return;
 		}
 		if($('#phoneNumber').length>0) {
@@ -454,7 +341,7 @@
 					phonenumber : $('#phoneNumber').val(),
 					<%}%>
 					idxes_payment : idxList.toString(),
-					receive_date : $('#ob-date').val(),
+					idx_target : curTarget,
 					receive_time : $('#ob-time').val()
 				},
 				false,
@@ -475,7 +362,7 @@
 	function check() {
 		ajax('./payment/check.do', 
 				{
-					PG_price : <%=finalPrice2 %>
+					PG_price : <%=sumPrice %>
 				},
 				true,
 				function(status) {
@@ -491,11 +378,51 @@
 		);
 	}
 	
+	var time_start = '<%=time_start %>'.split(':');
+	var time_end = '<%=time_end %>'.split(':');
+	
+	function changeTime() {
+		var products = '<%=products %>';
+		if(products.length <= 0) return;
+		ajax('./product/getmaxtime.do', 
+				{
+					products : products
+				},
+				true,
+				function(millis) {
+					var d = new Date(millis);
+					$('#ob-date').append($('<option>', {
+					    text: d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일',
+					    selected : true
+					}));
+					
+					for(var i=time_start[0]+1; i<d.getHours(); i++) {
+						$('#ob-time').append($('<option>', {
+						    text: i+'시 ', //+(time_start[1]>0?time_start[1]+'분':''),
+						    disabled : true
+						}));
+					}
+					for(var i=d.getHours(); i<=parseInt(time_end[0])+1; i++) {
+						var tf = i==d.getHours();
+						$('#ob-time').append($('<option>', {
+						    text: i+'시 ', //+(time_end[1]>0?time_end[1]+'분':''),
+						    selected : tf
+						}));
+					}
+					
+				},
+				function() {
+					alert('네트워크 오류');
+				}
+		);
+	}
+	
+	/*
 	changeTime();
 	$('.datepicker').datepicker({
         autoclose : true,
 		format: 'yyyy-mm-dd',
-		language : 'kr',
+		language : 'ko',
 		todayHighlight : true
 	});
 	$('.datepicker').datepicker().on('changeDate', function(e) {
@@ -542,6 +469,7 @@
 			}
 		}
 	}
+	*/
 	
 	</script>
 

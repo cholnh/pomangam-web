@@ -2,6 +2,7 @@ package com.mrporter.pomangam.common.login.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -70,8 +71,8 @@ public class UserCrudDAO extends Crud<UserBean> {
 			
 			queryRunner.update(conn, "UPDATE " + TABLENAME + " SET nickname=?, targetidx=?, subscribeidx=?, regdate=?, moddate=?  WHERE username = ?;", 
 					bean.getNickname(),
-					bean.getTargetidx(),
-					bean.getSubscribeidx(),
+					bean.getIdx_target(),
+					bean.getIdx_subscribe(),
 					bean.getRegdate(),
 					bean.getModdate(),
 					bean.getUsername()); 
@@ -99,5 +100,31 @@ public class UserCrudDAO extends Crud<UserBean> {
 		PasswordEncoding bCryptEncoder = new PasswordEncoding(new BCryptPasswordEncoder());
 		
 		return bCryptEncoder.encode(pwEncoder.encode(plaintext));
+	}
+	
+	public void rememberSession(String session_key, Date session_limit, String username) throws Exception {
+		sqlUpdate("UPDATE member SET session_key = ?, session_limit = ? WHERE username = ? ", session_key, session_limit, username);
+	}
+	
+	public UserBean getMemberWithSession(String session_key) {
+		Connection conn = Config.getInstance().sqlLogin();
+		UserBean result = null;
+		List<Map<String, Object>> listOfMaps = null;
+		try {
+			QueryRunner queryRunner = new QueryRunner();
+			listOfMaps = queryRunner.query(conn, "SELECT * FROM " + TABLENAME + " WHERE session_key = ? AND session_limit > now();", 
+						new MapListHandler(), session_key);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DbUtils.closeQuietly(conn);
+		}
+		
+		if(!listOfMaps.isEmpty()) {
+			Gson gson = new Gson();
+			result = new Gson().fromJson(gson.toJson(listOfMaps.get(0)), 
+					new TypeToken<UserBean>() {}.getType());
+		}
+		return result;
 	}
 }

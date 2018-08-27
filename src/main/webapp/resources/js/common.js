@@ -84,6 +84,23 @@ function realtimeClock() {
 	setTimeout("realtimeClock()", 1000);
 }
 
+function getTime(idx_product, amount, tf) {
+	ajax('./product/gettime.do', 
+			{
+				idx_product : idx_product,
+				amount : amount
+			},
+			tf,
+			function(t) {
+				var d = new Date(t);
+				$('#ob-time').text(d.getHours()+'시 '+(d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
+			},
+			function() {
+				alert('네트워크 오류');
+			}
+	);
+}
+
 function ajax(url, data, async, success, error) {
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -158,6 +175,14 @@ function updateCartProduct(idx, amount) {
 }
 
 function removeCartProduct(idx, totalPrice) {
+	$('#cart-'+idx).fadeOut("slow", function(){
+		$('#cart-'+idx).remove();
+	});
+	if($('#cart2-'+idx).length > 0) {
+		$('#cart2-'+idx).fadeOut("slow", function(){
+			$('#cart2-'+idx).remove();
+		});
+	}
 	ajax('./cart/delete.do', 
 			{
 				idx : idx
@@ -165,14 +190,9 @@ function removeCartProduct(idx, totalPrice) {
 			true,
 			function(status) {
 				if (status.code / 100 == 2) {
-					$('#cart-'+idx).fadeOut("slow", function(){
-						$('#cart-'+idx).remove();
-					});
-					if($('#cart2-'+idx).length > 0) {
-						$('#cart2-'+idx).fadeOut("slow", function(){
-							$('#cart2-'+idx).remove();
-						});
-					}
+					location.reload();
+					/*
+					
 					
 					var size = $('#ob-cartSize').text() - 1;
 					$('#ob-cartSize').text(size<0?0:size);
@@ -182,7 +202,7 @@ function removeCartProduct(idx, totalPrice) {
 					var cur = numberWithCommas(pre-totalPrice);
 					$('#ob-sumPrice').text(cur);
 					$('#ob-sumPrice2').text(cur);
-					
+					*/
 				} else {
 					alert(status.message);
 				}
@@ -200,6 +220,8 @@ function removeAllCartProduct() {
 			true,
 			function(status) {
 				if (status.code / 100 == 2) {
+					location.reload();
+					/*
 					$('#cartTable').find("tr").each(function() {
 						$(this).fadeOut("slow", function(){
 							$(this).remove();
@@ -214,6 +236,7 @@ function removeAllCartProduct() {
 					$('#ob-sumPrice2').text('0');
 					$('#ob-cartSize').text('0');
 					$('#ob-cartSize2').text('0');
+					*/
 				} else {
 					alert(status.message);
 				}
@@ -222,6 +245,12 @@ function removeAllCartProduct() {
 				alert('네트워크 오류');
 			}
 		);
+}
+
+function goPayment() {
+	if(confirm($($('.ob-time-max')[0]).text()+'까지 도착합니다. 계속하시겠습니까?')) {
+		location.href='./payment.do';
+	}
 }
 
 function setCookie(cookieName, value, exdays){

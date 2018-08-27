@@ -28,6 +28,14 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 		List<RestaurantBean> result = null;
 		List<Map<String, Object>> lom = sqlQuery(
 				"SELECT " +
+					"* " +
+				"FROM " + 
+					"restaurant " +
+				"WHERE " + 
+					"idx_target = ?", idx);
+		/*
+		List<Map<String, Object>> lom = sqlQuery(
+				"SELECT " +
 					"r.idx, r.idx_target, r.name, r.location, r.tel, r.description, r.imgpath, r.cnt_star, r.cnt_comment, sum(p.cnt_limit) as sum_limit " +
 				"FROM " + 
 					"restaurant r, product p " +
@@ -36,6 +44,7 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 				"GROUP BY " + 
 					"r.idx;"
 				, idx);
+		*/
 		if(!lom.isEmpty()) {
 			Gson gson = new Gson();
 			result = new Gson().fromJson(gson.toJson(lom), 

@@ -113,7 +113,7 @@ public class CartController {
 		} else {
 			cartList = (ArrayList<CartBean>) obj;
 			for(CartBean c : cartList) {
-				System.out.println(c);
+				//System.out.println(c);
 				if(c.getIdx().intValue() == idx.intValue()) {
 					c.setAmount(amount);
 					session.setAttribute("cartList", cartList);

@@ -42,7 +42,7 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 			return Integer.parseInt(lom.get(0).get("count(*)")+"");
 	}
 	
-	public int makeBoxNumber(String receive_date, String receive_time) throws Exception {
+	public int makeBoxNumber(Integer idx_target, String receive_date, String receive_time) throws Exception {
 		List<Map<String, Object>> lom 
 		= super.sqlQuery(
 				"SELECT " +
@@ -50,8 +50,8 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 				"FROM " +
 					"payment_index " +
 				"WHERE " +
-					"receive_date = ? AND receive_time = ?;", 
-				receive_date, receive_time);
+					"idx_target = ? AND receive_date = ? AND receive_time = ?;", 
+					idx_target, receive_date, receive_time);
 		Object obj = lom.get(0).get("nextbn");
 		if(obj == null) {
 			return 0;
@@ -92,18 +92,18 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 			sumAmount += amount;
 		}
 		
+		/*
 		int tAmount = sumAmount>1?sumAmount-1:0;
 		int tmp = tAmount * 500;
 		int tPrice = (tmp > 2000 ? 2000 : tmp) + 2000;
 		sumPrice += tPrice;
-
+		 */
 		boolean result = (PG_price.intValue() == sumPrice);
 		if(!result) {
 			logger.info("금액불일치\n"
 					+ "idx : " + idx + "\n"
 					+ "주문번호 : " + idxes + "\n"
 					+ "배달수량 : " + sumAmount + "\n"
-					+ "배달가격 : " + tPrice + "\n"
 					+ "최종 : " + sumPrice + "\n"
 					+ "PG_price : "+ PG_price + "\n"
 					+ Date.getCurDate());

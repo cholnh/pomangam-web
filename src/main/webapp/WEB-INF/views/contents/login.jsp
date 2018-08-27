@@ -10,6 +10,7 @@
 	<%	
 		String publicKeyModulus = (String) request.getAttribute("publicKeyModulus");
 		String publicKeyExponent = (String) request.getAttribute("publicKeyExponent");
+		String username = (String) request.getParameter("username");
 	%>
 	
 	<!-- Navbar -->
@@ -34,7 +35,7 @@
 								<input type="password" class="n-input n-border" 
 									id="password" name="password" type="text" placeholder="비밀번호" required>
 								<label class="custom-control custom-checkbox" style="margin-top:10px">
-									<input type="checkbox" id="remember" value="1" class="custom-control-input">
+									<input type="checkbox" id="ob-remember" value="1" class="custom-control-input">
 									<span class="custom-control-indicator"></span>
 									로그인 상태 유지
 								 </label>
@@ -50,6 +51,7 @@
 				        <form id="securedLoginForm" name="securedLoginForm" action="./j_spring_security_check" method="post" style="display: none;">
 				            <input type="hidden" name="securedUsername" id="securedUsername" value="" />
 				            <input type="hidden" name="securedPassword" id="securedPassword" value="" />
+				            <input type="hidden" name="remember" id="remember" value="" />
 				            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				        </form>
 				        
@@ -80,25 +82,34 @@
 						<div id="signup" style="display:none;">
 							<hr>
 							<div style="padding:10px">
-								<form action="" target="_blank">
+								<form id="form-signup" action="./signup.do" method="POST">
 									<div class="form-group" style="text-align: left">
-										<label for="grid-input-17">아이디</label>
-										<input type="text" id="input-id" class="form-control" placeholder="" required>
+										<label>아이디</label>
+										<input type="text" id="form_username" name="form_username" class="form-control" placeholder="" required>
+										<span id="form_username_success" style="display:none;color:blue">사용가능한 아이디 입니다.</span>
+										<span id="form_username_warning" style="display:none;color:red">중복되는 아이디가 있습니다.</span>
 									</div>
 									<div class="form-group" style="text-align: left">
-										<label for="grid-input-17">비밀번호</label>
-										<input type="password" id="input-pw" class="form-control" placeholder="8~16자 영문, 숫자" required>
+										<label>비밀번호</label>
+										<input type="password" id="form_password" name="form_password" class="form-control" placeholder="8~16자 영문, 숫자" required>
 									</div>
 									<div class="form-group" style="text-align: left">
-										<label for="grid-input-17">비밀번호 확인</label>
-										<input type="password" id="input-pwchk" class="form-control" placeholder="" required>
+										<label>비밀번호 확인</label>
+										<input type="password" id="form_password_recheck" name="form_password_recheck" class="form-control" placeholder="" required>
+										<span id="form_password_warning" style="display:none;color:red">비밀번호 불일치</span>
 									</div>
 									<div class="form-group" style="text-align: left">
-										<label for="grid-input-17">이름</label>
-										<input type="text" id="input-name" class="form-control" placeholder="홍길동" required>
+										<label>이름</label>
+										<input type="text" id="form_name" name="form_name" class="form-control" placeholder="홍길동" required>
+									</div>
+									<div class="form-group" style="text-align: left">
+										<label>핸드폰 번호</label>
+										<input type="tel"  pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}|[0-9]{11}" 
+											id="form_tel" name="form_tel" class="form-control" placeholder="010-xxxx-xxxx" required>
 									</div>
 									<button type="submit" class="n-btn n-round n-signupBtn" 
 											style="background-color: #eb613e; color: white">회원가입</button>
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								</form>
 								
 								<div class="n-or-container">
@@ -128,8 +139,8 @@
 			<h4 class="modal-title" id="myModalLabel">아이디 찾기</h4>
 		  </div>
 		  <div class="modal-body">
-			<h4 class="m-t-0">구현 중</h4>
-
+			<h4 class="m-t-0">구현 중 </h4>
+			관리자에게 문의 바랍니다.
 		  </div>
 
 		</div>
@@ -145,7 +156,7 @@
 		  </div>
 		  <div class="modal-body">
 			<h4 class="m-t-0">구현 중</h4>
-
+			관리자에게 문의 바랍니다.
 		  </div>
 
 		</div>
@@ -154,9 +165,6 @@
 	
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
-
-	<!-- jQuery -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
@@ -177,12 +185,12 @@
 		$('#signup').fadeIn('slow');
 		var offset = $('#focusPanel').offset();
        	$('html, body').animate({scrollTop : offset.top-100}, 400);
-		$('#input-id').focus();
+		$('#form_username').focus();
 	}
 	
 	</script>
 	<script>
-	
+	var isDup = true;
 	var userId = getCookie("cookieUsername"); 
     $("#username").val(userId); 
      
@@ -201,16 +209,19 @@
 	    	$('#password').focus();
 	    } else {
 	    	 try {
-			    	if($("#remember").is(":checked")){
-			            var userId = $("#username").val();
-			            setCookie("cookieUsername", userId, 7); // 7일동안 쿠키 보관
+	    		 	/*
+			    	if($("#ob-remember").is(":checked")){
+			            //var userId = $("#username").val();
+			            //setCookie("cookieUsername", userId, 7); // 7일동안 쿠키 보관
+			            
 			        } else {
-			            deleteCookie("cookieUsername");
+			            //deleteCookie("cookieUsername");
 			        }
-			    	
+			    	*/
+			    	var isRemember = $("#ob-remember").is(":checked");
 			        var rsaPublicKeyModulus = document.getElementById("rsaPublicKeyModulus").value;
 			        var rsaPublicKeyExponent = document.getElementById("rsaPublicKeyExponent").value;
-			        submitEncryptedForm(username,password, rsaPublicKeyModulus, rsaPublicKeyExponent);
+			        submitEncryptedForm(username,password, rsaPublicKeyModulus, rsaPublicKeyExponent, isRemember);
 			    } catch(err) {
 			        alert(err);
 		    	}
@@ -219,7 +230,7 @@
 	    return false;
  	});
     
-	function submitEncryptedForm(username, password, rsaPublicKeyModulus, rsaPpublicKeyExponent) {
+	function submitEncryptedForm(username, password, rsaPublicKeyModulus, rsaPpublicKeyExponent, isRemember) {
 	    var rsa = new RSAKey();
 	    rsa.setPublic(rsaPublicKeyModulus, rsaPpublicKeyExponent);
 	
@@ -231,12 +242,19 @@
 	    var securedLoginForm = document.getElementById("securedLoginForm");
 	    securedLoginForm.securedUsername.value = securedUsername;
 	    securedLoginForm.securedPassword.value = securedPassword;
+	    securedLoginForm.remember.value = isRemember;
 	    securedLoginForm.submit();
 	}
 
 	var status = <%=new Gson().toJson(request.getSession().getAttribute("status")) %>;
 	var error = '${error}';
 	var msg = '${msg}';
+	<%if(username!=null){%>
+	$('#username').val(<%=username%>);
+	$('#password').focus();
+	<%} else {%>
+	$('#username').focus();
+	<%}%>
 	
 	if(error != '') {
 		alert(error);
@@ -244,7 +262,69 @@
 	if(msg != '') {
 		alert(msg);
 	}
-		
+	
+	$('#form_username').focusout(function(){
+		if($('#form_username').val().length<=0) {
+			$('#form_username_success').hide();
+			$('#form_username_warning').hide();
+			return;
+		}
+		ajax('./login/check.do', 
+				{
+					username : $('#form_username').val()
+				},
+				true,
+				function(tf) {
+					isDup = tf;
+					if(isDup) {
+						$('#form_username_success').hide();
+						$('#form_username_warning').show();
+					} else {
+						$('#form_username_success').show();
+						$('#form_username_warning').hide();
+					}
+				},
+				function() {
+					alert('네트워크 오류');
+				}
+		);
+	});
+	function recheck(e) {
+		if($(e).val() === $('#form_password').val()) {
+			$('#form_password_warning').hide();
+			return;
+		} else {
+			$('#form_password_warning').show();
+		}
+	}
+	$('#form_password').focusout(function(){
+		if($('#form_password_recheck').val().length>0) {
+			recheck($('#form_password_recheck'));
+		}
+	});
+	$('#form_password_recheck').focusout(function(){
+		recheck(this);
+	});
+	
+	$('#form-signup').submit(function() {
+		if(isDup) {
+			alert('아이디를 확인해 주세요.');
+			$('#form_username').focus();
+			return false;
+		}
+		if($('#form_password').val() !== $('#form_password_recheck').val()) {
+			alert('비밀번호가 서로 다릅니다.');
+			return false;
+		}
+		$('#form-signup').submit();
+	});
+	
+	$('#password').on('keyup', function(e){
+		if(e.keyCode==13) {
+			$('#submitBtn').trigger('click'); 
+		}
+	});
+	
 	</script>
 </body>
 </html>

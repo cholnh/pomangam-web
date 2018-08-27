@@ -15,7 +15,7 @@
 <html>
 <head>
 </head>
-<body style="background-color: #FFF; height:100%">
+<body style="background-color: #FFF;">
 
 	<%	
 		String curTarget = (String) session.getAttribute("curTarget");
@@ -31,7 +31,7 @@
 	<!-- Navbar -->
 	<jsp:include page="../parts/header.jsp" /> 
 
-	<div class="container center" style="margin-top:50px">
+	<div class="container center" style="margin-top:50px;padding:0px">
 		<!-- Target Info -->
         
 		<div class="n-center">
@@ -40,13 +40,18 @@
 					<span class="n-xlarge n-bottombar" style="padding:5px"><span style="color:black">장바구니</span></span>
 				</a>
 			</div>
-            <div class="center n-border">
+            <div class="center n-border" style="padding:0px">
             	<%
 				if(cartList != null && !cartList.isEmpty()) {
 				%>
+				<br>
+				<span style="font-size:15px;font-weight:bold;">
+					배달 <span class="ob-time-max"></span>도착 
+				</span>
             	<div style="text-align:right; margin-right:12px">
 					<button class="btn btn-secondary n-small" onclick="removeAllCartProduct()">전체삭제</button>
 				</div>
+				
 				<%} %>
 				<div style="text-align: left;margin:12px">
 					<table id="cartTable2" class="table table-hover">
@@ -89,17 +94,26 @@
 										</a>
 									</td>
 									<td>
-										<div class="row" style="margin-left:12px">
+										<div class="row" style="margin-left:12px;margin-top:8px">
 											<span><b><%=product.getName() %></b></span>
 										</div>
 										<div class="row" style="margin-left:12px">
-											<b><% out.print(Number.numberWithCommas(product.getPrice())); %>원</b>
-											<input class="c-amount" id="amount-<%=cart.getIdx() %>" type="number" min=1 value=<%=cart.getAmount() %> style="width:40px;margin-left:6px">개
+											<span>
+												<b><% out.print(Number.numberWithCommas(product.getPrice())); %>원</b>
+											</span>
+											<input class="c-amount" id="amount-<%=cart.getIdx() %>" 
+												type="number" pattern="[0-9]*" inputmode="numeric" min=1 value=<%=cart.getAmount() %> 
+												style="width:40px;margin-left:6px">개
+										</div>
+										<div class="row" style="margin-left:12px">
+											<span style="font-size:13px!important" >
+							            		(<span class="ob-time-<%=idx_product %>"></span> 도착)
+							            	</span>
 										</div>
 									</td>
 									<td>
 										<i onclick="removeCartProduct(<%=cart.getIdx()%>, <%=totalPrice %>)" 
-													class="fa fa-remove fa-2x"></i>
+											class="fa fa-remove fa-2x" style="margin-top:16px"></i>
 									</td>
 								</tr>
 							<%}}%>
@@ -122,13 +136,13 @@
 		if(cartList != null && !cartList.isEmpty()) {
 		%>
 		<div class="n-target-mobilebtn n-on-mobile">
-			<button class="btn btn-primary" onclick="location.href='./payment.do'"
+			<button class="btn btn-primary" onclick="goPayment()"
 			style="width:100%;height:100%;font-size:20px;font-weight:bold">
 				주문하기
 			</button>
 		</div>
         <div class="n-center n-on-pc" style="margin-bottom: 64px; margin-top:32px">
-            <button class="btn btn-primary" onclick="location.href='./payment.do'"
+            <button class="btn btn-primary" onclick="goPayment()"
             style="width:40%;font-size:20px;font-weight:bold">
             	주문하기
             </button>
@@ -152,10 +166,6 @@
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
 	
-	
-	<!-- jQuery -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
@@ -173,10 +183,21 @@
 	
 	$('.c-amount').change(function() {
 		var $this = $(this);
+		var amount = $this[0].value;
+		if(isNaN(parseInt(amount))) {
+			alert('숫자만 입력가능합니다.');
+			return;
+		}
+		if(amount > 15) {
+			alert('15개 이상 단체주문은 010-6478-4899로 문의주세요.');
+			$this.val(15);
+			amount = 15;
+		} 
+		
 		if($this.length > 0) {
 			var idx = $this[0].id.split('amount-')[1];
-			console.log(idx + ' ' + $this[0].value);
-			updateCartProduct(idx, $this[0].value);
+			console.log(idx + ' ' + amount);
+			updateCartProduct(idx, amount);
 		}
 	});
 	</script>

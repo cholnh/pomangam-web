@@ -2,8 +2,11 @@ package com.mrporter.pomangam.common.security;
 
 import java.security.PrivateKey;
 import java.util.Collection;
+import java.util.Date;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -22,6 +25,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.gson.Gson;
+import com.mrporter.pomangam.common.login.dao.UserCrudDAO;
 import com.mrporter.pomangam.common.security.crypt.RSA;
 import com.mrporter.pomangam.common.security.model.UserService;
 import com.mrporter.pomangam.common.security.model.domain.User;
@@ -39,6 +43,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     		throws AuthenticationException {
     	HttpServletRequest request = 
     			((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    	HttpServletResponse response = 
+    			((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
+    	
     	HttpSession session = request.getSession();
     	try {
     		SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
@@ -49,10 +56,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     		PrivateKey privateKey = (PrivateKey) session.getAttribute("__rsaPrivateKey__");
     		String username = decryptRSA(privateKey, authentication.getName());
             String password = decryptRSA(privateKey, (String) authentication.getCredentials());
+            boolean isRemember = Boolean.parseBoolean(request.getParameter("remember"));
+            System.out.println(isRemember);
+            
             User user;
             Collection<? extends GrantedAuthority> authorities;
             try {
-            	System.out.println("hi - " + username + " " + password);
                 user = userService.loadUserByUsername(username);
         		
                 boolean isSuccess = bCryptEncoder.matches(pwEncoder.encode(password), user.getPassword());
@@ -69,6 +78,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             }
             user.setPassword("");
             session.setAttribute("user", new Gson().toJson(user));
+            
+            if(isRemember) {
+            	int amount = 60*60*24*7;	// 7days
+            	Cookie cookie = new Cookie("loginCookie", session.getId());
+            	cookie.setPath("/");
+            	cookie.setMaxAge(amount);
+            	response.addCookie(cookie);
+            	
+            	Date session_limit = new Date(System.currentTimeMillis() + (1000*amount));
+            	try {
+					new UserCrudDAO().rememberSession(session.getId(), session_limit, username);
+				} catch (Exception e) {
+					e.printStackTrace();
+				};
+            }
+            
             return new UsernamePasswordAuthenticationToken(user, password, authorities);
     	} finally {
     		session.removeAttribute("__rsaPrivateKey__");

@@ -28,11 +28,11 @@ public class UserService implements UserDetailsService {
         	
         	user.setName(userBean.getName());
         	user.setNickname(userBean.getNickname());
-        	user.setTargetidx(userBean.getTargetidx());
-        	user.setSubscribeidx(userBean.getSubscribeidx());
+        	user.setTargetidx(userBean.getIdx_target());
+        	user.setSubscribeidx(userBean.getIdx_subscribe());
         	user.setModdate(userBean.getModdate());
         	user.setRegdate(userBean.getRegdate());
-        	user.setPhonenumber(userBean.getPhonenumber());
+        	user.setPhonenumber(userBean.getTel());
         	
         	List<Role> roles = new ArrayList<Role>();
         	

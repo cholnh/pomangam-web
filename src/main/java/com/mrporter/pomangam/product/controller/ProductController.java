@@ -1,6 +1,7 @@
 package com.mrporter.pomangam.product.controller;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,6 +93,37 @@ public class ProductController {
 			bean = defaultDAO.getBean(column, value);
 		}
 		return bean;
+	}
+	
+	@RequestMapping(value = "/"+MAPPINGNAME+"/gettime.do", 
+			produces = "application/json; charset=utf-8")
+	public @ResponseBody long getTime(
+			@RequestParam(value = "idx_product", required = false) Integer idx_product,
+			@RequestParam(value = "amount", required = false) Integer amount) throws Exception {
+
+		Calendar cal = new ProductCrudDAO().getTime(idx_product, amount);
+		if(cal == null) {
+			return -1;
+		} else {
+			return cal.getTimeInMillis();
+		}
+	}
+	
+	@RequestMapping(value = "/"+MAPPINGNAME+"/getmaxtime.do", 
+			produces = "application/json; charset=utf-8")
+	public @ResponseBody long getMaxTime(
+			@RequestParam(value = "products", required = false) String products) throws Exception {
+		
+		long max = 0;
+		String[] productList = products.split(",");
+		for(String obj : productList) {
+			int idx_product = Integer.parseInt(obj.split("-")[0]);
+			int amount = Integer.parseInt(obj.split("-")[1]);
+			
+			long millis = new ProductCrudDAO().getTime(idx_product, amount).getTimeInMillis();
+			max = max < millis ? millis : max;
+		}
+		return max;
 	}
 	
 	@ExceptionHandler

@@ -40,12 +40,20 @@
             <div style="margin:12px">
                 <span style="font-size: 20px; font-weight: bold;"><%=product.getName() %></span>
             </div>
+            <div style="margin-top:0px"> 
+            	<a class="btn-primary " style="font-size:15px!important;padding:7px" >
+            		<b><span id="ob-time"></span> 도착</b> 
+            	 </a>
+            </div>
+            <!-- 
             <a class="btn-primary " style="font-size:12px!important;padding:5px"></b>
-            	<% out.print(Number.numberWithCommas(product.getCnt_limit())); %>개 남음
+            	<% //out.print(Number.numberWithCommas(product.getCnt_limit())); %>개 남음
             </a>
+             -->
             <div style="margin-top:18px">
-                
-                <input id="ob-amount" type="number" style="width:40px" min=1 value=1> 개
+                <input id="ob-amount" type="number" pattern="[0-9]*" inputmode="numeric"
+            		data-toggle="popover"  data-content="개수에 따라 도착시간이 달라집니다" data-placement="left"
+                	 style="width:40px" min=1 value=1> 개
                 <span style="color: #f3753a; font-weight: bold; margin-left: 12px; font-size: 15px;">
                     	<% out.print(Number.numberWithCommas(product.getPrice())); %>원
                 </span>
@@ -119,10 +127,6 @@
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
 
-
-	<!-- jQuery -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/pixeladmin.min.js"></script>
@@ -136,12 +140,43 @@
 	$('#header-back').show();
 	$('#header-center').show();
 	$('#header-back').prop('href', './restaurant.do?idx='+curRestaurant);
+	$('[data-toggle="popover"]').popover();
 	
-	function goDirect() {
-		location.href='./payment.do?direct=true&amount='+$('#ob-amount').val();
+	if(!mobilecheck()) {
+		$('#ob-amount').popover('show').off('click');
+	} else {
+		$('#ob-amount').off('click');
 	}
 	
 	
+	function goDirect() {
+		getTime(curProduct, $('#ob-amount').val(), false);
+		if(confirm($('#ob-time').text()+' 까지 도착합니다. 계속하시겠습니까?')) {
+			location.href='./payment.do?direct=true&amount='+$('#ob-amount').val();
+		}
+	}
+	
+	$('#ob-amount').on('change', function() {
+		var amount = $(this).val();
+		if(isNaN(parseInt(amount))) {
+			alert('숫자만 입력가능합니다.');
+			$(this).val(1);
+			return;
+		}
+			
+		if(amount > 15) {
+			alert('15개 이상 단체주문은 010-6478-4899로 문의주세요.');
+			return;
+		} 
+		getTime(curProduct, amount);
+	});
+	
+	timer();
+	
+	function timer() {
+		getTime(curProduct, $('#ob-amount').val(), true);
+		setTimeout("timer()", 1000*60);
+	}
 	</script>
 </body>
 </html>

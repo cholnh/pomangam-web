@@ -20,7 +20,6 @@ import com.mrporter.pomangam.common.pattern.vo.Status;
 import com.mrporter.pomangam.product.dao.ProductCrudDAO;
 import com.mrporter.pomangam.product.vo.ProductBean;
 import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
-import com.mrporter.pomangam.target.dao.OrdertimeCrudDAO;
 
 @Controller
 public class RestaurantController {
@@ -62,7 +61,6 @@ public class RestaurantController {
 			model.setViewName("contents/" + MAPPINGNAME);
 			model.addObject("restaurant", restaurant);
 			model.addObject("productList", productList);
-			model.addObject("ordertime", new OrdertimeCrudDAO().getTimeListByIdx(curTarget));
 			session.setAttribute("curRestaurant", idx+"");
 		}
 		return model;

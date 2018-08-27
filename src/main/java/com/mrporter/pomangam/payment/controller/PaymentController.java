@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mrporter.pomangam.cart.vo.CartBean;
+import com.mrporter.pomangam.common.map.dao.MapCrudDAO;
 import com.mrporter.pomangam.common.pattern.vo.Status;
 import com.mrporter.pomangam.common.security.model.domain.User;
 import com.mrporter.pomangam.common.util.Date;
@@ -29,8 +30,7 @@ import com.mrporter.pomangam.payment.dao.PaymentCrudDAO;
 import com.mrporter.pomangam.payment.dao.PaymentIndexCrudDAO;
 import com.mrporter.pomangam.payment.vo.PaymentBean;
 import com.mrporter.pomangam.payment.vo.PaymentIndexBean;
-import com.mrporter.pomangam.target.dao.DestinationCrudDAO;
-import com.mrporter.pomangam.target.dao.OrdertimeCrudDAO;
+import com.mrporter.pomangam.product.dao.ProductCrudDAO;
 import com.mrporter.pomangam.target.dao.TargetCrudDAO;
 
 @Controller
@@ -76,8 +76,8 @@ public class PaymentController {
 		
 		ModelAndView model = new ModelAndView();
 		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("destination", new DestinationCrudDAO().getListGroupByIdx(curTarget));
-		model.addObject("ordertime", new OrdertimeCrudDAO().getListByIdx(curTarget));
+		model.addObject("time_start", new MapCrudDAO().getValue("time_start"));
+		model.addObject("time_end", new MapCrudDAO().getValue("time_end"));
 		
 		return model;
 	}
@@ -170,7 +170,8 @@ public class PaymentController {
 		String pw = rand.nextInt(10) + "" + rand.nextInt(10);
 		bean.setPassword(pw);
 		bean.setTimestamp(Date.getCurDate());
-		bean.setIdx_box(indexDAO.makeBoxNumber(bean.getReceive_date(), bean.getReceive_time()));
+		bean.setReceive_date(Date.getCurDay());
+		bean.setIdx_box(indexDAO.makeBoxNumber(bean.getIdx_target(), bean.getReceive_date(), bean.getReceive_time()));
 		bean.setStatus(0); // 0 : 결제 대기, 1 : 결제 완료, 2 : 결제 실패
 		bean.setLocation("web [" + Ip.getInfo() + "]");
 		
@@ -206,6 +207,7 @@ public class PaymentController {
 			
 			indexDAO.setStatus(1, idx);
 			new TargetCrudDAO().addCountOrder(curTarget);
+			new ProductCrudDAO().addCountSell(idx);
 			return new Status(200);
 		} else {
 			// 금액 불일치
