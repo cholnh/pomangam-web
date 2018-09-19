@@ -17,5 +17,7 @@ public class PaymentIndexBean {
 	Integer idx_box, idx_target;
 	String receive_date, receive_time;
 	Integer status; // 0 : 결제 대기, 1 : 결제 완료, 2 : 결제 실패
-	String username, location, phonenumber;
+	String username, location, phonenumber, guestname;
+	Integer totalprice;
+	String cashreceipt, where;
 }

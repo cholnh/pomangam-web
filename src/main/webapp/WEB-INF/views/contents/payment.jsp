@@ -19,6 +19,7 @@
 
 <html>
 <head>
+	<link href="resources/img/favicon.ico" rel="shortcut icon">
 </head>
 <body style="background-color: #FFF">
 
@@ -41,6 +42,10 @@
 		
 		String time_start = (String) request.getAttribute("time_start");
 		String time_end = (String) request.getAttribute("time_end");
+		
+		String bank_name = (String) request.getAttribute("bank_name");
+		String bank_account = (String) request.getAttribute("bank_account");
+		String bank_username = (String) request.getAttribute("bank_username");
 		
 		String userjson = (String) request.getSession().getAttribute("user");
 		User user = new Gson().fromJson(userjson, new TypeToken<User>() {}.getType());
@@ -74,7 +79,6 @@
 						<%
 						String products = "";
 						int sumPrice = 0;
-						int sumAmount = 0;
 						if(cartList != null) {
 						for(CartBean cart : cartList) {
 							int idx_product = cart.getIdx_product();
@@ -84,11 +88,11 @@
 									json, 
 									new TypeToken<List<ProductBean>>() {}.getType());
 							ProductBean product = list.get(0);
-							sumPrice += (product.getPrice() * cart.getAmount());
-							sumAmount += cart.getAmount();
+							
 							int totalPrice = product.getPrice()*cart.getAmount();
 							
-							products += idx_product+"-"+cart.getAmount()+",";
+							products += idx_product+"-"+cart.getAmount()+"-"+cart.getIdx_restaurant()+",";
+							
 						%>
 							<tr>
 								<th>
@@ -104,6 +108,40 @@
 									<b><% out.print(Number.numberWithCommas(totalPrice)); %>원</b>
 								</th>
 							</tr>
+							<%
+							int sum_addPrice = 0;
+							String add = cart.getAdditional();
+						
+							if(add!=null && add.length()>0) {
+								String[] parts = add.split(",");
+								for(String part : parts) {
+									//Integer idx_product_additional = Integer.parseInt(part.split("-")[0]);
+									int amount = Integer.parseInt(part.split("-")[1]);
+									if(amount<=0) continue;
+									int addPrice = Integer.parseInt(part.split("-")[2]);
+									String name = part.split("-")[3];
+									sum_addPrice += (addPrice * amount);
+									
+									%>
+										<tr>
+											<th>
+												(추가) <%=name %> 
+											</th>
+											<th>
+												<% out.print(Number.numberWithCommas(addPrice)); %>원
+											</th>
+											<th>
+												<% out.print(Number.numberWithCommas(amount*cart.getAmount())); %>개
+											</th>
+											<th>
+												<b><% out.print(Number.numberWithCommas(addPrice * amount * cart.getAmount())); %>원</b>
+											</th>
+										</tr>
+									<%
+								}
+							}
+							sumPrice += ((product.getPrice()+sum_addPrice) * cart.getAmount());
+							%>
 						<%}} %>
 
 
@@ -215,8 +253,9 @@
 		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 위치
 		            		</td>
 		            		<td>
-		            			<select class="form-control n-payment-select" style="width:150px">
-		            				<option>학생회관 앞</option>
+		            			<select id="ob-where" class="form-control n-payment-select" style="width:150px">
+		            				<option>학생회관 뒤</option>
+		            				<option>기숙사 정문 (도착시간 +10분)</option>
 			                    </select>
 		            		</td>
 	            		</tr>
@@ -226,23 +265,47 @@
 		            		</td>
 		            		<td>
 		            			<select class="form-control n-payment-select" style="width:150px">
-			                        <option>카카오페이</option>
-			                        <option>네이버페이</option>
-			                        <option>카드결제</option>
-			                        <option>계좌이체</option>
-			                        <option>핸드폰결제</option>
-			                        <option>무통장입금</option>
+		            				<option>계좌이체</option>
+		            				<option disabled="true">카드결제 &nbsp;&nbsp;&nbsp;(준비중입니다ㅠㅠ)</option>
+			                        <option disabled="true">카카오페이 (준비중입니다ㅠㅠ)</option>
+			                        <option disabled="true">네이버페이 (준비중입니다ㅠㅠ)</option>
+			                        <option disabled="true">핸드폰결제 (준비중입니다ㅠㅠ)</option>
+			                        <option disabled="true">무통장입금 (준비중입니다ㅠㅠ)</option>
 			                    </select>
 		            		</td>
 	            		</tr>
+	            		<tr>
+	            			<td colspan=2 style="text-align:right">
+	            				<span><%=bank_name %> <%=bank_account %>(<%=bank_username %>)</span>
+	            			</td>
+	            		</tr>
 	            		<%
 	            		if(user == null) {%>
+	            		<tr>
+	            			<td colspan=2><hr></td>
+	            		</tr>
+	            		<tr>
+		            		<td>
+		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 이름
+		            		</td>
+		            		<td>
+		            			<input class="form-control" type="text" id="guestname" required>
+		            		</td>
+	            		</tr>
 	            		<tr>
 		            		<td>
 		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 핸드폰 번호
 		            		</td>
 		            		<td>
-		            			<input class="form-control" type="tel" id="phoneNumber" required>
+		            			<input class="form-control" type="tel" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}|[0-9]{11}"  id="phoneNumber" required>
+		            		</td>
+	            		</tr>
+	            		<tr>
+		            		<td>
+		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 비밀번호 4자리
+		            		</td>
+		            		<td>
+		            			<input class="form-control" type="password" id="password" required>
 		            		</td>
 	            		</tr>
 	            		<%} %>
@@ -251,7 +314,7 @@
 	          
 	            <div class="center">
 	            	<label class="custom-control custom-checkbox" style="width:150px;padding:0px">
-	                    <input type="checkbox" class="custom-control-input" unchecked="">
+	                    <input id="cashReceipt" type="checkbox" class="custom-control-input" unchecked="">
 	                    <span class="custom-control-indicator"></span>현금영수증 신청
 	                </label>
                 </div>
@@ -300,6 +363,11 @@
 			return;
 		}
 		if($('#phoneNumber').length>0) {
+			if(!$('#guestname').val()) {
+				$('#guestname').focus();
+				alert('비회원은 성함 입력이 필수입니다.');
+				return;
+			}
 			if(!$('#phoneNumber').val()) {
 				$('#phoneNumber').focus();
 				alert('비회원은 핸드폰번호 입력이 필수입니다.');
@@ -312,15 +380,22 @@
 				return;
 			}
 		}
-		
+		<%if(user==null){%>
+		if(!confirm('입금하실 분의 성함이 \''+$('#guestname').val()+'\'님으로 등록됩니다. \n계속하시겠습니까?')) {
+			return;
+		}
+		<%}%>
 		var idxList = []; 
 		cartList.forEach(function(cart) {
+			console.log(cart);
 			ajax('./payment/insert.do', 
 					{
 						idx_target : cart.idx_target,
 						idx_restaurant : cart.idx_restaurant,
 						idx_product : cart.idx_product,
-						amount : cart.amount
+						amount : cart.amount,
+						additional : cart.additional,
+						requirement : cart.requirement
 					},
 					false,
 					function(status) {
@@ -335,19 +410,26 @@
 					}
 			);
 		});
+		var cur = new Date();
+		
 		ajax('./payment/insertindex.do', 
 				{
 					<%if(user == null) {%>
+					guestname : $('#guestname').val(),
 					phonenumber : $('#phoneNumber').val(),
 					<%}%>
 					idxes_payment : idxList.toString(),
 					idx_target : curTarget,
-					receive_time : $('#ob-time').val()
+					receive_date : date.getDate() - cur.getDate(),
+					receive_time : $('#ob-time').val(),
+					password : $('#password').val(),
+					cashreceipt : $("input:checkbox[id='cashReceipt']").is(":checked") ? 'true' : 'false',
+					where : $('#ob-where').val()
 				},
 				false,
 				function(status) {
 					if (status.code / 100 == 2) {
-						check();
+						checkPG();
 					} else {
 						alert(status.message);
 					}
@@ -358,9 +440,8 @@
 		);
 	}
 	
-	
-	function check() {
-		ajax('./payment/check.do', 
+	function checkPG() {
+		ajax('./payment/checkpg.do', 
 				{
 					PG_price : <%=sumPrice %>
 				},
@@ -380,7 +461,7 @@
 	
 	var time_start = '<%=time_start %>'.split(':');
 	var time_end = '<%=time_end %>'.split(':');
-	
+	var date;
 	function changeTime() {
 		var products = '<%=products %>';
 		if(products.length <= 0) return;
@@ -391,6 +472,7 @@
 				true,
 				function(millis) {
 					var d = new Date(millis);
+					date = d;
 					$('#ob-date').append($('<option>', {
 					    text: d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일',
 					    selected : true

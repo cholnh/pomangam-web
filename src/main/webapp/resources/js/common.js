@@ -1,3 +1,11 @@
+function copyToClipboard(val) {
+  var t = document.createElement("textarea");
+  document.body.appendChild(t);
+  t.value = val;
+  t.select();
+  document.execCommand('copy');
+  document.body.removeChild(t);
+}
 
 function goTop() {
 	$("html, body").animate({ scrollTop: 0 }, "slow");
@@ -84,16 +92,21 @@ function realtimeClock() {
 	setTimeout("realtimeClock()", 1000);
 }
 
-function getTime(idx_product, amount, tf) {
+function getTime(idx_product, amount, idx_restaurant, tf) {
 	ajax('./product/gettime.do', 
 			{
 				idx_product : idx_product,
-				amount : amount
+				amount : amount,
+				idx_restaurant : idx_restaurant
 			},
 			tf,
 			function(t) {
 				var d = new Date(t);
-				$('#ob-time').text(d.getHours()+'시 '+(d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
+				var text = '';
+				if(d.getDate() == new Date().getDate() + 1) {
+					text = '다음날 ';
+				}
+				$('#ob-time').text(text + d.getHours()+'시 '+(d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
 			},
 			function() {
 				alert('네트워크 오류');
@@ -131,13 +144,15 @@ function ajax(url, data, async, success, error) {
 	});
 };
 
-function insertCartProduct() {
+function insertCartProduct(d,r) {
 	ajax('./cart/insert.do', 
 		{
 			idx_target : curTarget,
 			idx_restaurant : curRestaurant,
 			idx_product : curProduct,
-			amount : $('#ob-amount').val()
+			amount : $('#ob-amount').val(),
+			additional : d,
+			requirement : r
 		},
 		true,
 		function(status) {
@@ -174,7 +189,7 @@ function updateCartProduct(idx, amount) {
 		);
 }
 
-function removeCartProduct(idx, totalPrice) {
+function removeCartProduct(idx) {
 	$('#cart-'+idx).fadeOut("slow", function(){
 		$('#cart-'+idx).remove();
 	});
@@ -191,18 +206,6 @@ function removeCartProduct(idx, totalPrice) {
 			function(status) {
 				if (status.code / 100 == 2) {
 					location.reload();
-					/*
-					
-					
-					var size = $('#ob-cartSize').text() - 1;
-					$('#ob-cartSize').text(size<0?0:size);
-					$('#ob-cartSize2').text(size<0?0:size);
-					
-					var pre = parseInt($('#ob-sumPrice').text().replace(',',''));
-					var cur = numberWithCommas(pre-totalPrice);
-					$('#ob-sumPrice').text(cur);
-					$('#ob-sumPrice2').text(cur);
-					*/
 				} else {
 					alert(status.message);
 				}

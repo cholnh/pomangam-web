@@ -16,4 +16,6 @@ public class PaymentBean {
 	String type;
 	Integer idx_target, idx_restaurant, idx_product;
 	Integer amount;
+	String additional, requirement;
+	Integer idx_payment_index;
 }

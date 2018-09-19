@@ -10,6 +10,7 @@
         <context:include-filter expression="org.springframework.stereotype.Repository" type="annotation"/>
     </context:component-scan>
     
+    
     <http pattern="/**/*.js" security="none" />
     <http pattern="/**/*.css" security="none" />
     <http pattern="/img/*" security="none" />

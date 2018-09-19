@@ -34,6 +34,7 @@ import com.mrporter.pomangam.common.login.vo.UserBean;
 import com.mrporter.pomangam.common.pattern.vo.Status;
 import com.mrporter.pomangam.common.security.model.UserService;
 import com.mrporter.pomangam.common.security.model.domain.User;
+import com.mrporter.pomangam.common.util.Ip;
 
 
 @Controller
@@ -99,7 +100,7 @@ public class LoginController {
 			@RequestParam(value = "data", required = false) String data,
 			final HttpServletRequest request,
 			final HttpServletResponse response) throws Exception {
-		logger.info("logout");
+		//logger.info("logout");
 		
 		HttpSession session= request.getSession(false);
 		SecurityContextHolder.clearContext();
@@ -181,7 +182,7 @@ public class LoginController {
 	public ModelAndView denied(
 			@RequestParam(value = "data", required = false) String data,
 			final HttpServletResponse response) throws Exception {
-		logger.info("denied");
+		logger.info("denied - " + Ip.getInfo());
 
 		ModelAndView model = new ModelAndView();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

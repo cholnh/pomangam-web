@@ -18,4 +18,9 @@ public class PaymentCrudDAO extends Crud<PaymentBean> {
 	public PaymentCrudDAO() {
 		super(TABLENAME);
 	}
+	
+	public void setPaymentIndex(Integer idx_payment, Integer idx_payment_index) throws Exception {
+		sqlUpdate("UPDATE payment SET idx_payment_index = ? WHERE idx = ?", 
+				idx_payment_index, idx_payment);
+	}
 }

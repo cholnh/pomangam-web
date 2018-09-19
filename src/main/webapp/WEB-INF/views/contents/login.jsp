@@ -4,6 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.n.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<link href="resources/img/favicon.ico" rel="shortcut icon">
 </head>
 <body style="background-color: #FFF">
 
@@ -59,12 +60,13 @@
 							<hr class="n-or-hr">
 							<div id="or">or</div>
 						</div>
-						<!-- social login -->
+						<!--  social login --> 
 						<div class="n-row n-container n-center">
 							<div class="n-half">
 								<a class="n-hover-shadow" href=""><img class="n-socialLogin" src="resources/img/login/naverlogin.PNG" ></a>
 							</div>
 						</div> 
+						
 					</div>
 				</div>
 
@@ -85,13 +87,16 @@
 								<form id="form-signup" action="./signup.do" method="POST">
 									<div class="form-group" style="text-align: left">
 										<label>아이디</label>
-										<input type="text" id="form_username" name="form_username" class="form-control" placeholder="" required>
+										<input type="text" id="form_username" name="form_username" class="form-control" placeholder="" 
+											pattern="[A-Za-z0-9]{5,20}" title="5~20자의 영문 소문자, 숫자만 사용하세요." required>
 										<span id="form_username_success" style="display:none;color:blue">사용가능한 아이디 입니다.</span>
 										<span id="form_username_warning" style="display:none;color:red">중복되는 아이디가 있습니다.</span>
+										<span id="form_username_warning2" style="display:none;color:red">5~20자의 영문 소문자, 숫자만 사용하세요.</span>
 									</div>
 									<div class="form-group" style="text-align: left">
 										<label>비밀번호</label>
-										<input type="password" id="form_password" name="form_password" class="form-control" placeholder="8~16자 영문, 숫자" required>
+										<input type="password" id="form_password" name="form_password" class="form-control" placeholder="8~16자 영문, 숫자" 
+											pattern=".{8,16}" title="8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요." required>
 									</div>
 									<div class="form-group" style="text-align: left">
 										<label>비밀번호 확인</label>
@@ -116,12 +121,13 @@
 									<hr class="n-or-hr">
 									<div id="or">or</div>
 								</div>
-								<!-- social login -->
+								<!--  social login  -->
 								<div class="n-row n-container n-center">
 									<div class="n-half">
 										<a class="n-hover-shadow" href=""><img class="n-socialLogin" src="resources/img/login/naverlogin.PNG" style="width:110%"></a>
 									</div>
 								</div> 
+								
 							</div>
 						</div>
 					</div>
@@ -250,7 +256,7 @@
 	var error = '${error}';
 	var msg = '${msg}';
 	<%if(username!=null){%>
-	$('#username').val(<%=username%>);
+	$('#username').val('<%=username%>');
 	$('#password').focus();
 	<%} else {%>
 	$('#username').focus();
@@ -264,9 +270,18 @@
 	}
 	
 	$('#form_username').focusout(function(){
-		if($('#form_username').val().length<=0) {
+		var len = $('#form_username').val().length;
+		var r = /^[a-zA-Z0-9]+$/;
+		
+		if(len<=0) {
 			$('#form_username_success').hide();
 			$('#form_username_warning').hide();
+			$('#form_username_warning2').hide();
+			return;
+		} else if(len<5 || len>20 || !r.test($('#form_username').val())) {
+			$('#form_username_success').hide();
+			$('#form_username_warning').hide();
+			$('#form_username_warning2').show();
 			return;
 		}
 		ajax('./login/check.do', 
@@ -277,9 +292,11 @@
 				function(tf) {
 					isDup = tf;
 					if(isDup) {
+						$('#form_username_warning2').hide();
 						$('#form_username_success').hide();
 						$('#form_username_warning').show();
 					} else {
+						$('#form_username_warning2').hide();
 						$('#form_username_success').show();
 						$('#form_username_warning').hide();
 					}

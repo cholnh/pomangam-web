@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mrporter.pomangam.common.pattern.vo.Status;
+import com.mrporter.pomangam.product.dao.AdditionalCrudDAO;
 import com.mrporter.pomangam.product.dao.ProductCrudDAO;
 
 @Controller
@@ -60,6 +61,7 @@ public class ProductController {
 			model.setViewName("contents/" + MAPPINGNAME);
 			model.addObject("product", product);
 			model.addObject("recommend", defaultDAO.getRecommend(idx));
+			model.addObject("additionalList", new AdditionalCrudDAO().getListByIdxProduct(idx));
 			session.setAttribute("curProduct", idx+"");
 		}
 		return model;
@@ -99,9 +101,10 @@ public class ProductController {
 			produces = "application/json; charset=utf-8")
 	public @ResponseBody long getTime(
 			@RequestParam(value = "idx_product", required = false) Integer idx_product,
-			@RequestParam(value = "amount", required = false) Integer amount) throws Exception {
+			@RequestParam(value = "amount", required = false) Integer amount,
+			@RequestParam(value = "idx_restaurant", required = false) Integer idx_restaurant) throws Exception {
 
-		Calendar cal = new ProductCrudDAO().getTime(idx_product, amount);
+		Calendar cal = new ProductCrudDAO().getTime(idx_product, amount, idx_restaurant);
 		if(cal == null) {
 			return -1;
 		} else {
@@ -119,11 +122,28 @@ public class ProductController {
 		for(String obj : productList) {
 			int idx_product = Integer.parseInt(obj.split("-")[0]);
 			int amount = Integer.parseInt(obj.split("-")[1]);
+			int idx_restaurant = Integer.parseInt(obj.split("-")[2]);
 			
-			long millis = new ProductCrudDAO().getTime(idx_product, amount).getTimeInMillis();
+			long millis = new ProductCrudDAO().getTime(idx_product, amount, idx_restaurant).getTimeInMillis();
 			max = max < millis ? millis : max;
 		}
 		return max;
+	}
+	
+	public static void main(String...args){
+		for(int i=28; i<=36; i++) {
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '주먹김밥', 2000);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '계란찜', 2000);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '치즈', 3000);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '계란(2알)', 1500);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '떡', 1000);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '오뎅', 1000);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '순대', 3000);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '우동사리', 2000);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '당면사리', 2000);");
+			System.out.println("INSERT INTO product_additional (`idx_product`, `name`, `price`) VALUES ("+i+", '모듬튀김', 2000);");
+			
+		}
 	}
 	
 	@ExceptionHandler

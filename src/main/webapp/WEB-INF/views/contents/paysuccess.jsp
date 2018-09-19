@@ -3,22 +3,27 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<link href="resources/img/favicon.ico" rel="shortcut icon">
 </head>
 <body>
 	<%
 		String payNumber = (String) request.getAttribute("payNumber");
 		String payPassword = (String) request.getAttribute("payPassword");
 		String boxNumber = (String) request.getAttribute("boxNumber");
+		String totalPrice = (String) request.getAttribute("totalprice");
+		
+		String bank_name = (String) request.getAttribute("bank_name");
+		String bank_account = (String) request.getAttribute("bank_account");
+		String bank_username = (String) request.getAttribute("bank_username");
 		
 	%>
 	<jsp:include page="../parts/header.jsp" /> 
-	<div style="margin-top:100px;margin-bottom:160px">
+	<div style="margin-top:50px;margin-bottom:70px">
 		<center>
-			
 			<div class="n-center n-padding-32 n-margin-bottom">
 				<a style="text-decoration:none; !important">
 					<span class="n-xlarge n-bottombar" style="padding:5px">
-						<span style="color:black; font-size:32px">
+						<span style="color:black; font-size:25px">
 							주문 완료
 						</span>
 					</span>
@@ -29,7 +34,7 @@
 						<span style="font-size:14px; color:gray">
 							주문번호 : no.<%=payNumber %>
 						</span>
-					</div>
+				</div>
 				<div class="n-border">
 					<br>
 					<span style="font-size:23px; font-weight: bold">아래 번호를 꼭 기억해 주세요.</span><br> 
@@ -40,9 +45,20 @@
 						<%=boxNumber %>
 					</span>
 				</div>
+				<div class="n-border">
+					<br>
+					<span style="font-size:23px; font-weight: bold">아래 금액을 이체해 주세요.</span><br>
+					<span style="font-size:13px">
+						※<b>5분</b> 이내 미입금 시 <b>자동주문취소</b>
+					</span><br><br>
+					<span style="font-size:32px; font-weight: bold"><%=totalPrice %>원</span><br> 
+					<span style="font-size:15px;"><%=bank_name %> (<%=bank_username %>)<br> <%=bank_account %></span><br>
+					<button class="btn btn-primary" style="font-size:13px" onclick="copyToClipboard('<%=bank_account %>')">복사하기</button>
+					<br><br>
+				</div>	
 			</div>
-			<!-- <button class="btn btn-primary" type="button" onclick="location.href='./'">홈</button> -->
-			<button class="btn btn-primary" style="font-size:20px;margin-top:32px" type="button" onclick="location.href='./'">홈으로</button>
+			<!-- <button class="btn btn-primary" type="button" onclick="location.href='./'">홈</button> 
+			<button class="btn btn-primary" style="font-size:20px;margin-top:32px" type="button" onclick="location.href='./'">홈으로</button>-->
 		</center>
 	</div>
 	<%@ include file="../parts/footer.jsp" %>

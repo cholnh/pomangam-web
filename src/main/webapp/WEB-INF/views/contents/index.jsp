@@ -7,6 +7,7 @@
 
 <html>
 <head>
+	<link href="resources/img/favicon.ico" rel="shortcut icon">
 </head>
 <body>
 	<%	
@@ -28,8 +29,8 @@
     <div class="container" style="margin-top:128px">
       <!-- Header -->
       <!--<h1 class="font-weight-semibold">포 만 감</h1>-->
-		
-		<span class="font-weight-semibold" style="color:white">
+		<img class="lazyload image n-mainlogo" src="resources/img/main/logo.png" alt="logo"><br>
+		<span class="font-weight-semibold" style="color:black">
 			<span class="n-title-bigchar">
 				포
 			</span>
@@ -46,7 +47,7 @@
 				감
 			</span>
 		</span>
-      <h2 class="n-font" style="opacity: 0.5 !important">
+      <h2 class="n-font" style="color:black">
 		  정해진 시간과 장소로 무엇이든 배달해 드립니다.
       </h2>
 		
@@ -75,14 +76,14 @@
 				</div>
 			</div>
 			-->
-			<button class="btn btn-primary btn-3d btn-outline" onclick="location.href='./target.do?idx=1'"
+			<button class="btn btn-primary btn-3d" onclick="location.href='./target.do?idx=1'"
 				style="width:auto;font-size:20px;font-weight:bold">한국항공대학교 점 <br>바로가기</button>
 		</div>
       </div>
 		
       <!-- App sample -->
       <div class="sample">
-		  <div class="row" style="color:aliceblue">
+		  <div class="row" style="color:black">
 			<div class="col-md-4">
 				<div>
 					<span class="n-number-bigchar" id="ob-sumOrder">1,143,703</span>
@@ -150,6 +151,7 @@
             </div>
           </div>
         </div>
+        <!--  -->
         <div class="col-md-4">
 		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
             <img class="n-school-img lazyload image" src="resources/img/main/school3.jpg" alt="kau">
@@ -523,7 +525,9 @@
 	
 	<script>
 		$('#nav').removeClass('sticky');
-	
+		//$('.px-navbar .navbar-header').css('background', 'white'); 
+		//$('.px-navbar .navbar-header').css('color', 'black'); 
+		
 		$('#owl-carousel-autoplay').owlCarousel({
 			items:           5,
 			loop:            true,

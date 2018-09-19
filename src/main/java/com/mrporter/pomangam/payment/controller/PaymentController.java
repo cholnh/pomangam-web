@@ -3,7 +3,6 @@ package com.mrporter.pomangam.payment.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +30,7 @@ import com.mrporter.pomangam.payment.dao.PaymentIndexCrudDAO;
 import com.mrporter.pomangam.payment.vo.PaymentBean;
 import com.mrporter.pomangam.payment.vo.PaymentIndexBean;
 import com.mrporter.pomangam.product.dao.ProductCrudDAO;
+import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
 import com.mrporter.pomangam.target.dao.TargetCrudDAO;
 
 @Controller
@@ -44,6 +44,8 @@ public class PaymentController {
 	public ModelAndView openIndexPage(
 			@RequestParam(value = "direct", required = false) boolean direct,
 			@RequestParam(value = "amount", required = false) Integer amount,
+			@RequestParam(value = "additional", required = false) String additional,
+			@RequestParam(value = "requirement", required = false) String requirement,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
@@ -68,16 +70,21 @@ public class PaymentController {
 				return null;
 			}
 			CartBean bean = new CartBean(
-					0, curTarget, curRestaurant, curProduct, amount);
+					0, curTarget, curRestaurant, curProduct, amount, additional, requirement);
 			List<CartBean> directList = new ArrayList<>();
 			directList.add(bean);
 			request.setAttribute("directList", directList);
 		}
 		
+		MapCrudDAO map = new MapCrudDAO();
+		
 		ModelAndView model = new ModelAndView();
 		model.setViewName("contents/" + MAPPINGNAME);
-		model.addObject("time_start", new MapCrudDAO().getValue("time_start"));
-		model.addObject("time_end", new MapCrudDAO().getValue("time_end"));
+		model.addObject("time_start", new RestaurantCrudDAO().getStartTime(curRestaurant));
+		model.addObject("time_end", new RestaurantCrudDAO().getEndTime(curRestaurant));
+		model.addObject("bank_name", map.getValue("bank_name"));
+		model.addObject("bank_account", map.getValue("bank_account"));
+		model.addObject("bank_username", map.getValue("bank_username"));
 		
 		return model;
 	}
@@ -102,6 +109,12 @@ public class PaymentController {
 			model.addObject("payNumber", payNumber+"");
 			model.addObject("boxNumber", indexDAO.getBoxNumber(payNumber)+"");
 			model.addObject("payPassword", indexDAO.getPW(payNumber));
+			model.addObject("totalprice", indexDAO.getTotalPrice(payNumber)+"");
+			
+			MapCrudDAO map = new MapCrudDAO();
+			model.addObject("bank_name", map.getValue("bank_name"));
+			model.addObject("bank_account", map.getValue("bank_account"));
+			model.addObject("bank_username", map.getValue("bank_username"));
 		}
 		return model;
 	}
@@ -165,16 +178,19 @@ public class PaymentController {
 		
 		HttpSession session = request.getSession();
 		
-		PaymentIndexCrudDAO indexDAO = new PaymentIndexCrudDAO();
-		Random rand = new Random();
-		String pw = rand.nextInt(10) + "" + rand.nextInt(10);
-		bean.setPassword(pw);
-		bean.setTimestamp(Date.getCurDate());
-		bean.setReceive_date(Date.getCurDay());
-		bean.setIdx_box(indexDAO.makeBoxNumber(bean.getIdx_target(), bean.getReceive_date(), bean.getReceive_time()));
-		bean.setStatus(0); // 0 : 결제 대기, 1 : 결제 완료, 2 : 결제 실패
-		bean.setLocation("web [" + Ip.getInfo() + "]");
+		try {
 		
+		PaymentIndexCrudDAO indexDAO = new PaymentIndexCrudDAO();
+		//Random rand = new Random();
+		//String pw = rand.nextInt(10) + "" + rand.nextInt(10);
+		//bean.setPassword(pw);
+		bean.setTimestamp(Date.getCurDate());
+		bean.setReceive_date(Date.getCurDay(Integer.parseInt(bean.getReceive_date())));
+		bean.setIdx_box(indexDAO.makeBoxNumber(bean.getIdx_target(), bean.getReceive_date(), bean.getReceive_time()));
+		bean.setStatus(0); // 0 : 결제 대기, 1 : 결제 완료, 2 : 결제 실패, 3: 배달 완료
+		bean.setLocation("web [" + Ip.getInfo() + "]");
+		bean.setTotalprice(indexDAO.getTotalPrice(bean.getIdxes_payment()));
+
 		Object obj = request.getSession().getAttribute("user");
 		if(obj != null) {
 			User user = new Gson().fromJson(obj+"", new TypeToken<User>() {}.getType());
@@ -183,14 +199,23 @@ public class PaymentController {
 		}
 		
 		Integer idx = indexDAO.insert(bean);
-		session.setAttribute("payNumber", idx);
 		
+		String[] idxes = bean.getIdxes_payment().split(",");
+		for(String i : idxes) {
+			defaultDAO.setPaymentIndex(Integer.parseInt(i), idx);
+		}
+		
+		session.setAttribute("payNumber", idx);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return new Status(200);
 	}
 	
-	@RequestMapping(value = "/"+MAPPINGNAME+"/check.do", 
+	@RequestMapping(value = "/"+MAPPINGNAME+"/checkpg.do", 
 			produces = "application/json; charset=utf-8")
-	public @ResponseBody Status check(
+	public @ResponseBody Status checkPG(
 			@RequestParam(value = "PG_price", required = false) Integer PG_price,	// PG에서 승인된 금액
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -204,14 +229,15 @@ public class PaymentController {
 		if(indexDAO.check(idx, PG_price)) {
 			// 금액 일치
 			//response.sendRedirect("../paysuccess.do");
-			
-			indexDAO.setStatus(1, idx);
+			session.removeAttribute("cartList");
+			//indexDAO.setStatus(1, idx);
 			new TargetCrudDAO().addCountOrder(curTarget);
 			new ProductCrudDAO().addCountSell(idx);
 			return new Status(200);
 		} else {
 			// 금액 불일치
 			indexDAO.transactionFail(idx);
+			indexDAO.setStatus(2, idx);
 			// pg취소
 			// 관리자에게 알림
 			//response.sendRedirect("../payerror.do");

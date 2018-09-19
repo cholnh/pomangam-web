@@ -30,4 +30,10 @@ public class Date {
 		LocalDateTime now = LocalDateTime.now();
 		return dtf.format(now);
 	}
+	
+	public static String getCurDay(long n) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDateTime now = LocalDateTime.now();
+		return dtf.format(now.plusDays(n));
+	}
 }

@@ -12,6 +12,7 @@
 
 <html>
 <head>
+	<link href="resources/img/favicon.ico" rel="shortcut icon">
 </head>
 <body style="background-color: #FFF">
 	<%
@@ -52,6 +53,7 @@
             </b>
             <br>
              -->
+           	<span style="font-size:20px"><b><%=restaurant.getStart() %> ~ <%=restaurant.getEnd() %></b></span><br>
             <i class="pull-xs fa fa-location-arrow"></i>
             	<%=restaurant.getLocation() %>
 	        <br>
@@ -80,13 +82,16 @@
 			<div class="container-fluid n-target-center" >
 				<div class="row">
 					<%
-					if(productList.isEmpty()) {%>
-					
-					<span>주문 가능한 메뉴가 없습니다.</span>
-					
-					<%}
+					if(productList==null||productList.isEmpty()) {%>
+					<div class="n-center" style="margin-bottom:50px">
+						<h2>준비중</h2>
+						<span style="font-size:18px">죄송합니다.. 주문 가능한 메뉴가 없습니다.</span>
+					</div>
+					<%} else {
 					for(int i=0; i<productList.size(); i++) {
-						ProductBean bean = productList.get(i);%>	
+						ProductBean bean = productList.get(i);
+							if(bean.getIsActive() == 0) continue;	
+					%>	
 
 					<div class="col-xs-4 col-sm-3" style="padding:0px">
 						<div class="box n-center" onclick="location.href='./product.do?idx=<%=bean.getIdx() %>'">
@@ -108,7 +113,7 @@
 							</div>
 						</div>
 					</div> 
-					<%} %>
+					<%}} %>
 					
 				</div>
 			</div>

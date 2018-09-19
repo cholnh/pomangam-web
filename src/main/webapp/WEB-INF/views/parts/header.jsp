@@ -1,3 +1,4 @@
+<%@page import="com.mrporter.pomangam.product.vo.AdditionalBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
@@ -38,14 +39,15 @@
 	<link href="resources/css/landing.css" rel="stylesheet" type="text/css">
 	<link href="resources/css/custom.css" rel="stylesheet" type="text/css">
 	
-	<!-- Icon -->
-	<link href="images/favicon.ico" rel="shortcut icon">
-	
 	<!-- jQuery -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="resources/js/common.js"></script>
 	
 	<%	
+	
+	//@SuppressWarnings({"unchecked", "rawtypes"})
+	//List<AdditionalBean> additionalList = (List) request.getAttribute("additionalList");
+	
 	List<CartBean> cartList = new ArrayList<>();
 	Object obj = session.getAttribute("cartList");
 	
@@ -78,12 +80,24 @@
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li>
+						<%if(user==null) {%>
+						<a href="./guestcheck.do" class="scroll-to">내 주문</a>
+						<%} else { %>
+						<a href="./myorder.do" class="scroll-to">내 주문</a>
+						<%} %>
+					</li>
+					
+					<li>
 						<div class="n-on-mobile" style="margin:10px 15px 10px 15px">
 							<a href="./cart.do" class="scroll-to">장바구니</a>
 						</div>
 						
 						<div class="n-dropdown-hover n-transparent n-right n-on-pc" style="width:100px; text-align:center">
-							<a href="./cart.do" class="scroll-to">장바구니&nbsp;(<span id="ob-cartSize"><%=cartList.size() %></span>)</a>
+							<a href="./cart.do" class="scroll-to">장바구니&nbsp;
+								<%if(cartList.size() > 0 ) { %>
+								(<span id="ob-cartSize"><%=cartList.size() %></span>)
+								<%} %>
+							</a>
 							<div class="n-dropdown-content n-card-4"
 								style="width: 350px; right: 0">
 								<%
@@ -130,9 +144,22 @@
 														json, 
 														new TypeToken<List<ProductBean>>() {}.getType());
 												ProductBean product = list.get(0);
-												sumPrice += (product.getPrice() * cart.getAmount());
 												
-												int totalPrice = product.getPrice()*cart.getAmount();
+												List<String> nameList = new ArrayList<>();
+												int sum_addPrice = 0;
+												String add = cart.getAdditional();
+											
+												if(add!=null && add.length()>0) {
+													String[] parts = add.split(",");
+													for(String part : parts) {
+														//Integer idx_product_additional = Integer.parseInt(part.split("-")[0]);
+														int amount = Integer.parseInt(part.split("-")[1]);
+														int addPrice = Integer.parseInt(part.split("-")[2]);
+														nameList.add(part.split("-")[3]+" "+amount+"개 추가");
+														sum_addPrice += (addPrice * amount);
+													}
+												}
+												sumPrice += ((product.getPrice()+sum_addPrice) * cart.getAmount());
 											%>
 											<tr id="cart-<%=cart.getIdx()%>">
 												<td>
@@ -147,19 +174,26 @@
 										            		(<span class="ob-time-<%=idx_product %>"></span> 도착)
 										            	</span>
 													</div>
-													
+													<%if(!nameList.isEmpty()) {%>
+													<div class="row" style="margin-left:12px">
+														<span>
+															<%=nameList.toString() %>
+														</span>
+													</div>
+													<%} %>
 													<div class="row" style="margin-left:12px">
 														<span style="font-weight:bold"></b>
 											            	<% out.print(Number.numberWithCommas(cart.getAmount())); %>개 
 											            </span>
 														<span style="margin-left:12px">
-															<b><% out.print(Number.numberWithCommas(product.getPrice())); %>원</b>
+															<b><% out.print(Number.numberWithCommas(product.getPrice()+sum_addPrice)); %>원</b>
 														</span>
+														
 														<!-- <input type="number" min=1 value="" style="width:40px;margin-left:6px">개  -->
 													</div>
 												</td>
 												<td>
-													<i onclick="removeCartProduct(<%=cart.getIdx()%>, <%=totalPrice %>)" 
+													<i onclick="removeCartProduct(<%=cart.getIdx()%>)" 
 													class="fa fa-remove fa-2x" style="margin-top:16px"></i>
 												</td>
 											</tr>	
@@ -191,12 +225,14 @@
 		</div>
 	</nav>
 	
-	<div id="ob-mobileCartBtn" class="n-target-mobilebtn n-on-mobile">
-		<button class="btn btn-primary" onclick="location.href='./cart.do'"
-		style="width:100%;height:100%;font-size:20px;font-weight:bold">
+	<%if(cartList.size() > 0 ) { %>
+	<div id="ob-mobileCartBtn" class="n-target-mobilebtn n-on-mobile" style="background-color: white;border-color: white">
+		<button class="btn" onclick="location.href='./cart.do'"
+		style="width:100%;height:100%;font-size:20px;font-weight:bold;background-color: white;color: #e84a22">
 			장바구니 (<span id="ob-cartSize2"><%=cartList.size() %></span>)
 		</button>
 	</div>
+	<%} %>
 	
 	<script>
 	var ob = document.getElementById('ob-sumPrice');
@@ -208,16 +244,17 @@
 	if(cartList != null) {
 	for(CartBean cart : cartList) {
 	%>
-		getTime2(<%=cart.getIdx_product()%>, <%=cart.getAmount()%>, true);
-		setTimeout("getTime2(<%=cart.getIdx_product()%>, <%=cart.getAmount()%>, true)", 1000*60);
+		getTime2(<%=cart.getIdx_product()%>, <%=cart.getAmount()%>, <%=cart.getIdx_restaurant() %>, true);
+		setTimeout("getTime2(<%=cart.getIdx_product()%>, <%=cart.getAmount()%>, <%=cart.getIdx_restaurant() %>, true)", 1000*60);
 	<%}}%>
 	
 	var maxtime = 0;
-	function getTime2(idx_product, amount, tf) {
+	function getTime2(idx_product, amount, idx_restaurant, tf) {
 		ajax('./product/gettime.do', 
 				{
 					idx_product : idx_product,
-					amount : amount
+					amount : amount,
+					idx_restaurant : idx_restaurant
 				},
 				tf,
 				function(t) {

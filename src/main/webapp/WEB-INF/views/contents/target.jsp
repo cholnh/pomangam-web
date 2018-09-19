@@ -10,6 +10,7 @@
 
 <html>
 <head>
+	<link href="resources/img/favicon.ico" rel="shortcut icon">
 </head>
 <body style="background-color: #FFF">
 
@@ -80,21 +81,27 @@
 													장소
 												</th>
 												<th>
-													도착 시간
+													점심 시간
 												</th>
 												<th>
-													배차 간격
+													저녁 시간
+												</th>
+												<th>
+													야식 시간
 												</th>
 											</tr>
 											<tr>
 												<td>
-													학생회관 앞
+													학생회관 뒤
 												</td>
 												<td>
-													오후 12시 부터 ~ 오후 10시 까지 
+													오후 12시 / 1시 / 2시
 												</td>
 												<td>
-													1시간 간격
+													오후 5시 / 6시 / 7시
+												</td>
+												<td>
+													오후 9시 / 10시
 												</td>
 											</tr>
 										</tbody>
@@ -111,8 +118,8 @@
 										예시2) 11시 31분 주문 시 1시에 배달<br>
 										<hr style="width:50%">
 										주문 대기시간에 따라 도착 시간이 달라질 수 있습니다.<br>
-										예시1) 11시 00분 주문 가능 수량 : 20개<br>
-										예시2) 11시 29분 주문 가능 수량 : 1개<br>
+										예시1) 11시 00분 (30분마감) 주문 가능 수량 : 20개<br>
+										예시2) 11시 29분 (30분마감) 주문 가능 수량 : 1개<br>
 										<hr style="width:50%">
 										또한 주문 사정에 따라 주문 가능 수량이 달라질 수 있습니다!
 										
@@ -162,6 +169,7 @@
 		boolean tf = true;
 		for(int i=0; i<restaurantList.size(); i++) {
 			RestaurantBean bean = restaurantList.get(i);
+			if(bean.getIsActive() == 0) continue;
 			if(tf) {%>
 				<li class="list-group-item n-noborder" style="padding:0px">
 					<div class="row">	
@@ -252,21 +260,41 @@
 									장소
 								</th>
 								<th>
-									도착 시간
+									점심 시간
 								</th>
 								<th>
-									배차 간격
+									저녁 시간
+								</th>
+								<th>
+									야식 시간
 								</th>
 							</tr>
 							<tr>
 								<td>
-									학생회관 앞
+									학생회관 뒤
 								</td>
 								<td>
-									오후 12시 부터 ~ 오후 10시 까지 
+									오후 12시 / 1시 / 2시
 								</td>
 								<td>
-									1시간 간격
+									오후 5시 / 6시 / 7시
+								</td>
+								<td>
+									오후 9시 / 10시
+								</td>
+							</tr>
+							<tr>
+								<td>
+									기숙사 앞 (+10분)
+								</td>
+								<td>
+									오후 12시 / 1시 / 2시
+								</td>
+								<td>
+									오후 5시 / 6시 / 7시
+								</td>
+								<td>
+									오후 9시 / 10시
 								</td>
 							</tr>
 						</tbody>
@@ -285,10 +313,10 @@
 							예시2) 11시 31분 주문 시 1시에 배달<br>
 							<hr style="width:50%">
 							주문 대기시간에 따라 도착 시간이 달라질 수 있습니다.<br>
-							예시1) 11시 00분 주문 가능 수량 : 20개<br>
-							예시2) 11시 29분 주문 가능 수량 : 1개<br>
+							예시1) 11시 00분 (30분마감) 주문 가능 수량 : 20개<br>
+							예시2) 11시 29분 (30분마감) 주문 가능 수량 : 1개<br>
 							<hr style="width:50%">
-							또한 주문 사정에 따라 주문 가능 수량이 달라질 수 있습니다!
+							▷ 또한 매장의 주문 사정에 따라 주문 가능 수량이 달라질 수 있습니다! ◁
 							
 						</span>
 					</div>

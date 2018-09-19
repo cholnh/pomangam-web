@@ -24,6 +24,28 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 		super(TABLENAME);
 	}
 	
+	public String getStartTime(Integer idx) throws Exception {
+		List<Map<String, Object>> lom = sqlQuery(
+				"SELECT " +
+					"start " +
+				"FROM " + 
+					"restaurant " +
+				"WHERE " + 
+					"idx= ?", idx);
+		return lom.get(0).get("start")+"";
+	}
+	
+	public String getEndTime(Integer idx) throws Exception {
+		List<Map<String, Object>> lom = sqlQuery(
+				"SELECT " +
+					"end " +
+				"FROM " + 
+					"restaurant " +
+				"WHERE " + 
+					"idx = ?", idx);
+		return lom.get(0).get("end")+"";
+	}
+	
 	public List<RestaurantBean> getBeanWithLimitCount(Integer idx) throws Exception {
 		List<RestaurantBean> result = null;
 		List<Map<String, Object>> lom = sqlQuery(
@@ -32,7 +54,7 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 				"FROM " + 
 					"restaurant " +
 				"WHERE " + 
-					"idx_target = ?", idx);
+					"idx_target = ? ORDER BY RAND()", idx);
 		/*
 		List<Map<String, Object>> lom = sqlQuery(
 				"SELECT " +

@@ -60,8 +60,8 @@ $(function() {
 $(function() {
   $('#landing-hero').pxResponsiveBg({
     backgroundImage:    'resources/img/main/hero.jpg',
-    backgroundPosition: 'center bottom',
-    overlay:            '<div class=""><div style="background:#000;opacity:.74;position:absolute;top:0;right:0;bottom:0;left:0;"></div></div>',
+    backgroundPosition: 'center bottom',			//background:#000;opacity:.74;
+    overlay:            '<div class=""><div style="background:#fff;position:absolute;top:0;right:0;bottom:0;left:0;"></div></div>',
     overlayOpacity:     1,
   });
 });
@@ -69,7 +69,7 @@ $(function() {
 
 // Clients block
 //
-
+/*
 $(function() {
   $('.landing-clients').pxResponsiveBg({
     backgroundImage:    'resources/img/main/sicksin.jpg',
@@ -92,3 +92,4 @@ $(function() {
       $(window).trigger('resize');
     });
 });
+*/

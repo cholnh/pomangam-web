@@ -78,11 +78,20 @@ img.lazyloaded { opacity: 1; }
   .px-navbar .navbar-brand { margin: 0 -20px !important; }
   .px-navbar .navbar-nav { padding: 0 !important; }
 
+
   .px-navbar a {
     height: 60px !important;
 
     line-height: 60px !important;
   }
+
+.px-navbar .navbar-nav a:hover{
+	color:black;
+}
+
+.px-navbar .navbar-header a:hover{
+	color:black!important
+}
 
   /* Non-sticky navbar */
 
@@ -98,7 +107,7 @@ img.lazyloaded { opacity: 1; }
   .px-navbar:not(.sticky) .navbar-collapse,
   .px-navbar:not(.sticky) .navbar-header,
   .px-navbar:not(.sticky) a {
-    color: #fff;
+    color: black;
     background: none !important;
   }
 
@@ -148,10 +157,10 @@ img.lazyloaded { opacity: 1; }
 }
 
 #landing-hero,
-#landing-hero.px-responsive-bg-container { background: #222 !important; }
+#landing-hero.px-responsive-bg-container { background: #fff !important; }
 
 #landing-hero h1,
-#landing-hero h2 { color: #fff !important; }
+#landing-hero h2 { color: #black !important; }
 
 #landing-hero h1 {
   margin: 100px 0 20px 0;

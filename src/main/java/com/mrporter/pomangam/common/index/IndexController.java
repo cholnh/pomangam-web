@@ -48,7 +48,7 @@ public class IndexController {
 			Cookie cookie = WebUtils.getCookie(request, "loginCookie");
 			if(cookie != null) {
 				String session_key = cookie.getValue();
-				System.out.println("session_key : " + session_key);
+				//System.out.println("session_key : " + session_key);
 				UserBean bean = new UserCrudDAO().getMemberWithSession(session_key);
 				if(bean != null) {
 					User user = userService.loadUserByUsername(bean.getUsername());
@@ -76,6 +76,13 @@ public class IndexController {
 	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
 	public ModelAndView openIndexPage(HttpServletRequest request) throws Exception {
 		return openDefaultPage(request);
+	}
+	
+	@RequestMapping(value = "/privacy.do")
+	public ModelAndView privacyPage() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("contents/privacy");
+		return model;
 	}
 	
 	@ExceptionHandler

@@ -14,6 +14,7 @@
 
 <html>
 <head>
+	<link href="resources/img/favicon.ico" rel="shortcut icon">
 </head>
 <body style="background-color: #FFF;">
 
@@ -22,7 +23,6 @@
 	
 		List<CartBean> cartList = new ArrayList<>();
 		Object obj = session.getAttribute("cartList");
-		
 		if(obj != null) {
 			cartList = (ArrayList<CartBean>) obj;
 		}
@@ -83,9 +83,22 @@
 										json, 
 										new TypeToken<List<ProductBean>>() {}.getType());
 								ProductBean product = list.get(0);
-								sumPrice += (product.getPrice() * cart.getAmount());
 								
-								int totalPrice = product.getPrice()*cart.getAmount();
+								List<String> nameList = new ArrayList<>();
+								int sum_addPrice = 0;
+								String add = cart.getAdditional();
+							
+								if(add!=null && add.length()>0) {
+									String[] parts = add.split(",");
+									for(String part : parts) {
+										//Integer idx_product_additional = Integer.parseInt(part.split("-")[0]);
+										int amount = Integer.parseInt(part.split("-")[1]);
+										int addPrice = Integer.parseInt(part.split("-")[2]);
+										nameList.add(part.split("-")[3]+" "+amount+"개 추가");
+										sum_addPrice += (addPrice * amount);
+									}
+								}
+								sumPrice += ((product.getPrice()+sum_addPrice) * cart.getAmount());
 							%>
 								<tr id="cart2-<%=cart.getIdx()%>">
 									<td>
@@ -97,9 +110,16 @@
 										<div class="row" style="margin-left:12px;margin-top:8px">
 											<span><b><%=product.getName() %></b></span>
 										</div>
+										<%if(!nameList.isEmpty()) { %>
 										<div class="row" style="margin-left:12px">
 											<span>
-												<b><% out.print(Number.numberWithCommas(product.getPrice())); %>원</b>
+												<%=nameList.toString() %>
+											</span>
+										</div>
+										<%} %>
+										<div class="row" style="margin-left:12px">
+											<span>
+												<b><% out.print(Number.numberWithCommas(product.getPrice()+sum_addPrice)); %>원</b>
 											</span>
 											<input class="c-amount" id="amount-<%=cart.getIdx() %>" 
 												type="number" pattern="[0-9]*" inputmode="numeric" min=1 value=<%=cart.getAmount() %> 
@@ -112,7 +132,7 @@
 										</div>
 									</td>
 									<td>
-										<i onclick="removeCartProduct(<%=cart.getIdx()%>, <%=totalPrice %>)" 
+										<i onclick="removeCartProduct(<%=cart.getIdx()%>)" 
 											class="fa fa-remove fa-2x" style="margin-top:16px"></i>
 									</td>
 								</tr>
@@ -181,6 +201,7 @@
 	$('#ob-mobileCartBtn').hide();
 	$('#ob-sumPrice2').text(numberWithCommas(<%=sumPrice%>));
 	
+	
 	$('.c-amount').change(function() {
 		var $this = $(this);
 		var amount = $this[0].value;
@@ -188,6 +209,23 @@
 			alert('숫자만 입력가능합니다.');
 			return;
 		}
+		
+		var rem = 0;
+		var cartAmount = 0;
+		var amounts = $('.c-amount');
+		for(var i=0; i<amounts.length; i++) {
+			cartAmount += parseInt(amounts[i].value);
+			if($this[0].id != amounts[i].id) {
+				rem += parseInt(amounts[i].value);
+			}
+		}
+		
+		if(cartAmount > 5) {
+			alert('죄송합니다...\n한번에 주문가능한 총 메뉴 개수는 최대 5개 입니다.\n\n');
+			$this.val(5-rem);
+			return;
+		}
+		
 		if(amount > 15) {
 			alert('15개 이상 단체주문은 010-6478-4899로 문의주세요.');
 			$this.val(15);

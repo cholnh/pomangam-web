@@ -7,6 +7,8 @@ body {
 	font-family: godo;
 }
 
+.n-mainlogo{height:200px; width:200px}
+
 .n-font {font-family: godo!important}
 
 .n-container{padding:0.01em 16px; margin:12px}
@@ -96,7 +98,7 @@ body {
 
 .n-cart-icon{height:60px;width:60px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}
 
-.n-product-icon{height:150px;width:150px;padding:3px;}
+.n-product-icon{height:300px;width:300px;padding:3px;}
 
 .n-target-icon{height:80px;width:80px;padding:3px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)}
 
@@ -130,7 +132,7 @@ body {
 
 @media (max-width:600px){.n-dropdown-hover.n-mobile .n-dropdown-content,.n-dropdown-click.n-mobile .n-dropdown-content{position:relative}.n-dropdown-hover.n-mobile,.n-dropdown-hover.n-mobile .n-btn,.n-dropdown-hover.n-mobile .n-button,.n-dropdown-click.n-mobile,.n-dropdown-click.n-mobile .n-btn,.n-dropdown-click.n-mobile .n-button{width:100%}.n-loginBtn{margin-top:20px;width:100%;padding-bottom: 6px;padding-top: 6px;}.n-signupBtn{margin-top:20px;width:100%;padding-bottom: 6px;padding-top: 6px;}}
 
-@media (max-width:768px){.n-target-mobilebtn{display:block;width:100%; left:0; bottom:0; position:fixed; z-index:3; height: 60px; background-color:white; text-align:center}.n-subtitle{font-size:14px}.n-product-nutrient{width:90%}.n-payment-table{margin-left:0px}.n-main-category{margin:5px}.n-payment-table2{margin-left:0px}.n-loginContent{margin-top:24%;margin-bottom:100px}.footertext{font-size:12px;margin:1px; text-decoration:none; !important; color:black; font-weight:bold}.n-target-detailinfo{width: 320px;font-size:11px;left: 50%;transform: translate(-50%);z-index:2}.center{width:90%}.n-target-center{width:100%}.n-restaurant-center{m=width: 100%}.col-half-offset-first{margin-left:0px}.n-restaurant-layout{width:33.333333%}.col-half-offset{margin-left:0px}.n-restaurant-icon{height:60px;width:60px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}.n-cart-icon{height:60px;width:60px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}.n-on-mobile{display:block}.n-on-pc{display:none}.n-product-icon{height:150px;width:150px;padding:3px;}.n-product-recommand{height:70px;width:70px;padding:3px;}.n-product-desc{width:90%!important; text-align: center;display: inline-block}}
+@media (max-width:768px){.n-target-mobilebtn{display:block;width:100%; left:0; bottom:0; position:fixed; z-index:3; height: 60px; background-color:white; text-align:center}.n-subtitle{font-size:14px}.n-product-nutrient{width:90%}.n-payment-table{margin-left:0px}.n-main-category{margin:5px}.n-payment-table2{margin-left:0px}.n-loginContent{margin-top:24%;margin-bottom:100px}.footertext{font-size:12px;margin:1px; text-decoration:none; !important; color:black; font-weight:bold}.n-target-detailinfo{width: 320px;font-size:11px;left: 50%;transform: translate(-50%);z-index:2}.center{width:90%}.n-target-center{width:100%}.n-restaurant-center{m=width: 100%}.col-half-offset-first{margin-left:0px}.n-restaurant-layout{width:33.333333%}.col-half-offset{margin-left:0px}.n-restaurant-icon{height:60px;width:60px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}.n-cart-icon{height:60px;width:60px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);padding:3px;}.n-on-mobile{display:block}.n-on-pc{display:none}.n-mainlogo{height:140px; width:140px}.n-product-icon{height:300px;width:300px;padding:3px;}.n-product-recommand{height:70px;width:70px;padding:3px;}.n-product-desc{width:90%!important; text-align: center;display: inline-block}}
 
 .n-right{float:right!important}
 .n-transparent,.n-hover-none:hover{background-color:transparent!important}

@@ -1,14 +1,15 @@
 package com.mrporter.pomangam.product.dao;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mrporter.pomangam.common.map.dao.MapCrudDAO;
 import com.mrporter.pomangam.common.pattern.dao.Crud;
 import com.mrporter.pomangam.product.vo.ProductBean;
+import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
 
 /**
  * ProductCrudDAO
@@ -18,45 +19,13 @@ import com.mrporter.pomangam.product.vo.ProductBean;
  */
 public class ProductCrudDAO extends Crud<ProductBean> {
 	private static final String TABLENAME = "product"; 
-	private static Calendar start;
-	private static Calendar end;
-	//private static int start_hour;
-	//private static int start_minute;
-	//private static int end_hour;
-	//private static int end_minute;
-	
+
 	/**
 	 * @param tableName
 	 */
 	public ProductCrudDAO() {
 		super(TABLENAME);
-		String[] starttime = new MapCrudDAO().getValue("time_start").split(":");
-		String[] endtime = new MapCrudDAO().getValue("time_end").split(":");
-		int start_hour = Integer.parseInt(starttime[0]);
-		int start_minute = Integer.parseInt(starttime[1]);
-		int end_hour = Integer.parseInt(endtime[0]);
-		int end_minute = Integer.parseInt(endtime[1]);
-		
-		start = Calendar.getInstance();
-		start.set(Calendar.MINUTE, start_minute);
-		if(start_hour>=12) {
-			start.set(Calendar.AM_PM, Calendar.PM);
-			start.set(Calendar.HOUR, start_hour-12);
-		} else {
-			start.set(Calendar.AM_PM, Calendar.AM);
-			start.set(Calendar.HOUR, start_hour);
-		}
-		
-		end = Calendar.getInstance();
-		end.set(Calendar.MINUTE, end_minute);
-		if(end_hour>=12) {
-			end.set(Calendar.AM_PM, Calendar.PM);
-			end.set(Calendar.HOUR, end_hour-12);
-		} else {
-			end.set(Calendar.AM_PM, Calendar.AM);
-			end.set(Calendar.HOUR, end_hour);
-		}
-		
+
 	}
 	
 	public List<ProductBean> getBeanList(Integer idx) throws Exception {
@@ -84,16 +53,6 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		}
 		return result;
 	}
-	
-	/*
-	public void reduceLimitCount(long difftime) throws Exception {
-		sqlUpdate(
-				"UPDATE " +
-					"product " +
-				"SET " + 
-					"cnt_limit = (?*unit_amount/unit_time) ", difftime);
-	}
-	*/
 	
 	public void addCountSell(Integer idx) throws Exception {
 		
@@ -127,7 +86,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		return amount>0?amount:0;
 	}
 	
-	public Calendar getTime(Integer idx_product, int amount) throws Exception {
+	public Calendar getTime(Integer idx_product, int amount, Integer idx_restaurant) throws Exception {
 		List<Map<String, Object>> lom = sqlQuery(
 				"SELECT " + 
 					"TRUNCATE(((?*unit_time/unit_amount) + " + 
@@ -137,37 +96,110 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 					"product " +
 				"WHERE idx = ?;", amount, idx_product, idx_product);
 		int seconds = Integer.parseInt(lom.get(0).get("seconds")+"");
+		
 		Calendar cur = Calendar.getInstance();
+		Calendar start;
+		Calendar end;
+		String[] starttime = new RestaurantCrudDAO().getStartTime(idx_restaurant).split(":");
+		String[] endtime = new RestaurantCrudDAO().getEndTime(idx_restaurant).split(":");
+		int start_hour = Integer.parseInt(starttime[0]);
+		int start_minute = Integer.parseInt(starttime[1]);
+		int end_hour = Integer.parseInt(endtime[0]);
+		int end_minute = Integer.parseInt(endtime[1]);
+		start = Calendar.getInstance();
+		start.set(Calendar.MINUTE, start_minute);
+		if(start_hour>=12) {
+			start.set(Calendar.AM_PM, Calendar.PM);
+			start.set(Calendar.HOUR, start_hour-12);
+		} else {
+			start.set(Calendar.AM_PM, Calendar.AM);
+			start.set(Calendar.HOUR, start_hour);
+		}
+		
+		end = Calendar.getInstance();
+		end.set(Calendar.MINUTE, end_minute-1);
+		if(end_hour>=12) {
+			end.set(Calendar.AM_PM, Calendar.PM);
+			end.set(Calendar.HOUR, end_hour-12);
+		} else {
+			end.set(Calendar.AM_PM, Calendar.AM);
+			end.set(Calendar.HOUR, end_hour);
+		}
+		
+		// 종료시간
+		if(cur.compareTo(end) > 0) {
+			cur.set(Calendar.DATE, cur.get(Calendar.DATE)+1);
+			cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+			cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+			cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+		}
+		
+		// 시작시간
+		if(cur.compareTo(start) < 0) {
+			cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+			cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+			cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+		}
 		cur.add(Calendar.SECOND, seconds);
-		Calendar next = getNext(cur);
-		//System.out.println("next : "+new Date(next.getTimeInMillis()));
+		
+		Calendar next = getNext(cur, idx_restaurant);
+		
 		return next;
 	}
 	
-	public Calendar getNext() {
-		return getNext(Calendar.getInstance());
+	public Calendar getNext(Integer idx_restaurant) throws Exception {
+		return getNext(Calendar.getInstance(), idx_restaurant);
 	}
 	
-	public Calendar getNext(Calendar cal) {
-		start.set(Calendar.DATE, cal.get(Calendar.DATE));
-		end.set(Calendar.DATE, cal.get(Calendar.DATE));
+	public Calendar getNext(Calendar cal, Integer idx_restaurant) throws Exception {
+	
+		// 휴식시간 2시 ~ 4시
+		Calendar pass_start = Calendar.getInstance();
+		pass_start.set(Calendar.AM_PM, Calendar.PM);
+		pass_start.set(Calendar.HOUR, 1);
+		pass_start.set(Calendar.MINUTE, 29);
 		
-		//System.out.println("start : "+ new Date(start.getTimeInMillis()).toString());
-		//System.out.println("end : " + new Date(end.getTimeInMillis()).toString());
-		//System.out.println("cur : " + new Date(cal.getTimeInMillis()).toString());
+		Calendar pass_end = Calendar.getInstance();
+		pass_end.set(Calendar.AM_PM, Calendar.PM);
+		pass_end.set(Calendar.HOUR, 3);
+		pass_end.set(Calendar.MINUTE, 30);
 		
-		if(cal.compareTo(end) > 0) { // if 'cal' is after the 'end'
-			cal.set(Calendar.HOUR, 0);
-			cal.set(Calendar.AM_PM, Calendar.PM);
+		if((cal.compareTo(pass_start) >= 0) && (cal.compareTo(pass_end) < 0)) {
+			cal.set(Calendar.HOUR, 5);
 			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
 			return cal;
 		}
 		
-		if(cal.compareTo(start) < 0) {
-			cal.set(Calendar.HOUR, 0);
-			cal.set(Calendar.AM_PM, Calendar.PM);
+		// 휴식시간 7시 ~ 8시
+		Calendar pass_start2 = Calendar.getInstance();
+		pass_start2.set(Calendar.AM_PM, Calendar.PM);
+		pass_start2.set(Calendar.HOUR, 6);
+		pass_start2.set(Calendar.MINUTE, 29);
+		
+		Calendar pass_end2 = Calendar.getInstance();
+		pass_end2.set(Calendar.AM_PM, Calendar.PM);
+		pass_end2.set(Calendar.HOUR, 7);
+		pass_end2.set(Calendar.MINUTE, 30);
+		
+		if((cal.compareTo(pass_start2) >= 0) && (cal.compareTo(pass_end2) < 0)) {
+			cal.set(Calendar.HOUR, 9);
 			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
 			return cal;
+		}
+		
+		// 첫 배달
+		Calendar firstPorter = Calendar.getInstance();
+		firstPorter.set(Calendar.HOUR, 11);
+		firstPorter.set(Calendar.AM_PM, Calendar.AM);
+		firstPorter.set(Calendar.MINUTE, 30);
+		firstPorter.set(Calendar.DATE, cal.get(Calendar.DATE));
+		
+		if(cal.compareTo(firstPorter) < 0) {
+			cal.set(Calendar.HOUR, firstPorter.get(Calendar.HOUR));
+			cal.set(Calendar.AM_PM, firstPorter.get(Calendar.AM_PM));
+			cal.set(Calendar.MINUTE, firstPorter.get(Calendar.MINUTE)-1);
 		}
 		
 		cal.set(Calendar.SECOND, 0);
@@ -180,5 +212,27 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		
 		cal.add(Calendar.MINUTE, 30); // 배달시간 +30분
 		return cal;
+	}
+	
+	public static void main(String...args) {
+		ProductCrudDAO d = new ProductCrudDAO();
+
+		for(int i=0; i<12; i++) {
+			for(int j=0; j<60; j+=10) {
+				Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.AM_PM, Calendar.AM);
+				cal.set(Calendar.HOUR, i);
+				cal.set(Calendar.MINUTE, j);
+				
+				System.out.println("cal : "+new Date(cal.getTimeInMillis()).toString());
+				try {
+					System.out.println("next : "+new Date(d.getNext(cal, 4).getTimeInMillis()).toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				System.out.println();
+			}
+		}
+		
 	}
 }

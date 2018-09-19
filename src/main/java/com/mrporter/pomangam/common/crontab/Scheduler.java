@@ -3,6 +3,7 @@ package com.mrporter.pomangam.common.crontab;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.mrporter.pomangam.payment.dao.PaymentIndexCrudDAO;
 import com.mrporter.pomangam.product.dao.ProductCrudDAO;
 
 /**
@@ -14,9 +15,10 @@ import com.mrporter.pomangam.product.dao.ProductCrudDAO;
 @Component
 public class Scheduler {
 	
-	@Scheduled(cron="0 30 0/1 * * MON-SAT")
+	@Scheduled(cron="0 30 0/1 * * *")
 	public void cronScheduler() throws Exception {
 		new ProductCrudDAO().resetCountSell();
+		new PaymentIndexCrudDAO().setStatusDone();
 	}
-		
+
 }

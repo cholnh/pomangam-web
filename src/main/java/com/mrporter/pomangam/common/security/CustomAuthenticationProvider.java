@@ -57,7 +57,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     		String username = decryptRSA(privateKey, authentication.getName());
             String password = decryptRSA(privateKey, (String) authentication.getCredentials());
             boolean isRemember = Boolean.parseBoolean(request.getParameter("remember"));
-            System.out.println(isRemember);
+            //System.out.println(isRemember);
             
             User user;
             Collection<? extends GrantedAuthority> authorities;

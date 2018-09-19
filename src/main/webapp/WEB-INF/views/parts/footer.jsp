@@ -16,14 +16,14 @@
 		</div>
 		<div class="text-xs-center" style="margin-bottom: 12px">
 			<a href="#" class="footertext">회사소개</a>
-			<a href="#" class="footertext">약관</a>
-			<a href="#" class="footertext">개인정보처리방침</a>
+			<!-- <a href="#" class="footertext">약관</a> -->
+			<a href="./privacy.do" class="footertext">개인정보처리방침/약관</a>
 			<a href="#" class="footertext">고객센터</a>
 		</div>
 		<p style="font-size:11px; color:darkgray">
-			123-45 JANGDANG-DONG , GANGNAM-GU, SEOUL, KOREA<br>
+			10540 Hanggongdaehak-ro, Deogyang-gu, Goyang-si, Gyeonggi-do, Republic of Korea<br>
 	    	TEL +82.10-5843-0627 / FAX +82.2.123.4567 / BUSSINESS NO. 546 05 00933<br>
-	    	REPRESENTATIVE. CHOI, EUN SEONG
+	    	JOINT REPRESENTATIVE. CHOI, EUN SEONG / CHOI, NAK HYEONG
 	    </p>
 		<p style="font-size:11px; color:black">
 		      COPYRIGHT © <b>Mr.Porter Corp.</b>ALL RIGHTS RESERVED.

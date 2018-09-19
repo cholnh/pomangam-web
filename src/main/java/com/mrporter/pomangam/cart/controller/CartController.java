@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mrporter.pomangam.cart.dao.CartCrudDAO;
 import com.mrporter.pomangam.cart.vo.CartBean;
 import com.mrporter.pomangam.common.pattern.vo.Status;
 
@@ -26,7 +25,6 @@ public class CartController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CartController.class);
 	private static final String MAPPINGNAME = "cart"; 
-	private static CartCrudDAO defaultDAO = new CartCrudDAO();
 	
 	@RequestMapping(value = "/"+MAPPINGNAME+".do")
 	public ModelAndView openIndexPage() throws Exception {
@@ -35,36 +33,7 @@ public class CartController {
 		model.setViewName("contents/" + MAPPINGNAME);
 		return model;
 	}
-	
-	@RequestMapping(value = "/"+MAPPINGNAME+"/getlist.do", 
-			produces = "application/json; charset=utf-8")
-	public @ResponseBody String getList(
-			@RequestParam(value = "tail", required = false) String tail) throws Exception {
-		
-		String list;
-		if(tail == null) {
-			list = defaultDAO.getList();
-		} else {
-			list = defaultDAO.getList(tail);
-		}
-		return list;
-	}
-	
-	@RequestMapping(value = "/"+MAPPINGNAME+"/getbean.do", 
-			produces = "application/json; charset=utf-8")
-	public @ResponseBody String getBean(
-			@RequestParam(value = "idx", required = false) Integer idx,
-			@RequestParam(value = "column", required = false) String column,
-			@RequestParam(value = "value", required = false) String value) throws Exception {
 
-		String bean = null;
-		if(idx != null) {
-			bean = defaultDAO.getBean(idx);
-		} else if(column!=null && value!=null) {
-			bean = defaultDAO.getBean(column, value);
-		}
-		return bean;
-	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/"+MAPPINGNAME+"/insert.do")
@@ -83,12 +52,34 @@ public class CartController {
 			cartList = (ArrayList<CartBean>) obj;
 		}
 		
-		for(CartBean c : cartList) {
-			if(c.getIdx_product().intValue() == bean.getIdx_product().intValue()) {
-				c.setAmount(c.getAmount().intValue() + bean.getAmount().intValue());
-				return new Status(200);
+		if((bean.getAdditional()==null || bean.getAdditional().length()<=0) && (bean.getRequirement()==null || bean.getRequirement().length() <=0)) {
+			for(CartBean c : cartList) {
+				if((c.getAdditional()!=null && c.getAdditional().length()>0) || (c.getRequirement()!=null && c.getRequirement().length()>0)) {
+					continue;
+				}
+				if(c.getIdx_product().intValue() == bean.getIdx_product().intValue()) {
+					c.setAmount(c.getAmount().intValue() + bean.getAmount().intValue());
+					return new Status(200);
+				}
 			}
+			//System.out.println("^^");
 		}
+		/*
+		List<AdditionalCrudDAO> additionalList = null;
+		String add = bean.getAdditional();
+		if(add == null || add.length()>0) {
+			additionalList = new ArrayList<>();
+			AdditionalCrudDAO aDAO = new AdditionalCrudDAO();
+			String[] parts = add.split(",");
+			for(String part : parts) {
+				Integer idx_product_additional = Integer.parseInt(part.split("-")[0]);
+				Integer amount = Integer.parseInt(part.split("-")[1]);
+				
+			}
+			
+		}
+		*/
+		
 		
 		bean.setIdx(cartList.size());
 		cartList.add(bean);

@@ -17,4 +17,5 @@ public class ProductBean {
 	Integer price;
 	String imgpath, description;
 	Integer unit_amount, unit_time, cnt_sell;
+	Integer isActive;
 }
