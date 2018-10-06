@@ -58,7 +58,7 @@
 	var error = <%=error %>;
 	
 	if(error) {
-		alert('일치하는 주문이 없습니다.');
+		toast('포만감','일치하는 주문이 없습니다.','warning');
 	}
 	
 	$('#orderForm').submit(function() {

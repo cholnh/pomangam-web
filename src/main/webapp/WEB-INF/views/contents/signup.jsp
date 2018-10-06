@@ -17,13 +17,14 @@
 			<div class="n-center n-padding-32 n-margin-bottom">
 				<a style="text-decoration:none; !important">
 					<span class="n-xlarge n-bottombar" style="padding:5px">
-						<span style="color:black; font-size:48px">
+						<span style="color:black; font-size:28px">
 							회원가입 완료
 						</span>
 					</span>
 				</a>
 			</div>
-			<h1 class="n-font"><%=name %> 회원님, 포만감 가입을 축하드립니다!</h1>
+			
+			<h3 class="n-font"><%=name %> 회원님, 포만감 가입을 축하드립니다!</h3>
 			
 			<!-- <button class="btn btn-primary" type="button" onclick="location.href='./'">홈</button> -->
 			<button class="btn btn-primary" style="font-size:20px" type="button" onclick="location.href='./login.do?username=<%=username%>'">로그인</button>

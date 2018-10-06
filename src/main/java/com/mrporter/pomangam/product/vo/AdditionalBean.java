@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
  */
 @Data @AllArgsConstructor @NoArgsConstructor
 public class AdditionalBean {
-	Integer idx, idx_product;
+	Integer idx;
 	String name;
 	Integer price;
+	String imgpath;
 }

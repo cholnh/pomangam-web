@@ -16,6 +16,7 @@
     <http pattern="/img/*" security="none" />
     <http pattern="/images/*" security="none" />
     <http pattern="/font/*" security="none" />
+
     
     <http auto-config="true" use-expressions="true" entry-point-ref="unauthorizedEntryPoint">
     	<csrf />

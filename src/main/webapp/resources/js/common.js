@@ -7,6 +7,54 @@ function copyToClipboard(val) {
   document.body.removeChild(t);
 }
 
+function toast(title, msg, type) {
+	toastr[type](msg, title, {
+	  positionClass:     'toast-top-full-width',
+	  closeButton:       true,
+	  progressBar:       false,
+	  preventDuplicates: true,
+	  newestOnTop:       true,
+	  timeOut:			 "3000",
+	});
+}
+
+function home_key(){
+	var userAgent = navigator.userAgent.toLowerCase();
+	var url = "www.pomangam.com";
+	var icon = "resources/img/favicon.ico";
+	var title = "포만감";
+	var serviceCode = "포만감";
+	
+	if(userAgent.match('iphone') || userAgent.match('ipad') || userAgent.match('ipod') || userAgent.match('android')) { 
+		 $(document).bookmark({
+            url : url,
+            icon : icon,
+            icon_name : title,
+            key : serviceCode
+        });
+	} else {
+		var bookmarkURL = window.location.href; 
+		var bookmarkTitle = document.title; 
+		
+		if (window.sidebar && window.sidebar.addPanel) { 
+			// Firefox version < 23
+			window.sidebar.addPanel(bookmarkTitle, bookmarkURL, ''); 
+		} else if ((window.sidebar && (navigator.userAgent.toLowerCase().indexOf('firefox') > -1)) || (window.opera && window.print)) { 
+			// Firefox version >= 23 and Opera Hotlist
+			var $this = $(this); 
+			$this.attr('href', bookmarkURL); 
+			$this.attr('title', bookmarkTitle); 
+			$this.attr('rel', 'sidebar');
+			$this.off(e);
+		} else if (window.external && ('AddFavorite' in window.external)) { 
+			// IE Favorite 
+			window.external.AddFavorite(bookmarkURL, bookmarkTitle); 
+		} else { // WebKit - Safari/Chrome 
+			alert('즐겨찾기 등록기능을 지원하지 않는 브라우저입니다.\n'+(navigator.userAgent.toLowerCase().indexOf('mac') != -1 ? 'Cmd' : 'Ctrl') + '+D 키를 눌러 즐겨찾기에 등록하실 수 있습니다.'); 
+		} 
+	}
+}
+
 function goTop() {
 	$("html, body").animate({ scrollTop: 0 }, "slow");
 }
@@ -109,7 +157,7 @@ function getTime(idx_product, amount, idx_restaurant, tf) {
 				$('#ob-time').text(text + d.getHours()+'시 '+(d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
 			},
 			function() {
-				alert('네트워크 오류');
+				toast('포만감','네트워크 오류','warning');
 			}
 	);
 }
@@ -134,12 +182,12 @@ function ajax(url, data, async, success, error) {
 				if (status.code / 100 == 2) {
 					location = location.origin + location.pathname;
 				} else { // fail
-					alert(status.message);
+					toast('포만감',status.message,'warning');
 				}
 			},
 		error : error ? error : 
 			function() {
-				alert('ajax error');
+				toast('포만감','ajax error','warning');
 			}
 	});
 };
@@ -157,14 +205,14 @@ function insertCartProduct(d,r) {
 		true,
 		function(status) {
 			if (status.code / 100 == 2) {
-				alert('추가되었습니다.');
 				location.href='./restaurant.do?idx='+curRestaurant;
+				toast('포만감','추가되었습니다.','success');
 			} else {
-				alert(status.message);
+				toast('포만감',status.message,'warning');
 			}
 		},
 		function() {
-			alert('네트워크 오류');
+			toast('포만감','네트워크 오류','warning');
 		}
 	);
 }
@@ -180,11 +228,11 @@ function updateCartProduct(idx, amount) {
 				if (status.code / 100 == 2) {
 					location.reload();
 				} else {
-					alert(status.message);
+					toast('포만감',status.message,'warning');
 				}
 			},
 			function() {
-				alert('네트워크 오류');
+				toast('포만감','네트워크 오류','warning');
 			}
 		);
 }
@@ -207,11 +255,11 @@ function removeCartProduct(idx) {
 				if (status.code / 100 == 2) {
 					location.reload();
 				} else {
-					alert(status.message);
+					toast('포만감',status.message,'warning');
 				}
 			},
 			function() {
-				alert('네트워크 오류');
+				toast('포만감','네트워크 오류','warning');
 			}
 		);
 }
@@ -241,11 +289,11 @@ function removeAllCartProduct() {
 					$('#ob-cartSize2').text('0');
 					*/
 				} else {
-					alert(status.message);
+					toast('포만감',status.message,'warning');
 				}
 			},
 			function() {
-				alert('네트워크 오류');
+				toast('포만감','네트워크 오류','warning');
 			}
 		);
 }

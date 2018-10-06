@@ -171,19 +171,27 @@
 			RestaurantBean bean = restaurantList.get(i);
 			if(bean.getIsActive() == 0) continue;
 			if(tf) {%>
-				<li class="list-group-item n-noborder" style="padding:0px">
+				<li class="list-group-item n-noborder" style="padding:0px;">
 					<div class="row">	
 			<%}%>
 						<div class="col-md-6">
-							<div class="box" style="cursor: pointer;" onclick="location.href='./restaurant.do?idx=<%=bean.getIdx() %>'">
-								<a class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" style="height:90px">
+							<div class="box" style="cursor: pointer;" 
+								<%if(bean.getIsPause() == 0) {%>
+								onclick="location.href='./restaurant.do?idx=<%=bean.getIdx() %>'"
+								<%} else { %>
+								onclick="alert('죄송합니다.\n<%=bean.getPause_description() %>\n더 나은 서비스로 찾아 뵙겠습니다.');"
+								<%} %>
+							>
+								<a class="box-cell col-xs-4 b-r-1 valign-middle text-xs-center font-size-24 n-noborder" 
+									style="height:90px; <%if(bean.getIsPause() == 1) {%>opacity:0.5<%}%>">
 									<img src="<%=bean.getImgpath() %>" alt="<%=bean.getName() %>" class="n-target-icon" />
 								</a>
 
 								<div class="box-cell">
 									<div class="box-container">
 										<div class="box-row">
-											<span class="box-cell valign-middle n-target-title"><%=bean.getName() %></span>
+											<span class="box-cell valign-middle n-target-title"
+												style="<%if(bean.getIsPause() == 1) {%>opacity:0.5<%}%>"><%=bean.getName() %></span>
 										</div>
 										<!-- 
 										<div class="box-row">
@@ -194,13 +202,14 @@
 												<% out.print(Number.numberWithCommas(bean.getCnt_comment())); %>
 											</div>
 										</div>
-										
+										 -->
+										 <%if(bean.getIsPause() == 1) {%>
 										<div class="box-row">
-											<span class="box-cell valign-middle n-target-subtitle">
-												남은 수량 : <b><% //out.print(Number.numberWithCommas(bean.getSum_limit())); %>개</b>
+											<span class="box-cell valign-middle n-target-subtitle" style="color:red;font-weight:bold;">
+												<%=bean.getPause_description() %>
 											</span>
 										</div>
-										 -->
+										<%} %>
 									</div>
 								</div>
 
@@ -353,6 +362,7 @@
 	
 	</script>
 	<script>
+	/*
 	$(function() {
 		$('#owl-carousel-basic').owlCarousel({
 			loop:   false,
@@ -367,6 +377,7 @@
 			rtl: $('html').attr('dir') === 'rtl',
 		});
 	});
+	*/
 	</script>
 	
 </body>

@@ -31,9 +31,19 @@
 </div>			
 		</center>
 	</div>
+	
+	<!-- 
+	<div id="ob-backBtn" class="n-target-mobilebtn" style="background-color: white;border-color: white">
+		<button class="btn" onclick="history.back();"
+		style="width:100%;height:100%;font-size:20px;font-weight:bold;background-color: white;color: #e84a22">
+			확인완료
+		</button>
+	</div>
+	 -->
 	<%@ include file="../parts/footer.jsp" %>
 	
 	<script>
+	
 	$('#ob-mobileCartBtn').hide();
 	$('#ob-footerBtn').hide();
 	

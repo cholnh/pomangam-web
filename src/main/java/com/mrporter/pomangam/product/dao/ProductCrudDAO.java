@@ -1,7 +1,8 @@
 package com.mrporter.pomangam.product.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +29,39 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 
 	}
 	
-	public List<ProductBean> getBeanList(Integer idx) throws Exception {
-		List<ProductBean> result = null;
+	public List<String> getCategoryList(Integer idx) throws Exception {
+		List<String> result = new ArrayList<>();
+		
 		List<Map<String, Object>> lom = sqlQuery(
-				"SELECT * FROM " + TABLENAME + " WHERE idx_restaurant=?", idx);
+				"SELECT category FROM product where idx_restaurant = ? group by category order by sequence", idx);
+		if(!lom.isEmpty()) {
+			Iterator<Map<String, Object>>  iter = lom.iterator();
+			while(iter.hasNext()) {
+				Map<String, Object> map = iter.next();
+				result.add(map.get("category")+"");
+			}
+		}
+		return result;
+	}
+	
+	public static void main(String...args) {
+		try {
+			System.out.println(new ProductCrudDAO().getCategoryList(1));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public List<ProductBean> getBeanList(Integer idx, String category) throws Exception {
+		List<ProductBean> result = null;
+		
+		String csql = "";
+		if(category!=null&&category.length()!=0) {
+			csql = "AND category = '" + category + "'";
+		}
+		List<Map<String, Object>> lom = sqlQuery(
+				"SELECT * FROM " + TABLENAME + " WHERE idx_restaurant= ? " + csql + " order by sequence", idx);
 		if(!lom.isEmpty()) {
 			Gson gson = new Gson();
 			result = new Gson().fromJson(gson.toJson(lom), 
@@ -214,6 +244,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		return cal;
 	}
 	
+	/*
 	public static void main(String...args) {
 		ProductCrudDAO d = new ProductCrudDAO();
 
@@ -235,4 +266,5 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		}
 		
 	}
+	*/
 }

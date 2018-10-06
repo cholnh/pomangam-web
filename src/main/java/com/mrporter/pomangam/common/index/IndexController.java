@@ -77,11 +77,18 @@ public class IndexController {
 	public ModelAndView openIndexPage(HttpServletRequest request) throws Exception {
 		return openDefaultPage(request);
 	}
-	
+
 	@RequestMapping(value = "/privacy.do")
 	public ModelAndView privacyPage() throws Exception {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("contents/privacy");
+		return model;
+	}
+	
+	@RequestMapping(value = "/terms.do")
+	public ModelAndView termsPage() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("contents/terms");
 		return model;
 	}
 	

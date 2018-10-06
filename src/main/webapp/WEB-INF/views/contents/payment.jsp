@@ -359,24 +359,24 @@
 	function  pay() {
 		if(!$('#ob-time').val()) {
 			$('#ob-time').focus();
-			alert('받는 시간을 확인해 주세요.');
+			toast('포만감','받는 시간을 확인해 주세요.','warning');
 			return;
 		}
 		if($('#phoneNumber').length>0) {
 			if(!$('#guestname').val()) {
 				$('#guestname').focus();
-				alert('비회원은 성함 입력이 필수입니다.');
+				toast('포만감','비회원은 성함 입력이 필수입니다.','warning');
 				return;
 			}
 			if(!$('#phoneNumber').val()) {
 				$('#phoneNumber').focus();
-				alert('비회원은 핸드폰번호 입력이 필수입니다.');
+				toast('포만감','비회원은 핸드폰번호 입력이 필수입니다.','warning');
 				return;
 			}
 			$('#phoneNumber').val($('#phoneNumber').val().replace(/-/g,''));
 			if($('#phoneNumber').val().length != 11) {
 				$('#phoneNumber').focus();
-				alert('잘못된 핸드폰번호 형식 입니다.');
+				toast('포만감','잘못된 핸드폰번호 형식 입니다.','warning');
 				return;
 			}
 		}
@@ -402,11 +402,11 @@
 						if (status.code / 100 == 2) {
 							idxList.push(parseInt(status.message));
 						} else {
-							alert(status.message);
+							toast('포만감',status.message,'warning');
 						}
 					},
 					function() {
-						alert('네트워크 오류');
+						toast('포만감','네트워크 오류','warning');
 					}
 			);
 		});
@@ -431,11 +431,11 @@
 					if (status.code / 100 == 2) {
 						checkPG();
 					} else {
-						alert(status.message);
+						toast('포만감',status.message,'warning');
 					}
 				},
 				function() {
-					alert('네트워크 오류');
+					toast('포만감','네트워크 오류','warning');
 				}
 		);
 	}
@@ -454,7 +454,7 @@
 					}
 				},
 				function() {
-					alert('네트워크 오류');
+					toast('포만감','네트워크 오류','warning');
 				}
 		);
 	}
@@ -494,7 +494,7 @@
 					
 				},
 				function() {
-					alert('네트워크 오류');
+					toast('포만감','네트워크 오류','warning');
 				}
 		);
 	}

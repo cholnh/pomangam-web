@@ -1,3 +1,6 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.math.BigInteger"%>
+<%@page import="java.security.SecureRandom"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="com.google.gson.Gson"%>
@@ -12,7 +15,17 @@
 		String publicKeyModulus = (String) request.getAttribute("publicKeyModulus");
 		String publicKeyExponent = (String) request.getAttribute("publicKeyExponent");
 		String username = (String) request.getParameter("username");
-	%>
+		
+	    String clientId = "HjXEzyg0yRvC4tZ7QzDN";//애플리케이션 클라이언트 아이디값";
+	    String redirectURI = URLEncoder.encode("./oauth/login.do", "UTF-8");
+	    SecureRandom random = new SecureRandom();
+	    String state = new BigInteger(130, random).toString();
+	    String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+	    apiURL += "&client_id=" + clientId;
+	    apiURL += "&redirect_uri=" + redirectURI;
+	    apiURL += "&state=" + state;
+	    session.setAttribute("state", state);
+	 %>
 	
 	<!-- Navbar -->
 	<jsp:include page="../parts/header.jsp" /> 
@@ -62,8 +75,8 @@
 						</div>
 						<!--  social login --> 
 						<div class="n-row n-container n-center">
-							<div class="n-half">
-								<a class="n-hover-shadow" href=""><img class="n-socialLogin" src="resources/img/login/naverlogin.PNG" ></a>
+							<div >
+								<a class="" href="<%=apiURL%>"><img class="n-socialLogin" src="resources/img/login/naverlogin.PNG" style="height:50px; width:100%" ></a>
 							</div>
 						</div> 
 						
@@ -73,12 +86,11 @@
 				<div class="n-border center n-card n-center" style="margin-top:32px;">
 					<div id="focusPanel" class="n-padding">
 						<span class="n-kor-bold">
-							<a class="n-nodec" data-toggle="modal" data-target="#id-modal">아이디</a> / 
-							<a class="n-nodec" data-toggle="modal" data-target="#pw-modal">비밀번호 찾기</a></span>
+							<a class="n-nodec" onclick="toast('비밀번호 찾기','관리자에게 문의바랍니다. (010-6478-4899)','warning')">아이디</a> / 
+							<a class="n-nodec" onclick="toast('비밀번호 찾기','관리자에게 문의바랍니다. (010-6478-4899)','warning')">비밀번호 찾기</a></span>
 							<br>
 						<span class="n-kor">계정이 없으신가요? 
-							<a class="n-nodec" href="#" 
-							   onclick="signup();"><b>회원가입</b></a>
+							<a class="n-nodec" href="javascript:signup()"><b>회원가입</b></a>
 						</span>
 						
 						<div id="signup" style="display:none;">
@@ -112,22 +124,33 @@
 										<input type="tel"  pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}|[0-9]{11}" 
 											id="form_tel" name="form_tel" class="form-control" placeholder="010-xxxx-xxxx" required>
 									</div>
+									<br>
+									<div class="form-group" style="text-align: left;">
+										<label class="custom-control custom-checkbox">
+							                <input type="checkbox" id="agree" class="custom-control-input" required>
+							                <span class="custom-control-indicator"></span>
+							                <span style="font-size:13px;font-weight:bold">포만감의 
+							                	<a href="javascript:window.open('./terms.do', '이용약관 새창', 'width=1000, height=700, toolbar=no, menubar=no, resizable=yes')">이용약관</a> 및 
+							                	<a href="javascript:window.open('./privacy.do', '개인정보처리방침 새창', 'width=1000, height=700, toolbar=no, menubar=no, resizable=yes')">개인정보처리방침</a>에 동의합니다.</span>
+							             </label>
+										
+									</div>
 									<button type="submit" class="n-btn n-round n-signupBtn" 
 											style="background-color: #eb613e; color: white">회원가입</button>
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								</form>
-								
+								<!-- 
 								<div class="n-or-container">
 									<hr class="n-or-hr">
 									<div id="or">or</div>
 								</div>
-								<!--  social login  -->
+								 social login 
 								<div class="n-row n-container n-center">
 									<div class="n-half">
 										<a class="n-hover-shadow" href=""><img class="n-socialLogin" src="resources/img/login/naverlogin.PNG" style="width:110%"></a>
 									</div>
 								</div> 
-								
+								 -->
 							</div>
 						</div>
 					</div>
@@ -184,9 +207,11 @@
 	<script src="js/rsa/rng.js"></script>
 	<script src='js/sha512.js'></script>
 	
+	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+	
 	<script>
 	$('#ob-mobileCartBtn').hide();
-	
+  	
 	function signup() {
 		$('#signup').fadeIn('slow');
 		var offset = $('#focusPanel').offset();
@@ -208,10 +233,10 @@
  		var username = document.getElementById("username").value;
 	    var password = document.getElementById("password").value;
 	    if(username.length==0) {
-	    	alert('아이디를 입력해 주세요.');
+	    	toast('포만감','아이디를 입력해 주세요.','warning');
 	    	$('#username').focus();
 	    } else if(password.length==0) {
-	    	alert('비밀번호를 입력해 주세요.');
+	    	toast('포만감','비밀번호를 입력해 주세요.','warning');
 	    	$('#password').focus();
 	    } else {
 	    	 try {
@@ -229,7 +254,7 @@
 			        var rsaPublicKeyExponent = document.getElementById("rsaPublicKeyExponent").value;
 			        submitEncryptedForm(username,password, rsaPublicKeyModulus, rsaPublicKeyExponent, isRemember);
 			    } catch(err) {
-			        alert(err);
+			    	toast('포만감',err,'warning');
 		    	}
 	    }
 	    
@@ -263,10 +288,10 @@
 	<%}%>
 	
 	if(error != '') {
-		alert(error);
+		toast('포만감',error,'warning');
 	}
 	if(msg != '') {
-		alert(msg);
+		toast('포만감',msg,'success');
 	}
 	
 	$('#form_username').focusout(function(){
@@ -302,7 +327,7 @@
 					}
 				},
 				function() {
-					alert('네트워크 오류');
+					toast('','네트워크 오류','warning');
 				}
 		);
 	});
@@ -324,13 +349,17 @@
 	});
 	
 	$('#form-signup').submit(function() {
+		if(!$('input:checkbox[id="agree"]').is(":checked")) {
+			toast('포만감','포만감 이용약관과 개인정보처리방침에 대한 안내에 동의해주세요.','warning');
+			return false;
+		}
 		if(isDup) {
-			alert('아이디를 확인해 주세요.');
+			toast('포만감','아이디를 확인해 주세요.','warning');
 			$('#form_username').focus();
 			return false;
 		}
 		if($('#form_password').val() !== $('#form_password_recheck').val()) {
-			alert('비밀번호가 서로 다릅니다.');
+			toast('포만감','비밀번호가 서로 다릅니다.','warning');
 			return false;
 		}
 		$('#form-signup').submit();

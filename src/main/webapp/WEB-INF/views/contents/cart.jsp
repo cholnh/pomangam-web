@@ -206,12 +206,14 @@
 		var $this = $(this);
 		var amount = $this[0].value;
 		if(isNaN(parseInt(amount))) {
-			alert('숫자만 입력가능합니다.');
+			toast('포만감','숫자만 입력가능합니다.','warning');
+			$this.val(1);
 			return;
 		}
 		
 		var rem = 0;
 		var cartAmount = 0;
+		/*
 		var amounts = $('.c-amount');
 		for(var i=0; i<amounts.length; i++) {
 			cartAmount += parseInt(amounts[i].value);
@@ -219,22 +221,23 @@
 				rem += parseInt(amounts[i].value);
 			}
 		}
-		
 		if(cartAmount > 5) {
-			alert('죄송합니다...\n한번에 주문가능한 총 메뉴 개수는 최대 5개 입니다.\n\n');
-			$this.val(5-rem);
+			
+			toast('죄송합니다...','최대 5개 까지 선택가능합니다.','warning');
+			//$this.val(5-rem);
+			$this.val(5);
 			return;
 		}
-		
-		if(amount > 15) {
-			alert('15개 이상 단체주문은 010-6478-4899로 문의주세요.');
-			$this.val(15);
-			amount = 15;
+		*/
+		if(amount > 5) {
+			alert('죄송합니다...\n최대 5개 까지 선택가능합니다.');
+			$this.val(5);
+			amount = 5;
 		} 
 		
 		if($this.length > 0) {
 			var idx = $this[0].id.split('amount-')[1];
-			console.log(idx + ' ' + amount);
+			//console.log(idx + ' ' + amount);
 			updateCartProduct(idx, amount);
 		}
 	});

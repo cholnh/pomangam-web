@@ -26,8 +26,34 @@ public class AdditionalCrudDAO extends Crud<AdditionalBean> {
 	
 	public List<AdditionalBean> getListByIdxProduct(Integer idx_product) throws Exception {
 		List<Map<String, Object>> lom;
-		lom = sqlQuery("SELECT * FROM product_additional WHERE idx_product = ?;", idx_product);
+		lom = sqlQuery("SELECT additional FROM product WHERE idx = ?;", idx_product);
+		
+		if(lom.isEmpty()) return null;
+		 
+		String[] additional = (lom.get(0).get("additional")+"").split(",");
+		String idxes = "";
+		for(int i=0; i<additional.length; i++) {
+			String idx = additional[i];
+			idxes += idx;
+			if(i!=additional.length-1) {
+				idxes += ",";
+			}
+		}
+		//System.out.println(idxes);
+		if(additional.length>0) {
+			lom = sqlQuery("SELECT * FROM product_additional WHERE idx in ("+idxes+")");
+		}
+		//System.out.println(lom.size());
 		Gson gson = new Gson();
 		return gson.fromJson(gson.toJson(lom), new TypeToken<List<AdditionalBean>>() {}.getType());
+	}
+	
+	public static void main(String...args) {
+		try {
+			System.out.println(new AdditionalCrudDAO().getListByIdxProduct(28));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

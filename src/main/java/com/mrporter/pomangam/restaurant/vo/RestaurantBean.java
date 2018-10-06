@@ -16,5 +16,6 @@ public class RestaurantBean {
 	String name, location, tel, description, imgpath;
 	Integer cnt_star, cnt_comment;
 	String start, end;
-	Integer isActive;
+	Integer isActive, isPause;
+	String pause_description;
 }

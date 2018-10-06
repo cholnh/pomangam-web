@@ -26,7 +26,8 @@
 
   <a class="position-relative" name="home"></a>
   <div id="landing-hero" class="text-xs-center clearfix">
-    <div class="container" style="margin-top:128px">
+ 
+    <div class="container" style="margin-top:40px">
       <!-- Header -->
       <!--<h1 class="font-weight-semibold">포 만 감</h1>-->
 		<img class="lazyload image n-mainlogo" src="resources/img/main/logo.png" alt="logo"><br>
@@ -80,6 +81,17 @@
 				style="width:auto;font-size:20px;font-weight:bold">한국항공대학교 점 <br>바로가기</button>
 		</div>
       </div>
+		<div style="font-size:38px!important;margin-top:16px!important;margin-bottom:12px!important;">
+			<a href="https://www.facebook.com/pomangam" title="facebook" >
+				<img src="resources/img/icon/facebook.png">
+			</a>
+			<a href="https://www.instagram.com/pomangam_official" title="instagram">
+				<img src="resources/img/icon/instagram.png">
+			</a>
+			
+			<br>
+			<span style="font-size:11px;">Pomangam Official</span>
+		</div>
 		
       <!-- App sample -->
       <div class="sample">
@@ -127,7 +139,7 @@
 			</a>
 		</div>
 		<div class="n-subtitle n-center">
-			Mr. Porter와 제휴를 맺어 배달이 가능한 곳입니다.
+			 미스터포터와 제휴를 맺어 배달이 가능한 곳입니다.
 		</div>
 	
 	   <div class="text-xs-center" style="margin-top:64px;margin-bottom: 12px">
@@ -153,7 +165,7 @@
         </div>
         <!--  -->
         <div class="col-md-4">
-		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="toast('죄송합니다...','제휴 준비 중 입니다.','warning');">
             <img class="n-school-img lazyload image" src="resources/img/main/school3.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>경기대학교</b></p>
@@ -162,7 +174,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="toast('죄송합니다...','제휴 준비 중 입니다.','warning');">
             <img class="n-school-img lazyload image" src="resources/img/main/school2.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>강원대학교</b></p>
@@ -174,7 +186,7 @@
 
       <div class="row n-desktop-show">
         <div class="col-md-4" >
-		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="toast('죄송합니다...','제휴 준비 중 입니다.','warning');">
             <img class="n-school-img lazyload image" src="resources/img/main/school4.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>호서대학교</b></p>
@@ -183,7 +195,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="toast('죄송합니다...','제휴 준비 중 입니다.','warning');">
             <img class="n-school-img lazyload image" src="resources/img/main/school5.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>장안대학교</b></p>
@@ -192,7 +204,7 @@
           </div>
         </div>
         <div class="col-md-4">
-		  <div class="n-card" style="cursor: pointer;" onclick="alert('제휴 준비 중 입니다.');">
+		  <div class="n-card" style="cursor: pointer;" onclick="toast('죄송합니다...','제휴 준비 중 입니다.','warning');">
             <img class="n-school-img lazyload image" src="resources/img/main/school6.jpg" alt="kau">
             <div class="n-container">
               <p style="font-size: 18px;"><b>인천대학교</b></p>
@@ -240,7 +252,7 @@
 			  	<h3 class="n-font">전화번호를 입력하시면<br><u>설치 주소</u>를 보내드립니다.</h3>
 				<div class="n-mobilesupport-form">
 				  <form action="" class="input-group input-group-md">
-					<input id="appinput" type="tel" class="form-control" placeholder="번호를 입력해주세요.">
+					<input id="appinput" type="tel" class="form-control" placeholder="어플 제작 중 입니다!">
 					<span class="input-group-btn">
 					  <button type="submit" class="btn btn-primary font-weight-semibold font-size-14 ">전송</button>
 					</span>
@@ -514,6 +526,8 @@
 	<!-- Landing page JS -->
 	<script src="resources/js/landing.js"></script>
 	
+	<script src="resources/js/bookmark.js"></script>
+	
 	<script>
 		var targetList = <%=new Gson().toJson(targetList)%>;
 		
@@ -619,5 +633,7 @@
 
 	}
 	</script>
+
+
 </body>
 </html>

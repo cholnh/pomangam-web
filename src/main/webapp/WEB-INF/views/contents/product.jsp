@@ -13,6 +13,19 @@
 <html>
 <head>
 	<link href="resources/img/favicon.ico" rel="shortcut icon">
+	<style>
+		body.modal-open {
+		    overflow: hidden;
+		    position: fixed;
+		}
+		body.viewport-lg {
+		    position: absolute; 
+		}
+		body {
+		    overflow-x: hidden;
+		    overflow-y: scroll !important;
+		}
+	</style>
 </head>
 <body style="background-color: #FFF">
 	<%
@@ -27,7 +40,7 @@
 		}
 		
 		String curTarget = (String) session.getAttribute("curTarget");
-		String curRestaurant = (String) session.getAttribute("curRestaurant");
+		//String curRestaurant = (String) session.getAttribute("curRestaurant");
 		String curProduct = (String) request.getParameter("idx");
 		
 		@SuppressWarnings({"unchecked"})
@@ -40,6 +53,8 @@
 				json, 
 				new TypeToken<List<ProductBean>>() {}.getType());
 		ProductBean product = list.get(0);
+		
+		String curRestaurant = product.getIdx_restaurant()+"";
 	%>
 	
 	<!-- Navbar -->
@@ -83,10 +98,47 @@
 		
 		<!-- Detail Description -->
         <hr>
+        
 		<div class="n-center" style="">
+			<div class="center" style="margin-top:32px">
+			
+				<%if(additionalList != null && !additionalList.isEmpty()) { %>
+				<div class="row">
+					<h2 class="n-font landing-heading text-xs-center">서브메뉴</h2>
+					
+					<%
+		            for(AdditionalBean bean : additionalList) {
+		            %>
+					<div class="col-xs-4 col-sm-3" style="padding:0px">
+						<div class="box n-center">
+							<a class="valign-middle n-noborder" onclick="toast('포만감','장바구니 또는 바로 주문 단계에서 추가할 수 있습니다.','warning');"> 
+							<img src="<%=bean.getImgpath() %>" alt="<%=bean.getName() %>" class="n-restaurant-icon"
+								style="margin-top: 3px" />
+							</a>
+							<div >
+								<div style="margin-top: 3px">
+									<b><%=bean.getName() %></b> <br> <% out.print(Number.numberWithCommas(bean.getPrice())); %>원
+								</div>
+								<div style="height:25px">
+								<!-- 
+								<button class="btn btn-primary "
+									style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
+								 -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<%}%>
+	   			</div>
+	   			<%} %>
+            </div>
+            <br><br>
+            <h2 class="n-font landing-heading text-xs-center">상품설명</h2>
 			<div class="n-product-desc">
 				<%=product.getDescription() %>
 			</div>
+			<br><br>
+			<!-- 
 			<div class="n-product-nutrient">
 				<b>영양성분</b> (1일 영양소 기준치에 대한 비율) <b>테스트 데이터 입니다.</b>
 				<div class="table-responsive">
@@ -118,7 +170,8 @@
 					</table>
 				</div>
 			</div>
-			
+			 -->
+			<!-- 
             <div class="" style="margin-top:32px">
             <%if(recommend != null) { %>
                 <h2 class="n-font landing-heading text-xs-center">추천상품</h2>
@@ -131,6 +184,7 @@
                 <%}%>
             <%}%>    
             </div>
+             -->
 		</div>
 
         
@@ -149,6 +203,10 @@
 					<div style="text-align:center; margin-top:32px;margin-bottom:12px">
 						<span style="font-weight:bold;font-size:18px;">추가사항</span>
 					</div>
+					<%} %>
+					
+					<%if(additionalList!=null && !additionalList.isEmpty()){ %>
+					
 					<table class="table table-border" style="text-align:left">
 						<tbody>
 							<colgroup>
@@ -194,17 +252,15 @@
 						<span id="m-add-total">0</span>원
 						</h3>
 					</div>
-					
-					<br>
-					<br>
 					<hr>
+					<br>
+					<br>
 					<%} %>
 					
 					<div style="text-align:center;margin-bottom:12px">
 						<span style="font-weight:bold;font-size:18px">요구사항</span>
 					</div>
-					<textarea id="ob_requirement" rows="3" placeholder="" style="margin-top:8px; width:100%;">
-					</textarea>
+					<textarea id="ob_requirement" rows="3" placeholder="" style="margin-top:8px; width:100%;"></textarea>
 					
 					<br>
 					<br>							
@@ -224,6 +280,252 @@
 		</div>
 	</div>
 	
+	<%if(product.getIdx_restaurant().intValue() == 4){ %>
+	<div class="modal" id="modal2" tabindex="-1" role="dialog" style="overflow-y: scroll !important;overflow-x: scroll !important;">
+		<div class="modal-dialog" >
+			<div class="modal-content">
+				<div class="modal-header">
+					<span style="font-weight:bold;font-size:15px">주문 상세</span>
+				</div>
+				
+				<div class="modal-body" style="padding:5%;overflow-y: scroll !important;overflow-x: scroll !important;">
+					
+					<div style="text-align:center; margin-top:32px;margin-bottom:12px">
+						<span style="font-weight:bold;font-size:18px;">서브웨이 레시피</span>
+					</div>
+					<br>
+					<div class="form-group" style="text-align: left;">
+						<label class="custom-control custom-checkbox">
+			                <input type="checkbox" id="rec" class="custom-control-input" required>
+			                <span class="custom-control-indicator"></span>
+			                <span style="font-size:13px;font-weight:bold">추천레시피로 받아볼래요.</span>
+			             </label>
+					</div>
+					<br>
+					<div class="form-group">
+						<label class=" control-label">빵 종류</label>
+						<div class="">
+							<select class="form-control input-lg" id="bread" name="bread" required>
+								<option name="breadname" value="1">플랫 브래드</option>
+								<option name="breadname" value="2">화이트</option>
+								<option name="breadname" value="3">하티 이탈리안</option>
+								<option name="breadname" value="4">파마산 오레가노</option>
+								<option name="breadname" value="5">허니오트</option>
+								<option name="breadname" value="6">위트</option>
+								<option name="breadname" value="7">추천</option>
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="form-group">
+						<label class=" control-label">야채</label>
+						<div class="">
+							<label class="custom-control custom-checkbox checkbox-inline">
+								<input type="checkbox" id="checkall" class="custom-control-input" checked> <span
+								class="custom-control-indicator"></span>전체
+							</label>
+						</div>
+						<div class=""></div>
+						<div class="">
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="mapping"  value="피망" checked> 
+									<span class="custom-control-indicator"></span>
+									피망
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="mapping" value="양파" checked> 
+									<span class="custom-control-indicator"></span>
+									양파
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="mapping" value="오이" checked> 
+									<span class="custom-control-indicator"></span>
+									오이
+								</label>
+							</div>
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="mapping" value="피클" checked> 
+									<span class="custom-control-indicator"></span>
+									피클
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="mapping" value="토마토" checked> 
+									<span class="custom-control-indicator"></span>
+									토마토
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="mapping" value="양상추" checked> 
+									<span class="custom-control-indicator"></span>
+									양상추
+								</label>
+							</div>
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="mapping" value="올리브" checked> 
+									<span class="custom-control-indicator"></span>
+									올리브
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="mapping" value="할라피뇨" checked> 
+									<span class="custom-control-indicator"></span>
+									할라피뇨
+								</label>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="form-group">
+						<label class=" control-label">치즈 종류</label>
+						<div class="">
+							<select class="form-control input-lg" id="cheese" name="cheese" required>
+								<option value="1">아메리칸 치즈</option>
+								<option value="2">슈레드 치즈</option>
+								<option value="3">추천</option>
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="form-group">
+						<label class=" control-label">오븐굽기</label>
+						<div class="">
+							<label
+								class="switcher switcher-rounded switcher-lg switcher-primary switcher-blank">
+								<input type="checkbox" id="istempSelector" name="istemp">
+								<div class="switcher-indicator">
+									<div class="switcher-yes">O</div>
+									<div class="switcher-no">X</div>
+								</div>
+							</label>
+						</div>
+					</div>
+					<br>	
+					<div class="form-group">
+						<label class=" control-label">소스</label>
+						<div class="">
+							<label class="custom-control custom-checkbox checkbox-inline">
+								<input type="checkbox" id="recsauce" class="custom-control-input" checked> <span
+								class="custom-control-indicator"></span>추천
+							</label>
+						</div>
+						<div class=""></div>
+						<div class="">
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="바베큐"> 
+									<span class="custom-control-indicator"></span>
+									바베큐
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="허니머스타드"> 
+									<span class="custom-control-indicator"></span>
+									허니머스타드
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="랜치드레싱"> 
+									<span class="custom-control-indicator"></span>
+									랜치드레싱
+								</label>
+							</div>
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="핫칠리"> 
+									<span class="custom-control-indicator"></span>
+									핫칠리
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="마요네즈"> 
+									<span class="custom-control-indicator"></span>
+									마요네즈
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="디종홀스래디쉬"> 
+									<span class="custom-control-indicator"></span>
+									디종홀스래디쉬
+								</label>
+							</div>
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="머스타드"> 
+									<span class="custom-control-indicator"></span>
+									머스타드
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="올리브오일"> 
+									<span class="custom-control-indicator"></span>
+									올리브오일
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="스위트어니언"> 
+									<span class="custom-control-indicator"></span>
+									스위트어니언
+								</label>
+							</div>
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="후추"> 
+									<span class="custom-control-indicator"></span>
+									후추
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="스위트 칠리"> 
+									<span class="custom-control-indicator"></span>
+									스위트 칠리
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="사우스웨스트"> 
+									<span class="custom-control-indicator"></span>
+									사우스웨스트
+								</label>
+							</div>
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="소금"> 
+									<span class="custom-control-indicator"></span>
+									소금
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="레드와인 식초"> 
+									<span class="custom-control-indicator"></span>
+									레드와인 식초
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="이탈리안 드레싱"> 
+									<span class="custom-control-indicator"></span>
+									이탈리안 드레싱
+								</label>
+							</div>
+							<div>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="마리나라소스"> 
+									<span class="custom-control-indicator"></span>
+									마리나라소스
+								</label>
+								<label class="custom-control custom-checkbox checkbox-inline">
+									<input type="checkbox" class="custom-control-input" name="sauce" value="사우전 아일랜드"> 
+									<span class="custom-control-indicator"></span>
+									사우전 아일랜드
+								</label>
+							</div>
+						</div>
+					</div>
+					<br>
+				</div>
+
+				<div class="modal-footer">
+					<div class="n-center">
+						<button type="button" class="btn btn-primary" onclick="goNextModal()" style="font-size:20px;width:35%"> 다음
+						</button>
+						<button type="button" class="btn" data-dismiss="modal" aria-label="Close" style="font-size:20px;width:35%"> 취소
+						</button>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<%} %>
 	
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
@@ -253,22 +555,31 @@
 		}
 	}
 	
+	function goNextModal() {
+		$('#modal2').modal('hide');
+		$('#modal').modal();
+	}
 	
 	var where;
 	function modalDetail(w) {
 		var amount = $('#ob-amount').val();
 		where = w;
 		if(where == 'cart') {
+			/*
 			if(cartAmount + parseInt(amount) > 5) {
 				alert('죄송합니다...\n한번에 주문가능한 총 메뉴 개수는 최대 5개 입니다.\n\n'+
 						'장바구니 안 메뉴 개수 : '+cartAmount+'개\n'+
 						'선택하신 메뉴 개수 : '+amount+'개');
 				return;
 			}
+			*/
+			if(parseInt(amount) > 5) {
+				toast('죄송합니다...','최대 5개 까지 선택가능합니다.','warning');
+				return;
+			}
 		} else if (where == 'direct') {
 			if(parseInt(amount) > 5) {
-				alert('죄송합니다...\n한번에 주문가능한 총 메뉴 개수는 최대 5개 입니다.\n\n'+
-						'선택하신 메뉴 개수 : '+amount+'개');
+				toast('죄송합니다...','최대 5개 까지 선택가능합니다.','warning');
 				return;
 			}
 		}
@@ -287,7 +598,12 @@
 		$('#m-add-total').text(0);
 		$('#ob-amount').popover('hide');
 		
-		$('#modal').modal();
+		<%if(product.getIdx_restaurant() == 4){ %>
+			$('#modal2').modal();
+		<%} else {%>
+			$('#modal').modal();
+		<%}%>
+		
 	}
 	
 	$('#modal').on('hidden.bs.modal', function () {
@@ -296,7 +612,69 @@
 	
 	function goNext() {
 		var detail = getDetail();
-		var requirement = $('#ob_requirement').val().trim();
+		var requirement = '';
+		
+		
+		<%if(product.getIdx_restaurant() == 4){ %>
+		if($('#rec').is(":checked")) {
+			requirement += '추천레시피\n';
+		} else {
+			
+			/*
+			var vegtext = '';
+			if($("#checkall").is(":checked")) {
+				vegtext = '모두';
+			} else {
+				var vegs = $('input:checked[name=mapping]');
+				for(var i=0; i<vegs.length; i++){
+					vegtext += $(vegs[i]).val();
+					if(i!=vegs.length-1) {
+						vegtext += ', ';
+					}
+				}
+			}
+			*/
+			var vegtext = '';
+			
+			var vegs = $('input:unchecked[name=mapping]');
+			for(var i=0; i<vegs.length; i++){
+				vegtext += $(vegs[i]).val();
+				if(i!=vegs.length-1) {
+					vegtext += ', ';
+				}
+			}
+			
+			
+			var toasttext = '';
+			if($("#istempSelector").is(":checked")) {
+				toasttext = '(토스팅 O)';
+			} else {
+				toasttext = '(토스팅 X)';
+			}
+			
+			var saucetext = '';
+			if($("#recsauce").is(":checked")) {
+				saucetext = '추천';
+			} else {
+				var sauces = $('input:checked[name=sauce]');
+				for(var i=0; i<sauces.length; i++){
+					saucetext += $(sauces[i]).val();
+					if(i!=sauces.length-1) {
+						saucetext += ', ';
+					}
+				}
+			}
+			
+			requirement += '\n빵 : ' + $("#bread option:selected" ).text() + '\n';
+			requirement += '치즈 : ' + $("#cheese option:selected" ).text() + ' ' + toasttext + '\n';
+			requirement += '야채(빼는것) : ' + vegtext + '\n';
+			requirement += '소스 : ' + saucetext + '\n';
+		}
+		<%}%>
+		
+		if($('#ob_requirement').val().length > 0) {
+			requirement += '기타 요구사항 : '+$('#ob_requirement').val().trim();
+		}
 		
 		//console.log('goNext: '+ detail + ' ' + requirement);
 		
@@ -358,13 +736,14 @@
 	$('#ob-amount').on('change', function() {
 		var amount = $(this).val();
 		if(isNaN(parseInt(amount))) {
-			alert('숫자만 입력가능합니다.');
+			toast('포만감','숫자만 입력가능합니다.','warning');
 			$(this).val(1);
 			return;
 		}
 			
-		if(amount > 15) {
-			alert('15개 이상 단체주문은 010-6478-4899로 문의주세요.');
+		if(amount > 5) {
+			//toast('단체주문','15개 이상 단체주문은 010-6478-4899로 문의주세요.','warning');
+			toast('죄송합니다...','최대 5개 까지 선택가능합니다.','warning');
 			return;
 		} 
 		getTime(curProduct, amount, curRestaurant);
@@ -376,6 +755,75 @@
 		getTime(curProduct, $('#ob-amount').val(), curRestaurant, true);
 		setTimeout("timer()", 1000*60);
 	}
+	
+	
+	<%if(product.getIdx_restaurant() == 4){ %>
+	
+	$('#rec').on('change', function() {
+		var tf = $(this).is(':checked');
+		
+		$('#bread').val("7").prop("selected", true);
+		$("#bread option").not(":selected").attr("disabled", tf);
+		$("#checkall").prop("disabled", tf);
+		$('input[name=mapping]').each(function(e) {
+		      	$(this).prop("disabled", tf);
+		});
+		$('#recsauce').prop("checked", tf);
+		$('#recsauce').prop("disabled", tf);
+		$('input[name=sauce]').each(function(e) {
+			$(this).prop("checked", false);
+	      	$(this).prop("disabled", tf);
+		});
+		$('#istempSelector').prop("disabled", tf);
+		$('#cheese').val("3").prop("selected", true);
+		$("#cheese option").not(":selected").attr("disabled", tf);
+	});
+	
+	$("#checkall").on('change', function() {
+		var tf;
+        if($("#checkall").is(":checked")){
+            tf = true;
+        }else{
+            tf = false;
+        }
+        $('input[name=mapping]').each(function(e) {
+        	$(this).prop("checked", tf);
+        });
+    });
+	
+	$('#recsauce').on('change', function() {
+		$('input[name=sauce]').prop("checked", false);
+	});
+	
+	$('input[name=sauce]').on('change', function() {
+		var beans =$('input[name=sauce]');
+		var n = 0;
+		for(var i=0; i<beans.length; i++) {
+			if($(beans[i]).is(":checked")){
+				n++;
+			}
+		}
+		if(n>4) {
+			toast('포만감','소스는 최대 4개까지 선택 가능합니다.','warning');
+			$(this).prop("checked", false);
+		}
+		$('#recsauce').prop("checked", false);
+	});
+	
+	$('input[name=mapping]').on('change', function() {
+		var beans = $('input[name=mapping]');
+		for(var i=0; i<beans.length; i++) {
+			if(!$(beans[i]).is(":checked")){
+				$("#checkall").prop("checked", false);
+				return;
+			}
+		}
+		$("#checkall").prop("checked", true);
+	});
+	
+	<%}%>
+	
+	
 	</script>
 </body>
 </html>

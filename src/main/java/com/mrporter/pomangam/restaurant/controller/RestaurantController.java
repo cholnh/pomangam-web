@@ -31,6 +31,7 @@ public class RestaurantController {
 	@RequestMapping(value = "/"+MAPPINGNAME+".do")
 	public ModelAndView openIndexPage(
 			@RequestParam(value = "idx", required = false) Integer idx,
+			@RequestParam(value = "category", required = false) String category,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
@@ -49,10 +50,12 @@ public class RestaurantController {
 			response.sendRedirect("./target.do?idx="+curTarget); 
 			return null;
 		}
+		ProductCrudDAO pDAO = new ProductCrudDAO();
 		
 		ModelAndView model = new ModelAndView();
 		String restaurant = defaultDAO.getBean(idx);
-		List<ProductBean> productList = new ProductCrudDAO().getBeanList(idx);
+		List<ProductBean> productList = pDAO.getBeanList(idx, category);
+		List<String> categoryList = pDAO.getCategoryList(idx);
 		
 		if(restaurant.equals("[]")) { // is empty
 			response.sendRedirect("./target.do?idx="+curTarget);
@@ -61,6 +64,8 @@ public class RestaurantController {
 			model.setViewName("contents/" + MAPPINGNAME);
 			model.addObject("restaurant", restaurant);
 			model.addObject("productList", productList);
+			model.addObject("categoryList", categoryList);
+			model.addObject("category", category);
 			session.setAttribute("curRestaurant", idx+"");
 		}
 		return model;

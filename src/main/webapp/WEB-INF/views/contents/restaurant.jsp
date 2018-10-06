@@ -21,6 +21,10 @@
 		
 		@SuppressWarnings({"unchecked"})
 		List<ProductBean> productList = (List<ProductBean>) request.getAttribute("productList");
+		@SuppressWarnings({"unchecked"})
+		List<String> categoryList = (List<String>) request.getAttribute("categoryList");
+		
+		String category = (String) request.getAttribute("category");
 		
 		String json = (String) request.getAttribute("restaurant");
 		List<RestaurantBean> list = new Gson().fromJson(
@@ -71,7 +75,26 @@
 		</div>
 		-->
 		<hr>
-		
+		<div class="center">
+			<div id="owl-carousel-basic" class="owl-carousel" style="display: inline-block!important">
+				<div class="demo-item" onclick="location.href='./restaurant.do?idx=<%=curRestaurant %>'">
+					<span class="n-target-category">
+						<%if(category==null || category.length()==0) {%><u>전체</u><%} else {%>전체<%} %>
+					</span>
+				</div>
+				<%
+				if(categoryList != null) {
+				for(String c : categoryList) {%>
+				<div class="demo-item" onclick="categoryHref('<%=curRestaurant %>' , '<%=c%>')">
+					<span class="n-target-category">
+						<%if(c.equals(category)) {%><u><%=c %></u><%} else {%><%=c %><%} %>
+					</span>
+				</div>	
+				<%}} %>
+			</div>
+			 
+		</div>
+		<br>
 		<!-- Parter -->
 		<div>
 			<!-- 
@@ -94,7 +117,13 @@
 					%>	
 
 					<div class="col-xs-4 col-sm-3" style="padding:0px">
-						<div class="box n-center" onclick="location.href='./product.do?idx=<%=bean.getIdx() %>'">
+						<div class="box n-center" 
+							<%if(bean.getType() == 1) {%>
+								onclick="location.href='./product.do?idx=<%=bean.getIdx() %>'"
+							<%} else {%>
+								onclick="toast('포만감','메인메뉴 주문 단계에서 추가하실 수 있습니다.','warning')"
+							<%} %>
+						>
 							<a class="valign-middle n-noborder" style="cursor: pointer;"> 
 							<img src="<%=bean.getImgpath() %>" alt="<%=bean.getName() %>" class="n-restaurant-icon"
 								style="margin-top: 3px" />
@@ -115,6 +144,10 @@
 					</div> 
 					<%}} %>
 					
+				</div>
+				<div class="n-center">
+					<span>※ 위 가격은 배달가격이 포함된 가격입니다.<br>기존 업체가 제공하는 가격과 상이할 수 있습니다.</span>
+					<br><br>
 				</div>
 			</div>
 
@@ -139,6 +172,26 @@
 	$('#header-back').show();
 	$('#header-center').show();
 	$('#header-back').prop('href', './target.do?idx='+curTarget);
+	
+	$('#owl-carousel-basic').owlCarousel({
+		loop:   false,
+		margin: 10,
+
+		responsive:{
+			0:    { items: 5 },
+			600:  { items: 5 },
+			1000: { items: 5 },
+		},
+
+		rtl: $('html').attr('dir') === 'rtl',
+	});
+	
+	function categoryHref(idx, category) {
+		var t = encodeURI(category);
+		console.log(t);
+		location.href='./restaurant.do?idx='+idx+
+					'&category='+t;
+	}
 	
 	</script>
 

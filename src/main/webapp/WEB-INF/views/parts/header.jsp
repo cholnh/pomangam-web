@@ -21,7 +21,17 @@
 	<meta name="_csrf" content="${_csrf.token}"/>
 	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 
-	<title>Mr. Porter</title>
+	<link rel="canonical" href="http://www.pomangam.com">
+	<meta name="description" content="행복은 배부름에서 온다 - 푸드 딜리버리 서비스 플랫폼, 포터가 만나러 감">
+	
+	<!-- open graph -->
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="포만감">
+	<meta property="og:description" content="행복은 배부름에서 온다 - 푸드 딜리버리 서비스 플랫폼, 포터가 만나러 감">
+	<meta property="og:image" content="http://www.pomangam.com/resources/img/main/logo.png">
+	<meta property="og:url" content="http://www.pomangam.com">
+
+	<title>행복은 배부름에서 온다. 포만감</title>
 	
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin" rel="stylesheet" type="text/css">
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -42,6 +52,7 @@
 	<!-- jQuery -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="resources/js/common.js"></script>
+	<script src="resources/js/toastr.js"></script>
 	
 	<%	
 	
