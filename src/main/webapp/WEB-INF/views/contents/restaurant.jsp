@@ -85,7 +85,7 @@
 				<%
 				if(categoryList != null) {
 				for(String c : categoryList) {%>
-				<div class="demo-item" onclick="categoryHref('<%=curRestaurant %>' , '<%=c%>')">
+				<div class="demo-item" style="display:none" onclick="categoryHref('<%=curRestaurant %>' , '<%=c%>')">
 					<span class="n-target-category">
 						<%if(c.equals(category)) {%><u><%=c %></u><%} else {%><%=c %><%} %>
 					</span>
@@ -130,10 +130,10 @@
 
 							</a>
 							<div style="cursor: pointer;">
-								<div style="margin-top: 3px">
+								<div style="margin-top: 3px; height:60px">
 									<b><%=bean.getName() %></b> <br> <% out.print(Number.numberWithCommas(bean.getPrice())); %>원
 								</div>
-								<div style="height:25px">
+								<div style="">
 								<!-- 
 								<button class="btn btn-primary "
 									style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
@@ -173,6 +173,7 @@
 	$('#header-center').show();
 	$('#header-back').prop('href', './target.do?idx='+curTarget);
 	
+	$('.demo-item').css("display", "block");
 	$('#owl-carousel-basic').owlCarousel({
 		loop:   false,
 		margin: 10,

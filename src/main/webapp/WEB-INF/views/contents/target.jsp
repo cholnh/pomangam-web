@@ -1,3 +1,4 @@
+<%@page import="com.mrporter.pomangam.target.vo.TargetAdBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="com.google.gson.Gson"%>
@@ -20,6 +21,10 @@
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<RestaurantBean> restaurantList = (List) request.getAttribute("restaurantList");
 		
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<TargetAdBean> targetAdList = (List) request.getAttribute("targetAdList");
+		
+		
 		String json = (String) request.getAttribute("target");
 		List<TargetBean> list = new Gson().fromJson(
 				json, 
@@ -31,9 +36,9 @@
 	<jsp:include page="../parts/header.jsp" /> 
 	
 	<!-- Content -->
-	<div class="container center" style="margin-top:50px; margin-bottom: 1px">
+	<div class="container center" style="margin-top:40px; margin-bottom: 1px">
 		<!-- Target Info -->
-		<div class="n-center n-padding-32 n-margin-bottom">
+		<div class="n-center n-padding-24">
 			<a href="" style="text-decoration:none; !important">
 				<span class="n-xlarge n-bottombar" style="padding:5px">
 					<span style="color:black">
@@ -42,13 +47,6 @@
 				</span>
 			</a>
 		</div>
-		<div class="n-center">
-			<span style="font-size:13px">
-				누적 주문 수 : <b><% out.print(Number.numberWithCommas(target.getCnt_order())); %></b>건 <br>
-				구독 회원 수 : <b>25</b>명
-			</span>
-		</div>
-		
 		
 		<div class="n-center">
 			<table style="display:inline-block">
@@ -86,9 +84,6 @@
 												<th>
 													저녁 시간
 												</th>
-												<th>
-													야식 시간
-												</th>
 											</tr>
 											<tr>
 												<td>
@@ -99,9 +94,6 @@
 												</td>
 												<td>
 													오후 5시 / 6시 / 7시
-												</td>
-												<td>
-													오후 9시 / 10시
 												</td>
 											</tr>
 										</tbody>
@@ -135,28 +127,21 @@
 				</tr>
 			</tbody>
 			</table>
-			
 		</div>
-			
 		
-		<!-- Category 
+		<%if(targetAdList!=null && targetAdList.size()>0) {%>
+		<hr>
 		<div class="n-center">
-			<hr>
-			<div id="owl-carousel-basic" class="owl-carousel" style="display: inline-block!important">
-				<div class="demo-item"><span class="n-target-category"><u>전체</u></span></div>
-				<div class="demo-item"><span class="n-target-category">한식</span></div>
-				<div class="demo-item"><span class="n-target-category">분식</span></div>
-				<div class="demo-item"><span class="n-target-category">치킨</span></div>
-				<div class="demo-item"><span class="n-target-category">피자</span></div>
-				<div class="demo-item"><span class="n-target-category">중식</span></div>
-				<div class="demo-item"><span class="n-target-category">양식</span></div>
-				<div class="demo-item"><span class="n-target-category">패스트푸드</span></div>
-				<div class="demo-item"><span class="n-target-category">야식</span></div>
-				<div class="demo-item"><span class="n-target-category">디저트</span></div>
-			</div>
 			
+			<div id="owl-carousel-basic" class="owl-carousel" style="display: inline-block!important">
+				<% for(TargetAdBean bean : targetAdList) {
+					if(bean.getIsactive() == 0) continue;
+				%>
+						<img class="demo-item" style="display:none" alt="<%=bean.getName() %>" src="<%=bean.getImgpath() %>" width="90%" height="auto">
+				<%} %>
+			</div>
 		</div>
-		-->
+		<%} %>
 		<hr>
 		<!-- Parter -->
 		<div>
@@ -274,9 +259,6 @@
 								<th>
 									저녁 시간
 								</th>
-								<th>
-									야식 시간
-								</th>
 							</tr>
 							<tr>
 								<td>
@@ -288,9 +270,6 @@
 								<td>
 									오후 5시 / 6시 / 7시
 								</td>
-								<td>
-									오후 9시 / 10시
-								</td>
 							</tr>
 							<tr>
 								<td>
@@ -301,9 +280,6 @@
 								</td>
 								<td>
 									오후 5시 / 6시 / 7시
-								</td>
-								<td>
-									오후 9시 / 10시
 								</td>
 							</tr>
 						</tbody>
@@ -362,22 +338,25 @@
 	
 	</script>
 	<script>
-	/*
+	<%if(targetAdList!=null && targetAdList.size()>0) {%>
 	$(function() {
+		$('.demo-item').css("display", "block");
 		$('#owl-carousel-basic').owlCarousel({
-			loop:   false,
+			loop:   true,
 			margin: 10,
-
+			autoplay:        true,
+			autoplayTimeout: 4000,
+			
 			responsive:{
-				0:    { items: 5 },
-				600:  { items: 8 },
-				1000: { items: 12 },
+				0:    { items: 1 },
+				600:  { items: 1 },
+				1000: { items: 1 },
 			},
 
 			rtl: $('html').attr('dir') === 'rtl',
 		});
 	});
-	*/
+	<%}%>
 	</script>
 	
 </body>

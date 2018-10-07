@@ -73,13 +73,13 @@
 							<hr class="n-or-hr">
 							<div id="or">or</div>
 						</div>
-						<!--  social login --> 
+						<!--  social login 
 						<div class="n-row n-container n-center">
 							<div >
 								<a class="" href="<%=apiURL%>"><img class="n-socialLogin" src="resources/img/login/naverlogin.PNG" style="height:50px; width:100%" ></a>
 							</div>
 						</div> 
-						
+						--> 
 					</div>
 				</div>
 

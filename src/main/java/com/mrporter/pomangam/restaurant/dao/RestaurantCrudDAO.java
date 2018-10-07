@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mrporter.pomangam.common.pattern.dao.Crud;
 import com.mrporter.pomangam.restaurant.vo.RestaurantBean;
+import com.mrporter.pomangam.target.vo.TargetAdBean;
 
 /**
  * RestaurantCrudDAO
@@ -22,6 +23,18 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 	 */
 	public RestaurantCrudDAO() {
 		super(TABLENAME);
+	}
+	
+	public List<TargetAdBean> getAdList(Integer idx) throws Exception {
+		List<TargetAdBean> result = null;
+		List<Map<String, Object>> lom = sqlQuery(
+				"SELECT * FROM target_ad WHERE idx_target = ? ORDER BY sequence", idx);
+		if(!lom.isEmpty()) {
+			Gson gson = new Gson();
+			result = new Gson().fromJson(gson.toJson(lom), 
+					new TypeToken<List<TargetAdBean>>() {}.getType());
+		}
+		return result;
 	}
 	
 	public String getStartTime(Integer idx) throws Exception {

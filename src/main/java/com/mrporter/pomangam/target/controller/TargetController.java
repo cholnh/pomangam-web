@@ -24,6 +24,7 @@ import com.mrporter.pomangam.common.security.model.domain.User;
 import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
 import com.mrporter.pomangam.restaurant.vo.RestaurantBean;
 import com.mrporter.pomangam.target.dao.TargetCrudDAO;
+import com.mrporter.pomangam.target.vo.TargetAdBean;
 
 @Controller
 public class TargetController {
@@ -48,7 +49,7 @@ public class TargetController {
 		ModelAndView model = new ModelAndView();
 		String target = defaultDAO.getBean(idx);
 		List<RestaurantBean> restaurantList = new RestaurantCrudDAO().getBeanWithLimitCount(idx);
-		
+		List<TargetAdBean> targetAdList = new RestaurantCrudDAO().getAdList(idx);
 		if(target.equals("[]")) { // is empty
 			response.sendRedirect("./");
 			return null;
@@ -57,6 +58,7 @@ public class TargetController {
 			model.setViewName("contents/" + MAPPINGNAME);
 			model.addObject("target", target);
 			model.addObject("restaurantList", restaurantList);
+			model.addObject("targetAdList", targetAdList);
 			
 			Object obj = session.getAttribute("user");
 			if(obj != null) {
