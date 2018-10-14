@@ -194,7 +194,8 @@ public class PaymentController {
 		Object obj = request.getSession().getAttribute("user");
 		if(obj != null) {
 			User user = new Gson().fromJson(obj+"", new TypeToken<User>() {}.getType());
-			bean.setUsername(user.getName());
+			bean.setUsername(user.getUsername());	// 유저 아이디
+			bean.setMember_name(user.getName());	// 유저 이름
 			bean.setPhonenumber(user.getPhonenumber());
 		}
 		

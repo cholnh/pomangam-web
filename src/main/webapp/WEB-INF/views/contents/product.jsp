@@ -241,6 +241,26 @@
 								</td>
 							</tr>
 							<%} %>
+							<%if(product.getIdx_restaurant().intValue() == 4){ %>
+							<tr>
+								<td colspan="2">
+									<span id="detailname-set">세트 메뉴</span> 추가 (콜라 + 쿠키) <span name="span-set"> (<span name="amount"></span>세트 적용) </span>
+									<select class="form-control input-lg" id="cookie" name="cookie" required>
+										<option name="cookiename" value="1">선택 안함</option>
+										<option name="cookiename" value="2">초코칩</option>
+										<option name="cookiename" value="3">라즈베리 치즈케익</option>
+										<option name="cookiename" value="4">더블 초코칩</option>
+										<option name="cookiename" value="5">오트밀 레이즌</option>
+										<option name="cookiename" value="6">화이트 마카다미아</option>
+										<option name="cookiename" value="7">감자칩</option>
+										<option name="cookiename" value="8">추천</option>
+									</select>
+								</td>
+								<td>
+									1900원
+								</td>
+							</tr>
+							<%} %>
 						</tbody>
 					</table>
 					
@@ -701,6 +721,11 @@
 		calTotal();
 	});
 	
+	$('#cookie').on('change', function(e) {
+		calTotal();
+	});
+	
+	
 	function calTotal() {
 		var amount = $('#ob-amount').val();
 		var $details = $('input[name=detail]');
@@ -712,6 +737,12 @@
 			}
 		}
 		
+		<%if(product.getIdx_restaurant().intValue() == 4){ %>
+		var cookie = parseInt($('#cookie').val());
+		if(cookie != 1) {
+			addTotal += (amount * 1900);
+		}
+		<%}%>
 		$('#m-add-total').text(addTotal);
 	}
 	
@@ -730,6 +761,13 @@
 							$('#detailname-'+detail.id.split('-')[1]).text());
 			}
 		};
+		
+		<%if(product.getIdx_restaurant().intValue() == 4){ %>
+		var cookie = parseInt($('#cookie').val());
+		if(cookie != 1) {
+			result.push('set-1-1900-세트(' + $("#cookie option:selected" ).text() + ')');
+		}
+		<%}%>
 		return result.toString();
 	}
 	
