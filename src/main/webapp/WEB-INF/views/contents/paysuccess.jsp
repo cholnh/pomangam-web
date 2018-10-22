@@ -53,8 +53,9 @@
 					</span><br><br>
 					<span style="font-size:32px; font-weight: bold"><%=totalPrice %>원</span><br> 
 					<span style="font-size:15px;"><%=bank_name %> (<%=bank_username %>)<br> <%=bank_account %></span><br>
-					<button class="btn btn-primary" style="font-size:13px" onclick="copyToClipboard('<%=bank_account %>')">복사하기</button>
+					<button class="btn btn-primary" style="font-size:13px" onclick="copy('<%=bank_account %>')">복사하기</button>
 					<br><br>
+					<textarea id="test"></textarea>
 				</div>	
 			</div>
 			<!-- <button class="btn btn-primary" type="button" onclick="location.href='./'">홈</button> 
@@ -66,6 +67,49 @@
 	<script>
 	$('#ob-mobileCartBtn').hide();
 	$('#ob-footerBtn').hide();
+	$('#test').hide();
+	
+	function copy(result) {
+		$('#test').show();
+		$('#test').val(result);
+		$('#test')[0].select();
+		//document.execCommand('copy');
+		select_all_and_copy($('#test')[0]);
+		$('#test').hide();
+	}
+	
+	function select_all_and_copy(el) {
+		if (document.body.createTextRange) {
+	        // IE
+			var textRange = document.body.createTextRange();
+			textRange.moveToElementText(el);
+			textRange.select();
+			textRange.execCommand("Copy");   
+		} else if (window.getSelection && document.createRange) {
+	        // non-IE
+			var editable = el.contentEditable; // Record contentEditable status of element
+			var readOnly = el.readOnly; // Record readOnly status of element
+			el.contentEditable = true; // iOS will only select text on non-form elements if contentEditable = true;
+			el.readOnly = false; // iOS will not select in a read only form element
+			var range = document.createRange();
+			range.selectNodeContents(el);
+			var sel = window.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range); // Does not work for Firefox if a textarea or input
+			if (el.nodeName == "TEXTAREA" || el.nodeName == "INPUT")
+				el.select(); // Firefox will only select a form element with select()
+			if (el.setSelectionRange && navigator.userAgent.match(/ipad|ipod|iphone/i))
+				el.setSelectionRange(0, 999999); // iOS only selects "form" elements with SelectionRange
+			el.contentEditable = editable; // Restore previous contentEditable status
+			el.readOnly = readOnly; // Restore previous readOnly status
+			if (document.queryCommandSupported("copy")) {
+				var successful = document.execCommand('copy'); 
+			}  else {
+				if (!navigator.userAgent.match(/ipad|ipod|iphone|android|silk/i))
+					tooltip(el, "Press CTRL+C to copy");
+			}
+		}
+	}
 	
 	</script>
 	
