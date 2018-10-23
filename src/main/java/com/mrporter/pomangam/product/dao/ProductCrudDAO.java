@@ -125,14 +125,15 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 					"as seconds " + 
 				"FROM " + 
 					"product " +
-				"WHERE idx = ?;", 1, 1, 1);
+				"WHERE idx = ?;", amount, idx_product, idx_product);
 		int seconds = Integer.parseInt(lom.get(0).get("seconds")+"");
 		
 		Calendar cur = Calendar.getInstance();
 		Calendar start;
 		Calendar end;
-		String[] starttime = new RestaurantCrudDAO().getStartTime(1).split(":");
-		String[] endtime = new RestaurantCrudDAO().getEndTime(1).split(":");
+		String[] starttime = new RestaurantCrudDAO().getStartTime(idx_restaurant).split(":");
+		String[] endtime = new RestaurantCrudDAO().getEndTime(idx_restaurant).split(":");
+		System.out.println(starttime[0]+" " +starttime[1]);
 		int start_hour = Integer.parseInt(starttime[0]);
 		int start_minute = Integer.parseInt(starttime[1]);
 		int end_hour = Integer.parseInt(endtime[0]);
@@ -147,7 +148,6 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			start.set(Calendar.AM_PM, Calendar.AM);
 			start.set(Calendar.HOUR, start_hour);
 		}
-		
 		end = Calendar.getInstance();
 		end.set(Calendar.SECOND, 0);
 		end.set(Calendar.MINUTE, end_minute-1);
@@ -178,7 +178,10 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			cur.set(Calendar.SECOND, 0);
 		}
 		
-		Calendar next = getNext(cur, 1);
+		
+		
+		
+		Calendar next = getNext(cur, idx_restaurant);
 		
 		return next;
 	}
@@ -324,7 +327,13 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 	
 	public static void main(String...args) {
 		ProductCrudDAO d = new ProductCrudDAO();
-
+		
+		try {
+			System.out.println("cal : "+new Date(d.getTime(134,1,7).getTimeInMillis()).toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		/*
 		for(int i=6; i<7; i++) {
 			for(int j=26; j<32; j+=1) {
 				Calendar cal = Calendar.getInstance();
@@ -341,6 +350,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 				System.out.println();
 			}
 		}
+		*/
 		
 	}
 	
