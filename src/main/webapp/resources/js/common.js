@@ -151,7 +151,8 @@ function getTime(idx_product, amount, idx_restaurant, tf) {
 			function(t) {
 				var d = new Date(t);
 				var text = '';
-				if(d.getDate() == new Date().getDate() + 1) {
+				
+				if(d.getDate() != new Date().getDate()) {
 					text = '다음날 ';
 				}
 				$('#ob-time').text(text + d.getHours()+'시 '+(d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
