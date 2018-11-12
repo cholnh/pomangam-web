@@ -39,7 +39,10 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			Iterator<Map<String, Object>>  iter = lom.iterator();
 			while(iter.hasNext()) {
 				Map<String, Object> map = iter.next();
-				result.add(map.get("category")+"");
+				Object obj = map.get("category");
+				if(obj != null) {
+					result.add(obj+"");
+				}
 			}
 		}
 		return result;
