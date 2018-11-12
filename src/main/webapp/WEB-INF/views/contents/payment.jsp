@@ -485,6 +485,9 @@
 						}));
 					}
 					for(var i=d.getHours(); i<=parseInt(time_end[0])+1; i++) {
+						if(i==14 || i==15 || i==16) {
+							continue;
+						}
 						var tf = i==d.getHours();
 						$('#ob-time').append($('<option>', {
 						    text: i+'시 ', //+(time_end[1]>0?time_end[1]+'분':''),

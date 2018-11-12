@@ -402,7 +402,8 @@
 							<select class="form-control input-lg" id="cheese" name="cheese" required>
 								<option value="1">아메리칸 치즈</option>
 								<option value="2">슈레드 치즈</option>
-								<option value="3">추천</option>
+								<option value="3">치즈 제외</option>
+								<option value="4">추천</option>
 							</select>
 						</div>
 					</div>

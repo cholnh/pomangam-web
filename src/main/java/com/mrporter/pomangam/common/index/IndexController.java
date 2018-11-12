@@ -24,6 +24,7 @@ import com.mrporter.pomangam.common.login.vo.UserBean;
 import com.mrporter.pomangam.common.pattern.vo.Status;
 import com.mrporter.pomangam.common.security.model.UserService;
 import com.mrporter.pomangam.common.security.model.domain.User;
+import com.mrporter.pomangam.notice.dao.NoticeCrudDAO;
 import com.mrporter.pomangam.target.dao.TargetCrudDAO;
 
 /**
@@ -60,12 +61,15 @@ public class IndexController {
 		model.setViewName("contents/index");
 		
 		TargetCrudDAO targetDAO = new TargetCrudDAO();
+		NoticeCrudDAO noticeDAO = new NoticeCrudDAO();
 		//RestaurantCrudDAO restaurantDAO = new RestaurantCrudDAO();
 		//PaymentIndexCrudDAO indexDAO = new PaymentIndexCrudDAO();
 		
 		//model.addObject("sumOrder", targetDAO.getSumOrder());
 		//model.addObject("todayOrder", indexDAO.getTodayOrder());
 		model.addObject("targetList", targetDAO.getBeanList());
+		model.addObject("noticeList", noticeDAO.getBeanList());
+		
 		//model.addObject("sumRestaurant", restaurantDAO.getBeanList().size());
 		
 		return model;

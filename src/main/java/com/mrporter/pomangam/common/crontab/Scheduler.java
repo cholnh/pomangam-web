@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.mrporter.pomangam.payment.dao.PaymentIndexCrudDAO;
 import com.mrporter.pomangam.product.dao.ProductCrudDAO;
+import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
 
 /**
  * Scheduler
@@ -21,4 +22,13 @@ public class Scheduler {
 		new PaymentIndexCrudDAO().setStatusDone();
 	}
 
+	@Scheduled(cron="0 30 18 * * 5")
+	public void closeRestaurant() throws Exception {
+		new RestaurantCrudDAO().closeRestaurant();
+	}
+	
+	@Scheduled(cron="0 30 19 * * 0")
+	public void openRestaurant() throws Exception {
+		new RestaurantCrudDAO().openRestaurant();
+	}
 }

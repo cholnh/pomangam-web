@@ -104,7 +104,7 @@ public class ProductController {
 			@RequestParam(value = "amount", required = false) Integer amount,
 			@RequestParam(value = "idx_restaurant", required = false) Integer idx_restaurant) throws Exception {
 
-		Calendar cal = new ProductCrudDAO().getTime(idx_product, amount, idx_restaurant);
+		Calendar cal = new ProductCrudDAO().getTime(Calendar.getInstance(), idx_product, amount, idx_restaurant);
 		if(cal == null) {
 			return -1;
 		} else {
@@ -124,7 +124,7 @@ public class ProductController {
 			int amount = Integer.parseInt(obj.split("-")[1]);
 			int idx_restaurant = Integer.parseInt(obj.split("-")[2]);
 			
-			long millis = new ProductCrudDAO().getTime(idx_product, amount, idx_restaurant).getTimeInMillis();
+			long millis = new ProductCrudDAO().getTime(Calendar.getInstance(), idx_product, amount, idx_restaurant).getTimeInMillis();
 			max = max < millis ? millis : max;
 		}
 		return max;

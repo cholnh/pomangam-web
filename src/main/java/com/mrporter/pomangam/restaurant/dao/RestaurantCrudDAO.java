@@ -25,6 +25,14 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 		super(TABLENAME);
 	}
 	
+	public void closeRestaurant() throws Exception {
+		sqlUpdate("UPDATE restaurant SET isPause = 1");
+	}
+	
+	public void openRestaurant() throws Exception {
+		sqlUpdate("UPDATE restaurant SET isPause = 0");
+	}
+	
 	public List<TargetAdBean> getAdList(Integer idx) throws Exception {
 		List<TargetAdBean> result = null;
 		List<Map<String, Object>> lom = sqlQuery(

@@ -34,7 +34,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		List<String> result = new ArrayList<>();
 		
 		List<Map<String, Object>> lom = sqlQuery(
-				"SELECT category FROM product where idx_restaurant = ? group by category order by sequence", idx);
+				"SELECT category FROM product where idx_restaurant = ? AND isActive = 1 group by category order by sequence", idx);
 		if(!lom.isEmpty()) {
 			Iterator<Map<String, Object>>  iter = lom.iterator();
 			while(iter.hasNext()) {
@@ -117,7 +117,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		return amount>0?amount:0;
 	}
 	
-	public Calendar getTime(Integer idx_product, int amount, Integer idx_restaurant) throws Exception {
+	public Calendar getTime(Calendar cur, Integer idx_product, int amount, Integer idx_restaurant) throws Exception {
 		List<Map<String, Object>> lom = sqlQuery(
 				"SELECT " + 
 					"TRUNCATE(((?*unit_time/unit_amount) + " + 
@@ -128,7 +128,6 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 				"WHERE idx = ?;", amount, idx_product, idx_product);
 		int seconds = Integer.parseInt(lom.get(0).get("seconds")+"");
 		
-		Calendar cur = Calendar.getInstance();
 		Calendar start;
 		Calendar end;
 		String[] starttime = new RestaurantCrudDAO().getStartTime(idx_restaurant).split(":");
@@ -169,7 +168,6 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
 			cur.set(Calendar.SECOND, 0);
 		}
-		System.out.println("cur : "+new Date(cur.getTimeInMillis()).toString());
 		
 		// 시작시간
 		if(cur.compareTo(start) < 0) {
@@ -196,7 +194,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		// 휴식시간 2시 ~ 4시
 		Calendar pass_start = Calendar.getInstance();
 		pass_start.set(Calendar.AM_PM, Calendar.PM);
-		pass_start.set(Calendar.HOUR, 1);
+		pass_start.set(Calendar.HOUR, 0);
 		pass_start.set(Calendar.MINUTE, 29);
 		
 		Calendar pass_end = Calendar.getInstance();
@@ -264,30 +262,36 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 	
 	public static void main(String...args) {
 		ProductCrudDAO d = new ProductCrudDAO();
+
+		//Calendar cur = Calendar.getInstance();
+		//System.out.println("cur : "+new Date(cur.getTimeInMillis()).toString());
 		
-		try {
-			System.out.println("cal : "+new Date(d.getTime(134,1,7).getTimeInMillis()).toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		/*
-		for(int i=6; i<7; i++) {
-			for(int j=26; j<32; j+=1) {
-				Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.AM_PM, Calendar.PM);
-				cal.set(Calendar.HOUR, i);
-				cal.set(Calendar.MINUTE, j);
-				
-				System.out.println("cal : "+new Date(cal.getTimeInMillis()).toString());
+		final int idx_restaurant = 1;	// 맘스터치
+		final int idx_product = 1;		// 화이트갈릭버거
+		final int amount = 1;			// 개수
+		
+		
+		
+		
+		for(int i=0; i<=3; i++) {
+			for(int j=0; j<60; j++) {
+				Calendar cur = Calendar.getInstance();
+				cur.set(Calendar.AM_PM, Calendar.PM);
+				cur.set(Calendar.HOUR, i);
+				cur.set(Calendar.MINUTE, j);
+				System.out.println("cur"+new Date(cur.getTimeInMillis()).toString());
 				try {
-					System.out.println("next : "+new Date(d.test(cal).getTimeInMillis()).toString());
+					System.out.println("return : "+new Date(
+							d.getTime(cur, idx_product, amount, idx_restaurant)
+								.getTimeInMillis()).toString());
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				System.out.println();
 			}
 		}
-		*/
+		
 		
 	}
 	

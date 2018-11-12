@@ -1,3 +1,4 @@
+<%@page import="com.mrporter.pomangam.notice.vo.NoticeBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
@@ -17,6 +18,10 @@
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List<TargetBean> targetList = (List) request.getAttribute("targetList");
+		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		List<NoticeBean> noticeList = (List) request.getAttribute("noticeList");
+
 	%>
 
 	<!-- Navbar -->
@@ -282,6 +287,43 @@
 	
 	<!-- Footer -->
 	<%@ include file="../parts/footer.jsp" %>
+
+	<%if(noticeList != null && !noticeList.isEmpty()) {%>
+	<!-- notice popup modal -->
+	<div class="modal" id="notice_modal" tabindex="-1" role="dialog" style="top:5%">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span style="font-weight:bold;font-size:15px">공지사항</span>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				
+				<div class="modal-body" >
+					<div id="notice_carousel" class="owl-carousel">
+						
+						<%for(NoticeBean bean : noticeList){ %>
+						<div class="demo-item" style="margin-bottom:26px">
+							<img src="<%=bean.getImgpath() %>" alt="공지이미지">
+							<div class="n-center" style="margin-top:12px"><%=bean.getContents() %></div>
+						</div>
+						<%} %>
+						
+					</div>
+				</div>
+				
+				<div class="modal-footer n-center">
+					<button class="btn btn-primary" style="width:45%;font-size:17px;" onclick="noticeClose()">다시보지않기
+					</button>
+					<button class="btn btn-primary" style="width:45%;font-size:17px;" data-dismiss="modal">닫기
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<%} %>
 	
 	<!-- Core scripts -->
 	<script src="resources/js/bootstrap.min.js"></script>
@@ -301,6 +343,56 @@
 		var targetList = <%=new Gson().toJson(targetList)%>;
 		
 	</script>
+	
+	<!-- notice script -->
+	<%if(noticeList != null && !noticeList.isEmpty()) {%>
+	<script>
+		$(function() {
+			cookiedata = document.cookie;
+		    if(cookiedata.indexOf("close=Y")<0) {
+		        $("#notice_modal").modal();
+		    } else {
+		        $("#notice_modal").modal('hide');
+		    }
+		});
+		
+		$('#notice_carousel').owlCarousel({
+			loop:   false,
+			margin: 10,
+			nav:    true,
+		
+			responsive:{
+				0:    { items: 1 },
+				600:  { items: 1 },
+				1000: { items: 1 },
+			},
+		
+			rtl: $('html').attr('dir') === 'rtl',
+	    });
+		
+		function getCookieForNotice(cname) {
+		    var name = cname + "=";
+		    var ca = document.cookie.split(';');
+		    for(var i=0; i<ca.length; i++) {
+		        var c = ca[i];
+		        while (c.charAt(0)==' ') c = c.substring(1);
+		        if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+		    }
+		    return "";
+		}
+		function setCookieForNotice(cname, cvalue, exdays) {
+		    var d = new Date();
+		    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		    var expires = "expires="+d.toUTCString();
+		    document.cookie = cname + "=" + cvalue + "; " + expires;
+		}
+		
+		function noticeClose(){
+			 setCookie("close","Y",1);
+		    $("#notice_modal").modal('hide');
+		}
+	</script>
+	<%} %>
 	
 	<script>
 		$('#nav').removeClass('sticky');
