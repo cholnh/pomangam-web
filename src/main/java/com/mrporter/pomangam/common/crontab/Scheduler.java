@@ -24,11 +24,11 @@ public class Scheduler {
 
 	@Scheduled(cron="0 30 18 * * 5")
 	public void closeRestaurant() throws Exception {
-		new RestaurantCrudDAO().closeRestaurant();
+		//new RestaurantCrudDAO().closeRestaurant();
 	}
 	
 	@Scheduled(cron="0 30 19 * * 0")
 	public void openRestaurant() throws Exception {
-		new RestaurantCrudDAO().openRestaurant();
+		//new RestaurantCrudDAO().openRestaurant();
 	}
 }
