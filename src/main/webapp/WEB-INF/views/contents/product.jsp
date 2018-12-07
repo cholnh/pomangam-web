@@ -116,10 +116,10 @@
 								style="margin-top: 3px" />
 							</a>
 							<div >
-								<div style="margin-top: 3px">
+								<div style="margin-top: 3px; height:60px">
 									<b><%=bean.getName() %></b> <br> <% out.print(Number.numberWithCommas(bean.getPrice())); %>원
 								</div>
-								<div style="height:25px">
+								<div style="">
 								<!-- 
 								<button class="btn btn-primary "
 									style="font-size: 8px !important; padding: 2px; margin-bottom: 3px">마감임박</button>
@@ -248,7 +248,7 @@
 									<select class="form-control input-lg" id="cookie" name="cookie" required>
 										<option name="cookiename" value="1">선택 안함</option>
 										<option name="cookiename" value="2">초코칩</option>
-										<option name="cookiename" value="3">라즈베리 치즈케익</option>
+										<!-- <option name="cookiename" value="3">라즈베리 치즈케익</option>  -->
 										<option name="cookiename" value="4">더블 초코칩</option>
 										<option name="cookiename" value="5">오트밀 레이즌</option>
 										<option name="cookiename" value="6">화이트 마카다미아</option>
