@@ -27,8 +27,13 @@ public class Scheduler {
 		//new RestaurantCrudDAO().closeRestaurant();
 	}
 	
+	@Scheduled(cron="0 0 18 * * 6")
+	public void closeExceptionalRestaurant() throws Exception {
+		new RestaurantCrudDAO().closeExceptionalRestaurant();
+	}
+	
 	@Scheduled(cron="0 30 19 * * 0")
 	public void openRestaurant() throws Exception {
-		//new RestaurantCrudDAO().openRestaurant();
+		new RestaurantCrudDAO().openRestaurant();
 	}
 }
