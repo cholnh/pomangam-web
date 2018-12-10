@@ -164,6 +164,7 @@ public class PaymentController {
 			PaymentBean bean) throws Exception {
 		
 		//bean.setTimestamp(Date.getCurDate());
+		bean.setStatus(0);
 		
 		Integer idx = defaultDAO.insert(bean);
 		
