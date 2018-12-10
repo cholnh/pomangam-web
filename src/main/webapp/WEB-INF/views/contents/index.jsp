@@ -315,7 +315,7 @@
 				</div>
 				
 				<div class="modal-footer n-center">
-					<button class="btn btn-primary" style="width:45%;font-size:17px;" onclick="noticeClose()">다시보지않기
+					<button class="btn btn-primary" style="width:45%;font-size:17px;" onclick="noticeClose()">오늘하루 보지않기
 					</button>
 					<button class="btn btn-primary" style="width:45%;font-size:17px;" data-dismiss="modal">닫기
 					</button>
