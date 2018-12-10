@@ -255,7 +255,7 @@
 		            		<td>
 		            			<select id="ob-where" class="form-control n-payment-select" style="width:150px">
 		            				<option>학생회관 뒤</option>
-		            				<option>기숙사 정문 (도착시간 +10분)</option>
+		            				<option>기숙사 식당 (도착시간 +10분)</option>
 			                    </select>
 		            		</td>
 	            		</tr>
@@ -381,10 +381,15 @@
 			}
 		}
 		<%if(user==null){%>
-		if(!confirm('입금하실 분의 성함이 \''+$('#guestname').val()+'\'님으로 등록됩니다. \n계속하시겠습니까?')) {
+		if(!confirm('입금자 성함 : ' + $('#guestname').val() + '\n' + '받는 위치 : ' + $('#ob-where').val() + '\n\n' + '계속하시겠습니까?' )) {
+			return;
+		}
+		<%} else {%>
+		if(!confirm('입금자 성함 : <%=user.getName()%> \n' + '받는 위치 : ' + $('#ob-where').val() + '\n\n' + '계속하시겠습니까?' )) {
 			return;
 		}
 		<%}%>
+		
 		var idxList = []; 
 		cartList.forEach(function(cart) {
 			console.log(cart);
@@ -478,22 +483,53 @@
 					    selected : true
 					}));
 					
-					for(var i=time_start[0]+1; i<d.getHours(); i++) {
+					var curWeek = d.getDay();
+					if(curWeek==0 || curWeek==6) {
+						// 주말
+						
+						console.log(d);
+						
+						if(d.getHours() == 12) {
+							$('#ob-time').append($('<option>', {
+							    text: '12시 30분 ', //+(time_start[1]>0?time_start[1]+'분':''),
+							    selected : true
+							}));
+							$('#ob-time').append($('<option>', {
+							    text: '18시 30분 ', //+(time_start[1]>0?time_start[1]+'분':''),
+							}));
+						} else if(d.getHours() == 18) {
+							$('#ob-time').append($('<option>', {
+							    text: '12시 30분 ', //+(time_start[1]>0?time_start[1]+'분':''),
+							    disabled : true
+							}));
+							$('#ob-time').append($('<option>', {
+							    text: '18시 30분 ', //+(time_start[1]>0?time_start[1]+'분':''),
+							    selected : true
+							}));
+						}
+						
+					} else {
+						// 평일
+						
+						for(var i=time_start[0]+1; i<d.getHours(); i++) {
 						$('#ob-time').append($('<option>', {
 						    text: i+'시 ', //+(time_start[1]>0?time_start[1]+'분':''),
 						    disabled : true
 						}));
-					}
-					for(var i=d.getHours(); i<=parseInt(time_end[0])+1; i++) {
-						if(i==14 || i==15 || i==16) {
-							continue;
 						}
-						var tf = i==d.getHours();
-						$('#ob-time').append($('<option>', {
-						    text: i+'시 ', //+(time_end[1]>0?time_end[1]+'분':''),
-						    selected : tf
-						}));
+						for(var i=d.getHours(); i<=parseInt(time_end[0])+1; i++) {
+							if(i==14 || i==15 || i==16) {
+								continue;
+							}
+							var tf = i==d.getHours();
+							$('#ob-time').append($('<option>', {
+							    text: i+'시 ', //+(time_end[1]>0?time_end[1]+'분':''),
+							    selected : tf
+							}));
+						}
 					}
+						
+					
 					
 				},
 				function() {

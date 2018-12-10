@@ -224,10 +224,11 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		int curWeek = cal.get(Calendar.DAY_OF_WEEK);
 		if( curWeek==Calendar.SUNDAY || curWeek==Calendar.SATURDAY ) {
 			// 주말
-			System.out.println("주말");
+			//System.out.println("주말");
 			
 			// 첫 주문 마감
 			Calendar firstorder = Calendar.getInstance();
+			firstorder.set(Calendar.DATE, cal.get(Calendar.DATE));
 			firstorder.set(Calendar.AM_PM, Calendar.PM);
 			firstorder.set(Calendar.HOUR, 0);
 			firstorder.set(Calendar.MINUTE, 0);
@@ -259,7 +260,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 						
 		} else {
 			// 평일
-			System.out.println("평일");
+			//System.out.println("평일");
 			
 			// 휴식시간 2시 ~ 4시
 			Calendar pass_start = Calendar.getInstance();
