@@ -167,8 +167,10 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		if( curWeek==Calendar.SUNDAY || curWeek==Calendar.SATURDAY ) {
 			// 주말
 			
+			/*
 			// 종료시간
 			Calendar holy_end = Calendar.getInstance();
+			holy_end.set(Calendar.DATE, cur.get(Calendar.DATE));
 			holy_end.set(Calendar.AM_PM, Calendar.PM);
 			holy_end.set(Calendar.HOUR, 6);
 			holy_end.set(Calendar.MINUTE, 0);
@@ -182,6 +184,24 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			}
 			
 			// 시작시간			
+			if(cur.compareTo(start) < 0) {
+				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+				cur.set(Calendar.SECOND, 0);
+			}
+			*/
+			
+			// 종료시간
+			if(cur.compareTo(end) >= 0) {
+				cur.add(Calendar.DATE, 1);
+				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+				cur.set(Calendar.SECOND, 0);
+			}
+			
+			// 시작시간
 			if(cur.compareTo(start) < 0) {
 				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
 				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
@@ -226,6 +246,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			// 주말
 			//System.out.println("주말");
 			
+			/*
 			// 첫 주문 마감
 			Calendar firstorder = Calendar.getInstance();
 			firstorder.set(Calendar.DATE, cal.get(Calendar.DATE));
@@ -243,6 +264,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			
 			// 휴식시간 12시 30분 ~ 17시 30분
 			Calendar pass_end = Calendar.getInstance();
+			pass_end.set(Calendar.DATE, cal.get(Calendar.DATE));
 			pass_end.set(Calendar.AM_PM, Calendar.PM);
 			pass_end.set(Calendar.HOUR, 6);
 			pass_end.set(Calendar.MINUTE, 0);
@@ -256,8 +278,76 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			}
 			
 			return cal;
+			*/
 			
-						
+			// 휴식시간 2시 ~ 5시  <-- 이부분만 평일과 다른 로직임
+			Calendar pass_start = Calendar.getInstance();
+			pass_start.set(Calendar.AM_PM, Calendar.PM);
+			pass_start.set(Calendar.HOUR, 0);
+			pass_start.set(Calendar.MINUTE, 29);
+			
+			Calendar pass_end = Calendar.getInstance();
+			pass_end.set(Calendar.AM_PM, Calendar.PM);
+			pass_end.set(Calendar.HOUR, 4);
+			pass_end.set(Calendar.MINUTE, 30);
+			
+			if((cal.compareTo(pass_start) >= 0) && (cal.compareTo(pass_end) < 0)) {
+				cal.set(Calendar.HOUR, 6);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				return cal;
+			}
+			// end 
+			
+			// 휴식시간 7시 ~ 8시
+			Calendar pass_start2 = Calendar.getInstance();
+			pass_start2.set(Calendar.AM_PM, Calendar.PM);
+			pass_start2.set(Calendar.HOUR, 6);
+			pass_start2.set(Calendar.MINUTE, 30);
+			pass_start2.set(Calendar.SECOND, 0);
+			
+			Calendar pass_end2 = Calendar.getInstance();
+			pass_end2.set(Calendar.AM_PM, Calendar.PM);
+			pass_end2.set(Calendar.HOUR, 7);
+			pass_end2.set(Calendar.MINUTE, 30);
+			pass_end2.set(Calendar.SECOND, 0);
+			
+			//System.out.println("cur : "+new Date(cal.getTimeInMillis()).toString());
+			//System.out.println("pass_start2 : "+new Date(pass_start2.getTimeInMillis()).toString());
+			
+			if((cal.compareTo(pass_start2) >= 0) && (cal.compareTo(pass_end2) < 0)) {
+				cal.set(Calendar.HOUR, 9);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				return cal;
+			}
+			
+			// 첫 배달
+			Calendar firstPorter = Calendar.getInstance();
+			firstPorter.setTime(cal.getTime());
+			firstPorter.set(Calendar.HOUR, 11);
+			firstPorter.set(Calendar.AM_PM, Calendar.AM);
+			firstPorter.set(Calendar.MINUTE, 30);
+			//firstPorter.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+			//firstPorter.set(Calendar.DATE, cal.get(Calendar.DATE));
+			
+			if(cal.compareTo(firstPorter) < 0) {
+				cal.set(Calendar.HOUR, firstPorter.get(Calendar.HOUR));
+				cal.set(Calendar.AM_PM, firstPorter.get(Calendar.AM_PM));
+				cal.set(Calendar.MINUTE, firstPorter.get(Calendar.MINUTE)-1);
+			}
+			
+			cal.set(Calendar.SECOND, 0);
+			if(cal.get(Calendar.MINUTE) >= 30) {
+				cal.set(Calendar.HOUR, (cal.get(Calendar.HOUR)+1));
+				cal.set(Calendar.MINUTE, 30);
+			} else {
+				cal.set(Calendar.MINUTE, 30);
+			}
+			
+			cal.add(Calendar.MINUTE, 30); // 배달시간 +30분
+			return cal;
+			
 		} else {
 			// 평일
 			//System.out.println("평일");
@@ -344,10 +434,11 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			final int amount = 1;			// 개수
 			
 			
-			for(int i=6; i<=7; i++) {
-				for(int j=0; j<60; j++) {
+			for(int i=0; i<=12; i++) {
+				for(int j=0; j<60; j=j+5) {
 					Calendar cur = Calendar.getInstance();
-					cur.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+					//cur.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+					cur.add(Calendar.DATE, 2);
 					cur.set(Calendar.AM_PM, Calendar.PM);
 					cur.set(Calendar.HOUR, i);
 					cur.set(Calendar.MINUTE, j);

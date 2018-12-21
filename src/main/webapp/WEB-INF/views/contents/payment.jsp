@@ -487,6 +487,7 @@
 					if(curWeek==0 || curWeek==6) {
 						// 주말
 						
+						/*
 						console.log(d);
 						
 						if(d.getHours() == 12) {
@@ -507,15 +508,33 @@
 							    selected : true
 							}));
 						}
+						*/
 						
+						for(var i=time_start[0]+1; i<d.getHours(); i++) {
+							$('#ob-time').append($('<option>', {
+							    text: i+'시 ', //+(time_start[1]>0?time_start[1]+'분':''),
+							    disabled : true
+							}));
+						}
+						for(var i=d.getHours(); i<=parseInt(time_end[0])+1; i++) {
+							if(i==14 || i==15 || i==16 || i==17) {
+								continue;
+							}
+							var tf = i==d.getHours();
+							$('#ob-time').append($('<option>', {
+							    text: i+'시 ', //+(time_end[1]>0?time_end[1]+'분':''),
+							    selected : tf
+							}));
+						}
+							
 					} else {
 						// 평일
 						
 						for(var i=time_start[0]+1; i<d.getHours(); i++) {
-						$('#ob-time').append($('<option>', {
-						    text: i+'시 ', //+(time_start[1]>0?time_start[1]+'분':''),
-						    disabled : true
-						}));
+							$('#ob-time').append($('<option>', {
+							    text: i+'시 ', //+(time_start[1]>0?time_start[1]+'분':''),
+							    disabled : true
+							}));
 						}
 						for(var i=d.getHours(); i<=parseInt(time_end[0])+1; i++) {
 							if(i==14 || i==15 || i==16) {
