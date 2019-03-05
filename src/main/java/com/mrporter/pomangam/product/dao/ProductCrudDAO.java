@@ -280,25 +280,26 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			return cal;
 			*/
 			
-			// 휴식시간 2시 ~ 5시  <-- 이부분만 평일과 다른 로직임
+			// 휴식시간 2시 ~ 4시  <-- 이부분만 평일과 다른 로직임
 			Calendar pass_start = Calendar.getInstance();
 			pass_start.set(Calendar.AM_PM, Calendar.PM);
-			pass_start.set(Calendar.HOUR, 0);
+			pass_start.set(Calendar.HOUR, 1);
 			pass_start.set(Calendar.MINUTE, 29);
 			
 			Calendar pass_end = Calendar.getInstance();
 			pass_end.set(Calendar.AM_PM, Calendar.PM);
-			pass_end.set(Calendar.HOUR, 4);
+			pass_end.set(Calendar.HOUR, 3);
 			pass_end.set(Calendar.MINUTE, 30);
 			
 			if((cal.compareTo(pass_start) >= 0) && (cal.compareTo(pass_end) < 0)) {
-				cal.set(Calendar.HOUR, 6);
+				cal.set(Calendar.HOUR, 5);
 				cal.set(Calendar.MINUTE, 0);
 				cal.set(Calendar.SECOND, 0);
 				return cal;
 			}
 			// end 
 			
+			/*
 			// 휴식시간 7시 ~ 8시
 			Calendar pass_start2 = Calendar.getInstance();
 			pass_start2.set(Calendar.AM_PM, Calendar.PM);
@@ -321,6 +322,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 				cal.set(Calendar.SECOND, 0);
 				return cal;
 			}
+			*/
 			
 			// 첫 배달
 			Calendar firstPorter = Calendar.getInstance();
@@ -355,7 +357,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			// 휴식시간 2시 ~ 4시
 			Calendar pass_start = Calendar.getInstance();
 			pass_start.set(Calendar.AM_PM, Calendar.PM);
-			pass_start.set(Calendar.HOUR, 0);
+			pass_start.set(Calendar.HOUR, 1);
 			pass_start.set(Calendar.MINUTE, 29);
 			
 			Calendar pass_end = Calendar.getInstance();
@@ -370,7 +372,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 				return cal;
 			}
 			
-			
+			/*
 			// 휴식시간 7시 ~ 8시
 			Calendar pass_start2 = Calendar.getInstance();
 			pass_start2.set(Calendar.AM_PM, Calendar.PM);
@@ -393,6 +395,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 				cal.set(Calendar.SECOND, 0);
 				return cal;
 			}
+			*/
 			
 			// 첫 배달
 			Calendar firstPorter = Calendar.getInstance();
@@ -429,7 +432,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			//Calendar cur = Calendar.getInstance();
 			//System.out.println("cur : "+new Date(cur.getTimeInMillis()).toString());
 			
-			final int idx_restaurant = 1;	// 맘스터치
+			final int idx_restaurant = 9;	// 맘스터치
 			final int idx_product = 1;		// 화이트갈릭버거
 			final int amount = 1;			// 개수
 			
@@ -438,7 +441,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 				for(int j=0; j<60; j=j+5) {
 					Calendar cur = Calendar.getInstance();
 					//cur.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-					cur.add(Calendar.DATE, 2);
+					//cur.add(Calendar.DATE, 2);
 					cur.set(Calendar.AM_PM, Calendar.PM);
 					cur.set(Calendar.HOUR, i);
 					cur.set(Calendar.MINUTE, j);

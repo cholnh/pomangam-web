@@ -517,7 +517,7 @@
 							}));
 						}
 						for(var i=d.getHours(); i<=parseInt(time_end[0])+1; i++) {
-							if(i==14 || i==15 || i==16 || i==17) {
+							if(i==15 || i==16) {
 								continue;
 							}
 							var tf = i==d.getHours();
@@ -537,7 +537,7 @@
 							}));
 						}
 						for(var i=d.getHours(); i<=parseInt(time_end[0])+1; i++) {
-							if(i==14 || i==15 || i==16) {
+							if(i==15 || i==16) {
 								continue;
 							}
 							var tf = i==d.getHours();
