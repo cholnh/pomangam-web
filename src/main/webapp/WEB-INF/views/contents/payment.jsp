@@ -356,7 +356,7 @@
 	changeTime();
 	
 	
-	function  pay() {
+	function pay() {
 		if(!$('#ob-time').val()) {
 			$('#ob-time').focus();
 			toast('포만감','받는 시간을 확인해 주세요.','warning');
@@ -392,7 +392,7 @@
 		
 		var idxList = []; 
 		cartList.forEach(function(cart) {
-			console.log(cart);
+			//console.log(cart);
 			ajax('./payment/insert.do', 
 					{
 						idx_target : cart.idx_target,

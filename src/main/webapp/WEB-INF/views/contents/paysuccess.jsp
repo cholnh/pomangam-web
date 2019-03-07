@@ -69,6 +69,11 @@
 	$('#ob-footerBtn').hide();
 	$('#test').hide();
 	
+	history.pushState(null, null, location.href);
+	    window.onpopstate = function () {
+	        history.go(1);
+	};
+	
 	function copy(result) {
 		$('#test').show();
 		$('#test').val(result);

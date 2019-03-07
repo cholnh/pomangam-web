@@ -79,7 +79,7 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 				"FROM " + 
 					"restaurant " +
 				"WHERE " + 
-					"idx_target = ? ORDER BY RAND()", idx);
+					"idx_target = ? ORDER BY sequence", idx); // ORDER BY RAND()
 		/*
 		List<Map<String, Object>> lom = sqlQuery(
 				"SELECT " +

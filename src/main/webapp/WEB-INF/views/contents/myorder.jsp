@@ -59,6 +59,15 @@
 								case 3:
 									out.println("배달 완료");
 									break;
+								case 4:
+									out.println("취소");
+									break;
+								case 5:
+									out.println("환불");
+									break;
+								case 6:
+									out.println("주문발송실패");
+									break;
 								}
 							%> -
 						</span><br>

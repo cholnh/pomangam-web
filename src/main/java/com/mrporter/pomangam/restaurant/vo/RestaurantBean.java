@@ -18,4 +18,5 @@ public class RestaurantBean {
 	String start, end;
 	Integer isActive, isPause;
 	String pause_description;
+	Integer sequence;
 }
