@@ -64,6 +64,8 @@
 	        <span>
 	        	<%=restaurant.getDescription() %>
 	        </span>
+	        <br><br> 
+	        <a href="#country_origin"><b>원산지 표기 보기</b></a>
 		</div>
 		
 		<!--
@@ -149,6 +151,12 @@
 					<span>※ 위 가격은 배달가격이 포함된 가격입니다.<br>기존 업체가 제공하는 가격과 상이할 수 있습니다.</span>
 					<br><br>
 				</div>
+				<hr>
+				<div id="country_origin" class="n-center">
+					<h3><b>원산지 표기</b></h3>
+					<span><%=(restaurant.getCountry_origin()==null?"":restaurant.getCountry_origin()) %></span>
+					<br><br>
+				</div>
 			</div>
 
 			
@@ -193,6 +201,7 @@
 		location.href='./restaurant.do?idx='+idx+
 					'&category='+t;
 	}
+	
 	
 	</script>
 

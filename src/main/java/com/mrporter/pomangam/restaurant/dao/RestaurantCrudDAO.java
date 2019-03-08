@@ -70,7 +70,7 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 					"idx = ?", idx);
 		return lom.get(0).get("end")+"";
 	}
-	
+
 	public List<RestaurantBean> getBeanWithLimitCount(Integer idx) throws Exception {
 		List<RestaurantBean> result = null;
 		List<Map<String, Object>> lom = sqlQuery(

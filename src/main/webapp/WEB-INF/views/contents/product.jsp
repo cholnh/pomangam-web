@@ -66,8 +66,11 @@
             <a class="valign-middle n-noborder">
                 <img src="<%=product.getImgpath() %>" alt="<%=product.getName() %>" class="n-product-icon n-card" />
             </a>
-            <div style="margin:12px">
+            <div style="margin-top:12px"> 
                 <span style="font-size: 20px; font-weight: bold;"><%=product.getName() %></span>
+            </div>
+             <div style="margin-bottom:25px">
+                <span style="font-size: 13px; color: #b3b3b3; "><%=(product.getSub_description()==null?"":product.getSub_description()) %></span>
             </div>
             <div style="margin-top:0px"> 
             	<a class="btn-primary " style="font-size:15px!important;padding:7px" >

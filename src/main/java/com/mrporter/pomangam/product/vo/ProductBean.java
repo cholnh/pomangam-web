@@ -19,4 +19,5 @@ public class ProductBean {
 	Integer unit_amount, unit_time, cnt_sell;
 	Integer isActive, type; // 1 : main  / 2 : sub
 	Integer sequence;
+	String sub_description;
 }

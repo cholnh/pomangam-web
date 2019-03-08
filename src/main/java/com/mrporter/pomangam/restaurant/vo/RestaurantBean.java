@@ -19,4 +19,5 @@ public class RestaurantBean {
 	Integer isActive, isPause;
 	String pause_description;
 	Integer sequence;
+	String country_origin;
 }
