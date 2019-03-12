@@ -85,7 +85,11 @@
 					src="resources/img/icon/facebook.png">
 				</a> <a href="https://www.instagram.com/pomangam_official"
 					title="instagram"> <img src="resources/img/icon/instagram.png">
-				</a> <br> <span style="font-size: 11px;">Pomangam Official</span>
+				</a> 
+				<a href="http://pf.kakao.com/_xlxbhlj" title="kakaoplus"> <img
+					src="resources/img/icon/kakao.png">
+				</a>
+				<br> <span style="font-size: 11px;">Pomangam Official</span>
 			</div>
 
 			<!-- 광고 sample -->

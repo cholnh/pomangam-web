@@ -90,7 +90,7 @@
 													학생회관 뒤
 												</td>
 												<td>
-													오후 12시 / 1시
+													오후 12시 / 1시 / 2시
 												</td>
 												<td>
 													오후 5시 / 6시 / 7시
@@ -192,6 +192,12 @@
 										<div class="box-row">
 											<span class="box-cell valign-middle n-target-subtitle" style="color:red;font-weight:bold;">
 												<%=bean.getPause_description() %>
+											</span>
+										</div>
+										<%} else if(bean.getSub_description() != null) {%>
+										<div class="box-row">
+											<span class="box-cell valign-middle n-target-subtitle" style="color:red;font-weight:bold;">
+												<%=bean.getSub_description() %>
 											</span>
 										</div>
 										<%} %>

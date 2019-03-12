@@ -56,11 +56,15 @@
 	            <% out.print(Number.numberWithCommas(restaurant.getCnt_comment())); %>
             </b>
             <br>
-             -->
+             
            	<span style="font-size:20px"><b><%=restaurant.getStart() %> ~ <%=restaurant.getEnd() %></b></span><br>
             <i class="pull-xs fa fa-location-arrow"></i>
             	<%=restaurant.getLocation() %>
 	        <br>
+	         -->
+	        <%if(restaurant.getSub_description() != null) { %>
+	        <span style="font-size:18px"><%=restaurant.getSub_description() %></span><br>
+	        <%} %>
 	        <span>
 	        	<%=restaurant.getDescription() %>
 	        </span>
