@@ -90,11 +90,17 @@
                     	<% out.print(Number.numberWithCommas(product.getPrice())); %>원
                 </span>
             </div>
-			<div class="n-margin">
+			<div class="n-margin" style="margin-top:16px">
 				<button class="btn" onclick="modalDetail('cart')"
 				style="background-color: darkgray; color:white;font-size:20px;font-weight:bold">장바구니 담기</button>
 				<button class="btn btn-primary" onclick="modalDetail('direct')"
 				style="font-size:20px;font-weight:bold">바로 주문</button>
+				<br><br>
+				<span style="color:#b3b3b3">
+	            	※각 업체마다 생산량이 한정되어있어, 선착순 주문제로 주문을 받고 있습니다.<br>
+					이로 인해 주문이 조기 마감될 수 있습니다.
+				</span>
+				<br>
 			</div>
 			
         </div>

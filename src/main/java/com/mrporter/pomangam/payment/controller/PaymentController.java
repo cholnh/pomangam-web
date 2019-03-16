@@ -233,6 +233,15 @@ public class PaymentController {
 			//response.sendRedirect("../paysuccess.do");
 			session.removeAttribute("cartList");
 			//indexDAO.setStatus(1, idx);
+			
+			
+			
+			
+			/* 이곳에 indexDAO.sendOrderMsg(idx)  */
+			
+			
+			
+			
 			new TargetCrudDAO().addCountOrder(curTarget);
 			new ProductCrudDAO().addCountSell(idx);
 			return new Status(200);

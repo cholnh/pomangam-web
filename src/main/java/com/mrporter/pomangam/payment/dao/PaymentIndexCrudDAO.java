@@ -31,6 +31,61 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 		super(TABLENAME);
 	}
 	
+	public void sendOrderMsg(Integer idx) throws Exception {
+		String phone_number = "821064784899";
+		String tmplId = "pmg_order_info_1";
+		
+		String username = "최낙형";
+		int orderQuantity = 2;
+		String orderStatus = "예약완료";
+		int orderNum = 12;
+		String receive_date = "3/12 화요일";
+		String receive_time = "18";
+		String subinfo = "기숙사의 경우 10분 정도 차이가 날 수 있습니다.";
+		String orderInfo = 	"① 피자스쿨 (02-1234-1234)\n" +
+							"    - 불고기피자 (1개)\n" +
+							"    - 콜라(1.25L) (1개)\n" +
+							"② 맘스터치 (02-1234-1234)\n" +
+							"    - 싸이버거 세트 (2개)";
+		String bank_name = "카카오뱅크";
+		String bank_account = "3333-05-8294394";
+		String bank_username = "최낙형";
+		int totalprice = 21000;
+		
+		String text = 
+				"[포만감 주문안내]" + System.lineSeparator() +
+				username + "님의 주문 " + orderQuantity + "건이 '" + orderStatus + "'되었습니다." + System.lineSeparator() +
+				"▷ 주문번호 : " + orderNum + "번" + System.lineSeparator() +
+				"▷ 도착시간 : " + receive_time + "시 (" + receive_date + ")" + System.lineSeparator() +
+				"※ " + subinfo  + System.lineSeparator() + System.lineSeparator() +
+				
+				"[주문내역]" + System.lineSeparator() +
+				orderInfo + System.lineSeparator() + System.lineSeparator() +
+				
+				"[입금전용계좌]" + System.lineSeparator() +
+				"▷ " + bank_name + " " + bank_account + System.lineSeparator() +
+				"▷ " + totalprice + "원 (예금주 " + bank_username + ")" + System.lineSeparator() + System.lineSeparator() +
+				
+				"■ 포만감의 소식은 플친에서 확인!" + System.lineSeparator() +
+				"http://pf.kakao.com/_xlxbhlj " + System.lineSeparator() +
+				"(광고성정보 포함)";
+		
+		System.out.println(text);
+		
+		/*
+		Object obj = BizmApi.send(phone_number, text, tmplId).getBody();
+		Gson gson = new Gson();
+		List<ApiResultBean> bean = gson.fromJson(obj+"", new TypeToken<List<ApiResultBean>>() {}.getType());
+		if(!bean.get(0).getCode().equals("success")) {
+			// fail
+			
+		} else {
+			// success
+			
+		}
+		*/
+	}
+	
 	public void setStatusDone() throws Exception {
 		int hour = Calendar.getInstance().get(Calendar.HOUR);
 		if(Calendar.getInstance().get(Calendar.AM_PM) == Calendar.PM) {
@@ -43,7 +98,7 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 	
 	public static void main(String...args) {
 		try {
-			new PaymentIndexCrudDAO().setStatusDone();
+			new PaymentIndexCrudDAO().sendOrderMsg(1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
