@@ -242,8 +242,17 @@
 									<span id="detailname-<%=bean.getIdx()%>"><%=bean.getName() %></span> 추가 <span name="span-set"> (<span name="amount"></span>세트 적용) </span>
 								</td>
 								<td>
-									<input name="detail" id="detail-<%=bean.getIdx()%>-<%=bean.getPrice() %>" type="number" pattern="[0-9]*" inputmode="numeric"
-                						style="width:35px; margin-left:6px;" min=0 value=0>
+									<input class="additionalDetail" name="detail" id="detail-<%=bean.getIdx()%>-<%=bean.getPrice() %>" type="number" pattern="[0-9]*" inputmode="numeric"
+                						style="width:35px; margin-left:6px;" 
+                						<%if(bean.getMinimum()!=null) {%>
+                							min=<%=bean.getMinimum() %>
+                						<%} else {%>
+                							min=0
+                						<%} %>
+                						<%if(bean.getMaximum()!=null) {%>
+                							max=<%=bean.getMaximum() %>
+                						<%} %>
+                							value=0>
 								</td>
 								<td>
 									<%=bean.getPrice() %>원
@@ -872,6 +881,19 @@
 	<%}%>
 	
 	
+	$('.additionalDetail').on('mouseup', function() { $(this).select(); });
+	$('.additionalDetail').on('change', function() { 
+		
+		if(this.min && (this.min > this.value)) {
+			this.value = this.min;
+			toast('포만감','최소 ' + this.min + '개 까지 선택 가능합니다.','warning');
+		}
+		if(this.max && (this.value > this.max)) {
+			this.value = this.max;
+			toast('포만감','최대 ' + this.max + '개 까지 선택 가능합니다.','warning');
+		}
+
+	});
 	</script>
 </body>
 </html>

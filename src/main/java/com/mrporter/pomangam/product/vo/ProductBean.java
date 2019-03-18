@@ -20,5 +20,6 @@ public class ProductBean {
 	Integer isActive, type; // 1 : main  / 2 : sub
 	Integer sequence;
 	String sub_description;
-	Integer commission_prc;
+	Integer c_commission_prc;
+	Integer s_commission_prc;
 }

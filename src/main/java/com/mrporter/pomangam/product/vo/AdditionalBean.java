@@ -16,4 +16,6 @@ public class AdditionalBean {
 	String name;
 	Integer price;
 	String imgpath;
+	Integer minimum;
+	Integer maximum;
 }
