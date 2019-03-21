@@ -311,7 +311,6 @@
 	            		<%} %>
 	            	</tbody>
 	            </table>
-	          
 	            <div class="center">
 	            	<label class="custom-control custom-checkbox" style="width:150px;padding:0px">
 	                    <input id="cashReceipt" type="checkbox" class="custom-control-input" unchecked="">
@@ -322,6 +321,19 @@
 		</div>
 		
         <hr class="n-payment-hr">
+        
+        <div class="center agree-center" style="margin-bottom:64px;">
+	        <label class="custom-control custom-checkbox" style="">
+	           <input type="checkbox" id="agree" class="custom-control-input" required>
+	           <span class="custom-control-indicator"></span>
+	           <span style="font-size:15px;font-weight:bold">약관 및 개인정보처리방침 동의 
+	           <a onclick="$('#terms').show();$('#privacy').show();"><b style="font-size:11px;font-weight:bold">보기▽</b></a>
+	           </span>
+	        </label>
+	        <a id="terms" style="display:none;" href="javascript:window.open('./terms.do', '이용약관 새창', 'width=1000, height=700, toolbar=no, menubar=no, resizable=yes')"><b>▶ 이용약관 확인</b></a><br>
+	        <a id="privacy" style="display:none;" href="javascript:window.open('./privacy.do', '개인정보처리방침 새창', 'width=1000, height=700, toolbar=no, menubar=no, resizable=yes')"><b>▶ 개인정보처리방침 확인</b></a>
+        </div>
+        
 		<div class="n-target-mobilebtn n-on-mobile">
 			<button class="btn btn-primary" onclick="pay()"
 			style="width:100%;height:100%;font-size:20px;font-weight:bold">
@@ -357,6 +369,10 @@
 	
 	
 	function pay() {
+		if(!$('input:checkbox[id="agree"]').is(":checked")) {
+			toast('포만감','포만감 이용약관과 개인정보처리방침에 대한 안내에 동의해주세요.','warning');
+			return;
+		}
 		if(!$('#ob-time').val()) {
 			$('#ob-time').focus();
 			toast('포만감','받는 시간을 확인해 주세요.','warning');

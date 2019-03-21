@@ -63,7 +63,7 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 		cal.setTime(nDate);
 		
 		int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-		String receive_date = cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.DAY_OF_MONTH) + " " + getDayKor(dayNum) + "요일"; 
+		String receive_date = (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.DAY_OF_MONTH) + " " + getDayKor(dayNum) + "요일"; 
 		String receive_time = map.get("receive_time")+"";
 		String subinfo = "기숙사의 경우 10분 정도 차이가 날 수 있습니다.";
 		
@@ -117,6 +117,7 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 		String bank_username = mapDAO.getValue("bank_username");
 		int totalprice = Integer.parseInt(map.get("totalprice")+"");
 		String info = 	"포만감의 소식은 플친에서 확인!" + System.lineSeparator() +
+						"■ 주문문의 : 플친 → [채팅하기]" + System.lineSeparator() +
 						"http://pf.kakao.com/_xlxbhlj\n";
 		
 		String text = 

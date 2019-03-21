@@ -122,6 +122,8 @@ body {
 
 .n-desktop-show{display:none}
 
+.agree-center{width:30%}
+
 @media (min-width:601px){.n-twothird{width:66.66666%}.n-third{width:33.33333%}.n-half{width:49.99999%}}
 
 @media (min-width:769px){.n-desktop-show{display:block}.n-product-nutrient{width:60%}.n-target-mobilebtn{display:none}.n-payment-table{margin-left:20%}.n-payment-table2{margin-left:15%}.n-main-category{margin:12px}.n-mobile-head{margin-top:200px}.n-mobilesupport{}.n-mobilesupport-form{padding-left:48px;padding-right:48px;margin-top:48px}.n-title-bigchar{font-size:72px}.n-number-bigchar{font-size:48px;font-weight: 600}.n-target-category{font-size:15px}.n-restaurant-layout{float:left}.n-on-mobile{display:none}.n-on-pc{display:block}.n-product-recommand{height:90px;width:90px;padding:3px;margin:12px}}
