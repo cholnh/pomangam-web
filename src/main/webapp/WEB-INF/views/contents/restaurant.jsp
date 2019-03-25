@@ -137,7 +137,16 @@
 							</a>
 							<div style="cursor: pointer;">
 								<div style="margin-top: 3px; height:60px">
-									<b><%=bean.getName() %></b> <br> <% out.print(Number.numberWithCommas(bean.getPrice())); %>원
+									<b><%=bean.getName() %></b><br> 
+									<%if(bean.getDiscount_prc()==null || bean.getDiscount_prc().intValue()<=0) { %>
+										<% out.print(Number.numberWithCommas(bean.getPrice())); %>원
+									<%} else { %>
+										<del style="color:#b3b3b3"><% out.print(Number.numberWithCommas((bean.getPrice().intValue()+bean.getDiscount_prc().intValue()))); %>원</del><br>
+										<% out.print(Number.numberWithCommas(bean.getPrice())); %>원
+									<%} %>
+									
+
+									
 								</div>
 								<div style="">
 								<!-- 

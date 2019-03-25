@@ -29,8 +29,12 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 		sqlUpdate("UPDATE restaurant SET isPause = 1");
 	}
 	
-	public void closeExceptionalRestaurant() throws Exception {
-		sqlUpdate("UPDATE restaurant SET isPause = 1 where idx = ", 7);
+	public void closeExceptionalRestaurant(int res_index) throws Exception {
+		sqlUpdate("UPDATE restaurant SET isPause = 1 where idx = ?", res_index);
+	}
+	
+	public void openExceptionalRestaurant(int res_index) throws Exception {
+		sqlUpdate("UPDATE restaurant SET isPause = 0 where idx = ?", res_index);
 	}
 	
 	public void openRestaurant() throws Exception {

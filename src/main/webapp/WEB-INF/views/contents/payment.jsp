@@ -305,7 +305,7 @@
 		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 비밀번호 4자리
 		            		</td>
 		            		<td>
-		            			<input class="form-control" type="tel" required>
+		            			<input class="form-control" type="tel" id="password" required>
 		            		</td>
 	            		</tr>
 	            		<%} %>

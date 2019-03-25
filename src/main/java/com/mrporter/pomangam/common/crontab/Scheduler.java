@@ -22,18 +22,20 @@ public class Scheduler {
 		new PaymentIndexCrudDAO().setStatusDone();
 	}
 
+	/*
 	@Scheduled(cron="0 30 18 * * 5")
 	public void closeRestaurant() throws Exception {
 		//new RestaurantCrudDAO().closeRestaurant();
 	}
+	*/
 	
-	@Scheduled(cron="0 0 18 * * 6")
+	@Scheduled(cron="0 30 18 * * 6") // 토요일 저녁 가마로강정 닫기 
 	public void closeExceptionalRestaurant() throws Exception {
-		new RestaurantCrudDAO().closeExceptionalRestaurant();
+		new RestaurantCrudDAO().closeExceptionalRestaurant(7);
 	}
 	
-	@Scheduled(cron="0 30 19 * * 0")
+	@Scheduled(cron="0 30 18 * * 0") // 일요일 저녁 가마로강정 열기
 	public void openRestaurant() throws Exception {
-		new RestaurantCrudDAO().openRestaurant();
+		new RestaurantCrudDAO().openExceptionalRestaurant(7);
 	}
 }
