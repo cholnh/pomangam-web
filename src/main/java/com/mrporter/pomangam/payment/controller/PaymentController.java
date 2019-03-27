@@ -25,6 +25,7 @@ import com.mrporter.pomangam.common.pattern.vo.Status;
 import com.mrporter.pomangam.common.security.model.domain.User;
 import com.mrporter.pomangam.common.util.Date;
 import com.mrporter.pomangam.common.util.Ip;
+import com.mrporter.pomangam.payment.dao.CouponCrudDAO;
 import com.mrporter.pomangam.payment.dao.PaymentCrudDAO;
 import com.mrporter.pomangam.payment.dao.PaymentIndexCrudDAO;
 import com.mrporter.pomangam.payment.vo.PaymentBean;
@@ -85,6 +86,12 @@ public class PaymentController {
 		model.addObject("bank_name", map.getValue("bank_name"));
 		model.addObject("bank_account", map.getValue("bank_account"));
 		model.addObject("bank_username", map.getValue("bank_username"));
+		
+		String userjson = (String) session.getAttribute("user");
+		User user = new Gson().fromJson(userjson, new TypeToken<User>() {}.getType());
+		if(user != null) {
+			model.addObject("user_cp", new CouponCrudDAO().findByUsername(user.getUsername()));
+		}
 		
 		return model;
 	}

@@ -1,3 +1,4 @@
+<%@page import="com.mrporter.pomangam.payment.vo.CouponBean"%>
 <%@page import="com.mrporter.pomangam.common.security.model.domain.User"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
@@ -49,6 +50,9 @@
 		
 		String userjson = (String) request.getSession().getAttribute("user");
 		User user = new Gson().fromJson(userjson, new TypeToken<User>() {}.getType());
+		
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<CouponBean> cplist = (List) request.getAttribute("user_cp");
 	%>
 
 	<!-- Navbar -->
@@ -183,20 +187,47 @@
             						style="font-size:13px!important;padding:4px;margin-left:12px;margin-bottom:4px">상세</button>
             				</td>
             			</tr>
-            			<!-- 
+            			<tr>
+            				<td>
+            					&nbsp;
+            				</td>
+            			</tr>
+            			<%if(user != null) {%>
             			<tr>
             				<td>
             					할인 쿠폰 :
             				</td>
             				<td colspan=2>
-            					<select class="form-control m-b-2 n-payment-select">
-		                            <option>8월 할인 쿠폰</option>
-		                            <option>8월 할인 쿠폰</option>
-		                            <option>8월 할인 쿠폰</option>
+            					<select class="form-control m-b-2 n-payment-select" id="cpselect">
+            						<option value="non">선택 안 함</option>
+            						<%for(CouponBean cp : cplist) {%>
+            							<option value="<%=cp.getCpno()%>"><%=cp.getCpname() %></option>
+            						<%} %>
 		                        </select>
             				</td>
             			</tr>
-            			 -->
+            			<%} %>
+            			<tr>
+            				<td>
+            					쿠폰 입력 :
+            				</td>
+            				<td>
+            					<input class="form-control" type="text" id="cpinput" required>
+            				</td>
+            				<td>
+            					<button class="btn btn-primary" id="cpbtn"
+            						style="font-size:13px!important;padding:4px;margin-left:12px;margin-bottom:4px">적용</button>
+            				</td>
+            			</tr>
+            			
+            			<tr>
+            				<td>
+            				</td>
+            				<td colspan=2>
+            					<span style="color:grey" id="cpinfo"></span>
+            				</td>
+            			</tr>
+            			
             			<tr>
             				<td colspan=3><hr></td>
             			</tr>
@@ -207,7 +238,7 @@
             				<td >
             					<% 
             						String finalPrice = Number.numberWithCommas(sumPrice); %>
-            					<b><%=finalPrice %>원</b>
+            					<b><span class="totalp1"><%=finalPrice %></span>원</b>
             				</td>
             			</tr>
             		</tbody>
@@ -337,13 +368,13 @@
 		<div class="n-target-mobilebtn n-on-mobile">
 			<button class="btn btn-primary" onclick="pay()"
 			style="width:100%;height:100%;font-size:20px;font-weight:bold">
-				<%=finalPrice %>원 결제하기
+				<span class="totalp1"><%=finalPrice %></span>원 결제하기
 			</button>
 		</div>
         <div class="n-center n-on-pc" style="margin-bottom: 64px; margin-top:32px">
             <button class="btn btn-primary" onclick="pay()"
             style="width:40%;font-size:20px;font-weight:bold">
-            	<%=finalPrice %>원 결제하기
+            	<span class="totalp1"><%=finalPrice %></span>원 결제하기
             </button>
         </div>
 	</div>
@@ -572,6 +603,43 @@
 				}
 		);
 	}
+	
+	$('#cpbtn').on('click', function(e) {
+		var cpno = $('#cpinput').val();
+		
+		ajax('./coupon/findbycpno.do', 
+				{
+					cpno : cpno
+				},
+				true,
+				function(data) {
+					if(data) {
+						var cp_prc = data.discount_prc;
+					
+						if(data.cpname) {
+							$('#cpinfo').text(data.cpname+' - '+cp_prc+'원');
+						} else {
+							$('#cpinfo').text(data.discount_prc+'원');
+						}
+						if(<%=sumPrice%> < cp_prc) {
+							$('.totalp1').text(0);
+						} else {
+							$('.totalp1').text(numberWithCommas(<%=sumPrice%>-cp_prc));
+						}
+						
+					} else {
+						toast('포만감','사용 불가능 한 쿠폰입니다.','warning');
+						$('#cpinfo').text('');
+					}
+				},
+				function() {
+					toast('포만감','네트워크 오류','warning');
+				}
+		);
+		
+		
+		console.log(cpno);
+	});
 	
 	/*
 	changeTime();
