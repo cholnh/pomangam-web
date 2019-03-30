@@ -28,6 +28,7 @@ import com.mrporter.pomangam.common.util.Ip;
 import com.mrporter.pomangam.payment.dao.CouponCrudDAO;
 import com.mrporter.pomangam.payment.dao.PaymentCrudDAO;
 import com.mrporter.pomangam.payment.dao.PaymentIndexCrudDAO;
+import com.mrporter.pomangam.payment.vo.CouponBean;
 import com.mrporter.pomangam.payment.vo.PaymentBean;
 import com.mrporter.pomangam.payment.vo.PaymentIndexBean;
 import com.mrporter.pomangam.product.dao.ProductCrudDAO;
@@ -189,6 +190,7 @@ public class PaymentController {
 		try {
 		
 		PaymentIndexCrudDAO indexDAO = new PaymentIndexCrudDAO();
+		CouponCrudDAO cpDAO = new CouponCrudDAO();
 		//Random rand = new Random();
 		//String pw = rand.nextInt(10) + "" + rand.nextInt(10);
 		//bean.setPassword(pw);
@@ -197,7 +199,7 @@ public class PaymentController {
 		bean.setIdx_box(indexDAO.makeBoxNumber(bean.getIdx_target(), bean.getReceive_date(), bean.getReceive_time()));
 		bean.setStatus(0); // 0 : 결제 대기, 1 : 결제 완료, 2 : 결제 실패, 3: 배달 완료
 		bean.setLocation("web [" + Ip.getInfo() + "]");
-		bean.setTotalprice(indexDAO.getTotalPrice(bean.getIdxes_payment()));
+		
 
 		Object obj = request.getSession().getAttribute("user");
 		if(obj != null) {
@@ -206,6 +208,22 @@ public class PaymentController {
 			bean.setMember_name(user.getName());	// 유저 이름
 			bean.setPhonenumber(user.getPhonenumber());
 		}
+		
+		int totalPrice = indexDAO.getTotalPrice(bean.getIdxes_payment());
+		String cpno = bean.getCpno();
+		if(cpno!=null && !cpno.equals("")) {
+			CouponBean cp = cpDAO.findByCpno(cpno);
+			if(cp!=null) {
+				totalPrice -= cp.getDiscount_prc().intValue();
+				if(bean.getUsername() != null) {
+					cpDAO.useCoupon(bean.getUsername(), cpno);
+				} else {
+					cpDAO.useCoupon(bean.getGuestname(), cpno);
+				}
+			}
+		}
+		
+		bean.setTotalprice(totalPrice);
 		
 		Integer idx = indexDAO.insert(bean);
 		

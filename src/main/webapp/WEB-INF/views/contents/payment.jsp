@@ -188,9 +188,7 @@
             				</td>
             			</tr>
             			<tr>
-            				<td>
-            					&nbsp;
-            				</td>
+            				<td colspan=3><hr></td>
             			</tr>
             			<%if(user != null) {%>
             			<tr>
@@ -223,8 +221,12 @@
             			<tr>
             				<td>
             				</td>
-            				<td colspan=2>
+            				<td>
             					<span style="color:grey" id="cpinfo"></span>
+            				</td>
+            				<td>
+            					<button class="btn btn-primary" id="cpcancle"
+            						style="font-size:13px!important;padding:4px;margin-left:12px;margin-bottom:4px; display:none">취소</button>
             				</td>
             			</tr>
             			
@@ -463,7 +465,9 @@
 			);
 		});
 		var cur = new Date();
-		
+		var cpno = $('#cpselect').val() == 'non' 
+						? $('#cpinput').val()
+						:  $('#cpselect').val();
 		ajax('./payment/insertindex.do', 
 				{
 					<%if(user == null) {%>
@@ -476,7 +480,8 @@
 					receive_time : $('#ob-time').val(),
 					password : $('#password').val(),
 					cashreceipt : $("input:checkbox[id='cashReceipt']").is(":checked") ? 'true' : 'false',
-					where : $('#ob-where').val()
+					where : $('#ob-where').val(),
+					cpno : cpno
 				},
 				false,
 				function(status) {
@@ -604,8 +609,18 @@
 		);
 	}
 	
-	$('#cpbtn').on('click', function(e) {
-		var cpno = $('#cpinput').val();
+	$('#cpselect').change(function(e) {
+		var cpno = $('#cpselect').val();
+	
+		if(!cpno) {
+			return;
+		}
+		if(cpno && cpno == 'non') {
+			$('#cpinfo').text('');
+			$('.totalp1').text(numberWithCommas(<%=sumPrice%>));
+			$('#cpcancle').hide();
+			return;
+		}
 		
 		ajax('./coupon/findbycpno.do', 
 				{
@@ -626,7 +641,8 @@
 						} else {
 							$('.totalp1').text(numberWithCommas(<%=sumPrice%>-cp_prc));
 						}
-						
+						$('#cpcancle').show();
+						$('#cpinput').val('');
 					} else {
 						toast('포만감','사용 불가능 한 쿠폰입니다.','warning');
 						$('#cpinfo').text('');
@@ -637,8 +653,53 @@
 				}
 		);
 		
+	});
+	
+	$('#cpcancle').on('click', function(e) {
+		$('#cpcancle').hide();
+		$('#cpselect').val('non');
+		$('#cpinput').val('');
+		$('#cpinfo').text('');
+		$('.totalp1').text(numberWithCommas(<%=sumPrice%>));
+	});
+	
+	$('#cpbtn').on('click', function(e) {
+		var cpno = $('#cpinput').val().replace(/\s/gi, "");
+		if(cpno.length <= 0) {
+			toast('포만감','쿠폰 번호를 입력해 주세요.','warning');
+			return;
+		}
 		
-		console.log(cpno);
+		ajax('./coupon/findbycpno.do', 
+				{
+					cpno : cpno
+				},
+				true,
+				function(data) {
+					if(data) {
+						var cp_prc = data.discount_prc;
+					
+						if(data.cpname) {
+							$('#cpinfo').text(data.cpname+' - '+cp_prc+'원');
+						} else {
+							$('#cpinfo').text(data.discount_prc+'원');
+						}
+						if(<%=sumPrice%> < cp_prc) {
+							$('.totalp1').text(0);
+						} else {
+							$('.totalp1').text(numberWithCommas(<%=sumPrice%>-cp_prc));
+						}
+						$('#cpcancle').show();
+						$('#cpselect').val('non');
+					} else {
+						toast('포만감','사용 불가능 한 쿠폰입니다.','warning');
+						$('#cpinfo').text('');
+					}
+				},
+				function() {
+					toast('포만감','네트워크 오류','warning');
+				}
+		);
 	});
 	
 	/*

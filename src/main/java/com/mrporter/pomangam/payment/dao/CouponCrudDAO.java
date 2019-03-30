@@ -25,9 +25,19 @@ public class CouponCrudDAO extends Crud<CouponBean> {
 		super(TABLENAME);
 	}
 	
+	public void useCoupon(String username, String cpno) throws Exception {
+		if(cpno==null||cpno.equals("")) {
+			return;
+		}
+		sqlUpdate("UPDATE coupon SET use_username = ?, availability = availability-1 WHERE cpno = ?", username, cpno);
+	}
+	
 	public CouponBean findByCpno(String cpno) throws Exception {
+		if(cpno==null||cpno.equals("")) {
+			return null;
+		}
 		List<Map<String, Object>> lom 
-		= sqlQuery("SELECT * FROM " + TABLENAME + " WHERE cpno = ?", 
+		= sqlQuery("SELECT * FROM " + TABLENAME + " WHERE cpno = ? AND state_active = 1 AND start_date <= NOW() AND (end_date IS NULL OR end_date > NOW()) AND availability > 0", 
 				cpno);
 		
 		CouponBean bean = null;
@@ -39,8 +49,11 @@ public class CouponCrudDAO extends Crud<CouponBean> {
 	}
 	
 	public List<CouponBean> findByUsername(String username) throws Exception {
+		if(username==null||username.equals("")) {
+			return null;
+		}
 		List<Map<String, Object>> lom 
-		= sqlQuery("SELECT * FROM " + TABLENAME + " WHERE reg_username = ?", 
+		= sqlQuery("SELECT * FROM " + TABLENAME + " WHERE reg_username = ? AND state_active = 1 AND start_date <= NOW() AND (end_date IS NULL OR end_date > NOW()) AND availability > 0", 
 				username);
 		
 		List<CouponBean> bean = null;
@@ -96,6 +109,14 @@ public class CouponCrudDAO extends Crud<CouponBean> {
 					cpno += String.valueOf(rand.nextInt(10));
 				}
 			}
+			cpno += "-";
+			for(int i=0; i<4;i++) {
+				if(rand.nextBoolean()) {
+					cpno += String.valueOf((char) ((int) (rand.nextInt(26)) + 65));
+				} else {
+					cpno += String.valueOf(rand.nextInt(10));
+				}
+			}
 		} while(isDuplicated(cpno));
 		return code.toUpperCase() + "-" + cpno;
 	}
@@ -109,13 +130,13 @@ public class CouponCrudDAO extends Crud<CouponBean> {
 	
 	public static void main(String...args) {
 		try {
-			System.out.println(new CouponCrudDAO().findByCpno("TEST-M7F4"));
-			/*
+			//System.out.println(new CouponCrudDAO().findByCpno("TEST-M7F4"));
+			
 			System.out.println(new CouponCrudDAO().makeCoupon("test", 1));
-			System.out.println(new CouponCrudDAO().makeCoupon("test", "cholnh", 1));
-			System.out.println(new CouponCrudDAO().makeCoupon("test", "cholnh", null, "2019-04-24", 1));
-			System.out.println(new CouponCrudDAO().makeCoupon("test", "cholnh", "2019-03-25", "2019-04-24", 1));
-			*/
+			//System.out.println(new CouponCrudDAO().makeCoupon("test", "cholnh", 1));
+			//System.out.println(new CouponCrudDAO().makeCoupon("test", "cholnh", null, "2019-04-24", 1));
+			//System.out.println(new CouponCrudDAO().makeCoupon("test", "cholnh", "2019-03-25", "2019-04-24", 1));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
