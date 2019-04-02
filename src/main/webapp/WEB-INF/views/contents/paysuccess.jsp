@@ -45,6 +45,7 @@
 						<%=boxNumber %>
 					</span>
 				</div>
+				<%if(Integer.parseInt(totalPrice) > 0) { %>
 				<div class="n-border">
 					<br>
 					<span style="font-size:23px; font-weight: bold">아래 금액을 이체해 주세요.</span><br>
@@ -56,7 +57,8 @@
 					<button class="btn btn-primary" style="font-size:13px" onclick="copy('<%=bank_account %>')">복사하기</button>
 					<br><br>
 					<textarea id="test"></textarea>
-				</div>	
+				</div>
+				<%} %>
 			</div>
 			<!-- <button class="btn btn-primary" type="button" onclick="location.href='./'">홈</button> 
 			<button class="btn btn-primary" style="font-size:20px;margin-top:32px" type="button" onclick="location.href='./'">홈으로</button>-->

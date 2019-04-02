@@ -79,7 +79,7 @@
 							※ 음식 교환 시 사용되는 번호입니다.
 						</span><br><br><br>
 					</div>
-					<%if(bean.getStatus() == 0) {%>
+					<%if(bean.getStatus() == 0 && bean.getTotalprice().intValue() > 0) {%>
 					<div class="n-border">
 						<br>
 						<span style="font-size:23px; font-weight: bold">아래 금액을 이체해 주세요.</span><br>

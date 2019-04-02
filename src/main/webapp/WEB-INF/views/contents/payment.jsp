@@ -190,7 +190,7 @@
             			<tr>
             				<td colspan=3><hr></td>
             			</tr>
-            			<%if(user != null) {%>
+            			<%if(user != null && cplist!=null && !cplist.isEmpty()) {%>
             			<tr>
             				<td>
             					할인 쿠폰 :
@@ -199,8 +199,9 @@
             					<select class="form-control m-b-2 n-payment-select" id="cpselect">
             						<option value="non">선택 안 함</option>
             						<%for(CouponBean cp : cplist) {%>
+            						
             							<option value="<%=cp.getCpno()%>"><%=cp.getCpname() %></option>
-            						<%} %>
+            						<%}%>
 		                        </select>
             				</td>
             			</tr>
@@ -465,9 +466,17 @@
 			);
 		});
 		var cur = new Date();
-		var cpno = $('#cpselect').val() == 'non' 
-						? $('#cpinput').val()
-						:  $('#cpselect').val();
+		var cpno = '';
+		if($('#cpselect').length<=0) {
+			cpno = $('#cpinput').val();
+		} else {
+			if($('#cpselect').val() == 'non') {
+				cpno = $('#cpinput').val();
+			} else {
+				cpno = $('#cpselect').val();
+			}
+		}
+		console.log(cpno);
 		ajax('./payment/insertindex.do', 
 				{
 					<%if(user == null) {%>
@@ -632,9 +641,9 @@
 						var cp_prc = data.discount_prc;
 					
 						if(data.cpname) {
-							$('#cpinfo').text(data.cpname+' - '+cp_prc+'원');
+							$('#cpinfo').text(data.cpname+' - '+numberWithCommas(cp_prc)+'원');
 						} else {
-							$('#cpinfo').text(data.discount_prc+'원');
+							$('#cpinfo').text(numberWithCommas(data.discount_prc)+'원');
 						}
 						if(<%=sumPrice%> < cp_prc) {
 							$('.totalp1').text(0);
@@ -680,9 +689,9 @@
 						var cp_prc = data.discount_prc;
 					
 						if(data.cpname) {
-							$('#cpinfo').text(data.cpname+' - '+cp_prc+'원');
+							$('#cpinfo').text(data.cpname+' - '+numberWithCommas(cp_prc)+'원');
 						} else {
-							$('#cpinfo').text(data.discount_prc+'원');
+							$('#cpinfo').text(numberWithCommas(data.discount_prc)+'원');
 						}
 						if(<%=sumPrice%> < cp_prc) {
 							$('.totalp1').text(0);

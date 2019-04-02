@@ -215,6 +215,7 @@ public class PaymentController {
 			CouponBean cp = cpDAO.findByCpno(cpno);
 			if(cp!=null) {
 				totalPrice -= cp.getDiscount_prc().intValue();
+				totalPrice = totalPrice<=0?0:totalPrice;
 				if(bean.getUsername() != null) {
 					cpDAO.useCoupon(bean.getUsername(), cpno);
 				} else {
