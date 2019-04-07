@@ -244,6 +244,17 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 					"idx_target = ? AND receive_date = ? AND receive_time = ?;", 
 					idx_target, receive_date, receive_time);
 		Object obj = lom.get(0).get("nextbn");
+		/*
+		Object obj2 = lom.get(0).get("where");
+		String where = "";
+		if(obj2 != null) {
+			if((obj2+"").equals("기숙사 식당 (도착시간 +10분)")) {
+				where = "ㄱ";
+			} else {
+				where = "ㅎ";
+			}
+		}
+		*/
 		if(obj == null) {
 			return 0;
 		} else {
