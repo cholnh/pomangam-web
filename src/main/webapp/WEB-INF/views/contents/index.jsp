@@ -86,7 +86,7 @@
 				</a> <a href="https://www.instagram.com/pomangam_official"
 					title="instagram"> <img src="resources/img/icon/instagram.png">
 				</a> 
-				<a href="http://pf.kakao.com/_xlxbhlj" title="kakaoplus"> <img
+				<a href="https://pf.kakao.com/_xlxbhlj" title="kakaoplus"> <img
 					src="resources/img/icon/kakao.png">
 				</a>
 				<br> <span style="font-size: 11px;">Pomangam Official</span>

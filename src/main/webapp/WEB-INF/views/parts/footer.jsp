@@ -15,16 +15,16 @@
 			<a href="https://www.instagram.com/pomangam_official" title="instagram">
 				<img src="resources/img/icon/instagram.png">
 			</a>
-			<a href="http://pf.kakao.com/_xlxbhlj" title="kakaoplus"> <img
+			<a href="https://pf.kakao.com/_xlxbhlj" title="kakaoplus"> <img
 					src="resources/img/icon/kakao.png">
 			</a>
 		</div>
 		<div class="text-xs-center" style="margin-bottom: 12px">
-			<a href="http://pf.kakao.com/_xlxbhlj" class="footertext">회사소개</a>
+			<a href="https://pf.kakao.com/_xlxbhlj" class="footertext">회사소개</a>
 			<!-- <a href="#" class="footertext">약관</a> -->
 			<a href="./privacy.do" class="footertext">개인정보처리방침</a>
 			<a href="./terms.do" class="footertext">약관</a>
-			<a href="http://pf.kakao.com/_xlxbhlj" class="footertext">고객센터</a>
+			<a href="https://pf.kakao.com/_xlxbhlj" class="footertext">고객센터</a>
 		</div>
 		<p style="font-size:11px; color:darkgray">
 			<b>Mr. Porter Corp.</b> <br>
