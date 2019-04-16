@@ -727,7 +727,7 @@
 	function goDirect(d,r) {
 		getTime(curProduct, $('#ob-amount').val(), curRestaurant, false);
 		
-		if(confirm($('#ob-time').text()+' 까지 도착합니다. 계속하시겠습니까?')) {
+		if(confirm($('#ob-time').text()+' 까지 도착합니다. 계속하시겠습니까?\n\n(교통상황이나 업체의 사정으로 인해 배달시간이 다소 지연될 수 있습니다)')) {
 			d = encodeURI(d);
 			r = encodeURI(r);
 			location.href='./payment.do?direct=true&amount='+$('#ob-amount').val()+'&additional='+d+'&requirement='+r;

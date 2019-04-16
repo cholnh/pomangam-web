@@ -43,7 +43,10 @@
 					</span><br> 
 					<span style="margin-top:16px; font-size:128px; "> 
 						<%=boxNumber %>
-					</span>
+					</span><br> 
+					<span style="font-size:13px">
+						※ 교통상황이나 업체의 사정으로 인해 배달시간이 다소 지연될 수 있습니다.
+					</span><br><br>
 				</div>
 				<%if(Integer.parseInt(totalPrice) > 0) { %>
 				<div class="n-border">
