@@ -1,5 +1,6 @@
 package com.mrporter.pomangam.target.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,27 @@ public class TargetCrudDAO extends Crud<TargetBean> {
 			return 0;
 		else
 			return Integer.parseInt(lom.get(0).get("sum(cnt_order)")+"");
+	}
+	
+	public static void main(String...args){
+		try {
+			new TargetCrudDAO().getCountMap();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Map<Integer, Integer> getCountMap() throws Exception {
+		List<Map<String, Object>> lom = sqlQuery("SELECT idx_target, count(*) as cnt FROM payment GROUP BY idx_target");
+		
+		Map<Integer, Integer> map = new HashMap<>();
+		if(lom != null && !lom.isEmpty()) {
+			for(Map<String, Object> m : lom) {
+				map.put(Integer.valueOf(m.get("idx_target")+""), Integer.valueOf(m.get("cnt")+""));
+			}
+		}
+		
+		return map;
 	}
 	
 	public void addCountOrder(Integer idx) throws Exception {

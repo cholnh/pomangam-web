@@ -288,8 +288,14 @@
 		            		</td>
 		            		<td>
 		            			<select id="ob-where" class="form-control n-payment-select" style="width:150px">
-		            				<option>학생회관 뒤</option>
-		            				<option>기숙사 식당 (도착시간 +10분)</option>
+		            				<%if(curTarget.equals("1")) {%>
+		            					<option>학생회관 뒤</option>
+		            					<option>기숙사 식당 (도착시간 +10분)</option>
+		            				<%} else if(curTarget.equals("2")) {%>
+		            					<option>아카데미홀 </option>
+		            					<option>제2학생회관 (도착시간 +5분)</option>
+		            					<option>기숙사 정문 (도착시간 +10분)</option>
+		            				<%}%>
 			                    </select>
 		            		</td>
 	            		</tr>
@@ -300,11 +306,11 @@
 		            		<td>
 		            			<select class="form-control n-payment-select" style="width:150px">
 		            				<option>계좌이체</option>
-		            				<option disabled="true">카드결제 &nbsp;&nbsp;&nbsp;(준비중입니다ㅠㅠ)</option>
-			                        <option disabled="true">카카오페이 (준비중입니다ㅠㅠ)</option>
-			                        <option disabled="true">네이버페이 (준비중입니다ㅠㅠ)</option>
-			                        <option disabled="true">핸드폰결제 (준비중입니다ㅠㅠ)</option>
-			                        <option disabled="true">무통장입금 (준비중입니다ㅠㅠ)</option>
+		            				<option disabled="true">카드결제 &nbsp;&nbsp;&nbsp;(준비중)</option>
+			                        <option disabled="true">카카오페이 (준비중)</option>
+			                        <option disabled="true">네이버페이 (준비중)</option>
+			                        <option disabled="true">핸드폰결제 (준비중)</option>
+			                        <option disabled="true">무통장입금 (준비중)</option>
 			                    </select>
 		            		</td>
 	            		</tr>

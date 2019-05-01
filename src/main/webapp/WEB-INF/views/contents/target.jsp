@@ -86,15 +86,67 @@
 												</th>
 											</tr>
 											<tr>
-												<td>
-													학생회관 뒤
-												</td>
-												<td>
-													오후 12시 / 1시 / 2시
-												</td>
-												<td>
-													오후 5시 / 6시 / 7시
-												</td>
+												<%if(curTarget.equals("1")) {%>
+					            					<td>
+														학생회관 뒤
+													</td>
+													<td>
+														오후 12시 / 1시 / 2시
+													</td>
+													<td>
+														오후 5시 / 6시 / 7시
+													</td>
+					            				<%} else if(curTarget.equals("2")) {%>
+					            					<td>
+														아카데미홀
+													</td>
+													<td>
+														오후 12시 / 1시 / 2시
+													</td>
+													<td>
+														오후 5시 / 6시 / 7시
+													</td>
+					            				<%}%>
+											</tr>
+											<tr>
+												<%if(curTarget.equals("1")) {%>
+												<tr>
+													<td>
+														기숙사 식당 (+10분)
+													</td>
+													<td>
+														오후 12시 / 1시 / 2시
+													</td>
+													<td>
+														오후 5시 / 6시 / 7시
+													</td>
+												</tr>
+					            				<%} else if(curTarget.equals("2")) {%>
+					            					<td>
+														제2학생회관
+													</td>
+													<td>
+														오후 12시 / 1시 / 2시  (+5분)
+													</td>
+													<td>
+														오후 5시 / 6시 / 7시  (+5분)
+													</td>
+					            				<%}%>
+												
+											</tr>
+											<tr>
+												<%if(curTarget.equals("1")) {%>
+					            				<%} else if(curTarget.equals("2")) {%>
+					            					<td>
+														기숙사 정문
+													</td>
+													<td>
+														오후 12시 / 1시 / 2시  (+10분)
+													</td>
+													<td>
+														오후 5시 / 6시 / 7시  (+10분)
+													</td>
+					            				<%}%>
 											</tr>
 										</tbody>
 									</table>
@@ -267,26 +319,67 @@
 								</th>
 							</tr>
 							<tr>
-								<td>
-									학생회관 뒤
-								</td>
-								<td>
-									오후 12시 / 1시 / 2시
-								</td>
-								<td>
-									오후 5시 / 6시 / 7시
-								</td>
+								<%if(curTarget.equals("1")) {%>
+	            					<td>
+										학생회관 뒤
+									</td>
+									<td>
+										오후 12시 / 1시 / 2시
+									</td>
+									<td>
+										오후 5시 / 6시 / 7시
+									</td>
+	            				<%} else if(curTarget.equals("2")) {%>
+	            					<td>
+										아카데미홀
+									</td>
+									<td>
+										오후 12시 / 1시 / 2시
+									</td>
+									<td>
+										오후 5시 / 6시 / 7시
+									</td>
+	            				<%}%>
 							</tr>
 							<tr>
-								<td>
-									기숙사 식당 (+10분)
-								</td>
-								<td>
-									오후 12시 / 1시 / 2시
-								</td>
-								<td>
-									오후 5시 / 6시 / 7시
-								</td>
+								<%if(curTarget.equals("1")) {%>
+								<tr>
+									<td>
+										기숙사 식당 (+10분)
+									</td>
+									<td>
+										오후 12시 / 1시 / 2시
+									</td>
+									<td>
+										오후 5시 / 6시 / 7시
+									</td>
+								</tr>
+	            				<%} else if(curTarget.equals("2")) {%>
+	            					<td>
+										제2학생회관
+									</td>
+									<td>
+										오후 12시 / 1시 / 2시  (+5분)
+									</td>
+									<td>
+										오후 5시 / 6시 / 7시  (+5분)
+									</td>
+	            				<%}%>
+								
+							</tr>
+							<tr>
+								<%if(curTarget.equals("1")) {%>
+	            				<%} else if(curTarget.equals("2")) {%>
+	            					<td>
+										기숙사 정문
+									</td>
+									<td>
+										오후 12시 / 1시 / 2시  (+10분)
+									</td>
+									<td>
+										오후 5시 / 6시 / 7시  (+10분)
+									</td>
+	            				<%}%>
 							</tr>
 						</tbody>
 					</table>

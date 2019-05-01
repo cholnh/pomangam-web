@@ -1,3 +1,5 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.util.Map"%>
 <%@page import="com.mrporter.pomangam.notice.vo.NoticeBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -22,7 +24,11 @@
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List<NoticeBean> noticeList = (List) request.getAttribute("noticeList");
 
-	%>
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		Map<Integer, Integer> countMap = (Map) request.getAttribute("targetCountMap");
+		
+		DecimalFormat decimalFormat = new DecimalFormat("###,###.##");
+ 	%>
 
 	<!-- Navbar -->
 	<jsp:include page="../parts/header.jsp" />
@@ -49,8 +55,8 @@
 
 			<!-- Buttons -->
 			<div class="row">
-				<div class="col-md-4"></div>
-				<div class="col-md-4">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
 					<!-- 
 			<form action="./target.do" class="input-group input-group-lg">
 				<input type="text" class="form-control" placeholder="어디로 배달해 드릴까요?" style="margin:10px">
@@ -74,10 +80,16 @@
 			-->
 					<button class="btn btn-primary btn-3d"
 						onclick="location.href='./target.do?idx=1'"
-						style="width: auto; font-size: 20px; font-weight: bold">
-						한국항공대학교 점 <br>바로가기
+						style="width: 200px; font-size: 20px; font-weight: bold">
+						항공대학교 점 <br>바로가기
+					</button>
+					<button class="btn btn-primary btn-3d"
+						onclick="location.href='./target.do?idx=2'"
+						style="width: 200px; font-size: 20px; font-weight: bold">
+						군산대학교 점 <br>바로가기
 					</button>
 				</div>
+				<div class="col-md-2"></div>
 			</div>
 			<div
 				style="font-size: 38px !important; margin-top: 16px !important; margin-bottom: 12px !important;">
@@ -134,10 +146,10 @@
 							src="resources/img/main/school.jpg" alt="kau">
 						<div class="n-container">
 							<p style="font-size: 18px;">
-								<b>한국항공대학교</b>
+								<b>항공대학교</b>
 							</p>
 							<p class="n-opacity" style="font-size: 11px;">
-								경기도 고양시 덕양구 항공대학로 76<br>누적 주문 수 <B>14,723건</B>
+								경기도 고양시 덕양구 항공대학로 76<br>누적 주문 수 <B><%=decimalFormat.format(countMap.get(1)) %>건</B>
 							</p>
 						</div>
 					</div>
@@ -145,15 +157,15 @@
 				<!--  -->
 				<div class="col-md-4">
 					<div class="n-card" style="cursor: pointer;"
-						onclick="toast('죄송합니다...','제휴 준비 중 입니다.','warning');">
+						onclick="location.href='./target.do?idx=2'">
 						<img class="n-school-img lazyload image"
-							src="resources/img/main/school3.jpg" alt="kau">
+							src="resources/img/main/knu.jpg" alt="knu">
 						<div class="n-container">
 							<p style="font-size: 18px;">
-								<b>경기대학교</b>
+								<b>군산대학교</b>
 							</p>
 							<p class="n-opacity" style="font-size: 11px;">
-								경기도 수원시 영통구 광교산로 154-42<br>누적 주문 수 <B>11,957건</B>
+								전라북도 군산시 나운3동 대학로 558<br>누적 주문 수 <B><%=decimalFormat.format(countMap.get(2)) %>건</B>
 							</p>
 						</div>
 					</div>

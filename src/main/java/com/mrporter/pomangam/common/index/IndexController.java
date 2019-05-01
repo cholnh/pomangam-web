@@ -67,6 +67,7 @@ public class IndexController {
 		
 		//model.addObject("sumOrder", targetDAO.getSumOrder());
 		//model.addObject("todayOrder", indexDAO.getTodayOrder());
+		model.addObject("targetCountMap", targetDAO.getCountMap());
 		model.addObject("targetList", targetDAO.getBeanList());
 		model.addObject("noticeList", noticeDAO.getBeanList());
 		

@@ -46,6 +46,12 @@ public class TargetController {
 			return null;
 		}
 		
+
+		String preTarget = session.getAttribute("curTarget") + "";
+		if(!preTarget.equals(idx+"")) {
+			session.removeAttribute("cartList");
+		}
+		
 		ModelAndView model = new ModelAndView();
 		String target = defaultDAO.getBean(idx);
 		List<RestaurantBean> restaurantList = new RestaurantCrudDAO().getBeanWithLimitCount(idx);
