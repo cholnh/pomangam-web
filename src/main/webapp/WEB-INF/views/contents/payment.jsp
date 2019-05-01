@@ -292,9 +292,9 @@
 		            					<option>학생회관 뒤</option>
 		            					<option>기숙사 식당 (도착시간 +10분)</option>
 		            				<%} else if(curTarget.equals("2")) {%>
-		            					<option>아카데미홀 </option>
+		            					<option>기숙사 정문</option>
 		            					<option>제2학생회관 (도착시간 +5분)</option>
-		            					<option>기숙사 정문 (도착시간 +10분)</option>
+		            					<option>아카데미홀 (도착시간 +10분)</option>
 		            				<%}%>
 			                    </select>
 		            		</td>

@@ -98,7 +98,7 @@
 													</td>
 					            				<%} else if(curTarget.equals("2")) {%>
 					            					<td>
-														아카데미홀
+														기숙사 정문
 													</td>
 													<td>
 														오후 12시 / 1시 / 2시
@@ -138,7 +138,7 @@
 												<%if(curTarget.equals("1")) {%>
 					            				<%} else if(curTarget.equals("2")) {%>
 					            					<td>
-														기숙사 정문
+														아카데미홀
 													</td>
 													<td>
 														오후 12시 / 1시 / 2시  (+10분)
@@ -331,7 +331,7 @@
 									</td>
 	            				<%} else if(curTarget.equals("2")) {%>
 	            					<td>
-										아카데미홀
+										기숙사 정문
 									</td>
 									<td>
 										오후 12시 / 1시 / 2시
@@ -371,7 +371,7 @@
 								<%if(curTarget.equals("1")) {%>
 	            				<%} else if(curTarget.equals("2")) {%>
 	            					<td>
-										기숙사 정문
+										아카데미홀
 									</td>
 									<td>
 										오후 12시 / 1시 / 2시  (+10분)
