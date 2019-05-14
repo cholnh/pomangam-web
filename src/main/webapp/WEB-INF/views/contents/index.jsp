@@ -38,11 +38,17 @@
 	<a class="position-relative" name="home"></a>
 	<div id="landing-hero" class="text-xs-center clearfix">
 
-		<div class="container" style="margin-top: 40px">
+		<div class="container" style="margin-top: 0px">
 			<!-- Header -->
 			<!--<h1 class="font-weight-semibold">포 만 감</h1>-->
+			
+			<h3 class="n-font" style="color: black; font-size: 18px; ">정해진 시간과 장소로 배달해
+				드립니다.<br>'우리학교 테이크아웃 대행 서비스'</h3>
 			<img class="lazyload image n-mainlogo"
-				src="resources/img/main/logo.png" alt="logo"><br> <span
+				src="resources/img/main/logo2.png" alt="logo"><br> 
+				
+			<!-- 	
+			<span
 				class="font-weight-semibold" style="color: black"> <span
 				class="n-title-bigchar"> 포 </span> <span
 				style="font-size: 18px; margin-right: 12px"> 터가 </span> <span
@@ -50,9 +56,12 @@
 				style="font-size: 18px; margin-right: 12px"> 나러 </span> <span
 				class="n-title-bigchar"> 감 </span>
 			</span>
-			<h2 class="n-font" style="color: black">정해진 시간과 장소로 무엇이든 배달해
-				드립니다.</h2>
-
+			 -->
+			 
+			<img class="lazyload image logotxt"
+				src="resources/img/main/logotxt.png" alt="txt">
+			
+			
 			<!-- Buttons -->
 			<div class="row">
 				<div class="col-md-2"></div>
@@ -80,16 +89,16 @@
 			-->
 					<button class="btn btn-primary btn-3d"
 						onclick="location.href='./target.do?idx=1'"
-						style="width: 200px; font-size: 20px; font-weight: bold">
-						항공대학교 점 <br>바로가기
+						style="width: 200px; font-size: 18px; line-height:25px; ">
+						항공대학교 <br>주문하기
 					</button>
 					<button class="btn btn-primary btn-3d"
 						onclick="location.href='./target.do?idx=2'"
-						style="width: 200px; font-size: 20px; font-weight: bold">
-						군산대학교 점 <br>바로가기
+						style="width: 200px; font-size: 18px; line-height:25px; ">
+						군산대학교 <br>주문하기
 					</button>
 				</div>
-				<div class="col-md-2"></div>
+				<div class="col-md-2"></div> 
 			</div>
 			<div
 				style="font-size: 38px !important; margin-top: 16px !important; margin-bottom: 12px !important;">
@@ -254,7 +263,7 @@
 	<div class="landing-section landing-features">
 		<div class="container">
 			<div class="col-md-4 text-xs-center">
-				<img data-src="resources/img/main/iphone.png" class="lazyload image">
+				<img data-src="resources/img/main/iphone2.png" class="lazyload image">
 			</div>
 
 			<!-- spacer -->
@@ -285,7 +294,7 @@
 										placeholder="어플 제작 중 입니다!"> <span
 										class="input-group-btn">
 										<button type="submit"
-											class="btn btn-primary font-weight-semibold font-size-14 ">전송</button>
+											class="btn btn-primary font-weight-semibold font-size-14 " disabled>전송</button>
 									</span>
 								</form>
 								<input type="checkbox" style="margin: 12px">개인정보 수집/이용에

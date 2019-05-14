@@ -96,11 +96,11 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		String[] idxes = (lom.get(0).get("idxes_payment")+"").split(",");
 		for(String idx_payment : idxes) {
 			List<Map<String, Object>> lom2 = 
-					sqlQuery("SELECT idx_product, amount FROM payment WHERE idx = ?;", idx_payment);
+					sqlQuery("SELECT idx_restaurant, amount FROM payment WHERE idx = ?;", idx_payment);
 			
-			sqlUpdate("UPDATE product SET cnt_sell = cnt_sell + ? WHERE idx = ?", 
+			sqlUpdate("UPDATE restaurant SET cnt_sell = cnt_sell + ? WHERE idx = ?", 
 					lom2.get(0).get("amount"),
-					lom2.get(0).get("idx_product"));
+					lom2.get(0).get("idx_restaurant"));
 		}
 	}
 	
@@ -124,11 +124,11 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		List<Map<String, Object>> lom = sqlQuery(
 				"SELECT " + 
 					"TRUNCATE(((?*unit_time/unit_amount) + " + 
-					"(SELECT (cnt_sell*unit_time/unit_amount) FROM product WHERE idx = ?)) * 60, 0) " + 
+					"(SELECT (cnt_sell*unit_time/unit_amount) FROM restaurant WHERE idx = ?)) * 60, 0) " + 
 					"as seconds " + 
 				"FROM " + 
-					"product " +
-				"WHERE idx = ?;", amount, idx_product, idx_product);
+					"restaurant " +
+				"WHERE idx = ?;", amount, idx_restaurant, idx_restaurant);
 		int seconds = Integer.parseInt(lom.get(0).get("seconds")+"");
 		
 		Calendar start;

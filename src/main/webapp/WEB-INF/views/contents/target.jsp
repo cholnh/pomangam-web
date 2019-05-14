@@ -189,7 +189,7 @@
 				<% for(TargetAdBean bean : targetAdList) {
 					if(bean.getIsactive() == 0) continue;
 				%>
-						<img class="demo-item" style="display:none" alt="<%=bean.getName() %>" src="<%=bean.getImgpath() %>" width="90%" height="auto">
+						<img class="ad-img demo-item" style="display:none" alt="<%=bean.getName() %>" src="<%=bean.getImgpath() %>">
 				<%} %>
 			</div>
 		</div>

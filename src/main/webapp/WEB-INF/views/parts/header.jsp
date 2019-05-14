@@ -34,9 +34,12 @@
 
 	<title>행복은 배부름에서 온다. 포만감</title>
 	
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin" rel="stylesheet" type="text/css">
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-	<link href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css" rel="stylesheet" type="text/css">
+	<!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin" rel="stylesheet" type="text/css">
+	 -->
+	<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400&amp;subset=korean" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> 
+	 
+	<!-- <link href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css" rel="stylesheet" type="text/css">  -->
 	
 	<!-- Core stylesheets -->
 	<link href="resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -48,7 +51,7 @@
 	
 	<!-- Landing page CSS -->
 	<link href="resources/css/landing.css" rel="stylesheet" type="text/css">
-	<link href="resources/css/custom.css" rel="stylesheet" type="text/css">
+	<link href="resources/css/custom.css?ver=1.1" rel="stylesheet" type="text/css">
 	
 	<!-- jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
