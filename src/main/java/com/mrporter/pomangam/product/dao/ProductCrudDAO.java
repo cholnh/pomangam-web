@@ -105,7 +105,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 	}
 	
 	public void resetCountSell() throws Exception {
-		sqlUpdate("UPDATE product SET cnt_sell = 0");
+		sqlUpdate("UPDATE restaurant SET cnt_sell = 0");
 	}
 	
 	public int getAmount(Integer idx_product, int minute) throws Exception {
@@ -162,6 +162,43 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		}
 		
 		cur.add(Calendar.SECOND, seconds);
+		
+		
+		/* 이삭토스트 커스텀 시간 시작 
+		if(idx_restaurant == 15) {
+			Calendar pass_start = Calendar.getInstance();
+			pass_start.set(Calendar.AM_PM, Calendar.PM);
+			pass_start.set(Calendar.HOUR, 12);
+			pass_start.set(Calendar.MINUTE, 30);
+			
+			Calendar pass_end = Calendar.getInstance();
+			pass_end.set(Calendar.AM_PM, Calendar.PM);
+			pass_end.set(Calendar.HOUR, 4);
+			pass_end.set(Calendar.MINUTE, 30);
+			
+			if(cur.compareTo(pass_start) < 0) {
+				cur.set(Calendar.HOUR, 1);
+				cur.set(Calendar.AM_PM, Calendar.PM);
+				cur.set(Calendar.MINUTE, 0);
+				cur.set(Calendar.SECOND, 0);
+				return cur;
+			} else if((cur.compareTo(pass_start) >= 0) && (cur.compareTo(pass_end) < 0)) {
+				cur.set(Calendar.HOUR, 5);
+				cur.set(Calendar.AM_PM, Calendar.PM);
+				cur.set(Calendar.MINUTE, 0);
+				cur.set(Calendar.SECOND, 0);
+				return cur;
+			} else if(cur.compareTo(pass_end) >= 0) {
+				cur.add(Calendar.DATE, 1);
+				cur.set(Calendar.HOUR, 1);
+				cur.set(Calendar.AM_PM, Calendar.PM);
+				cur.set(Calendar.MINUTE, 0);
+				cur.set(Calendar.SECOND, 0);
+				return cur;
+			}
+			
+		}
+		 이삭토스트 커스텀 시간 끝 */
 		
 		int curWeek = cur.get(Calendar.DAY_OF_WEEK);
 		if( curWeek==Calendar.SUNDAY || curWeek==Calendar.SATURDAY ) {
@@ -279,6 +316,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			
 			return cal;
 			*/
+			
 			
 			// 휴식시간 2시 ~ 4시  <-- 이부분만 평일과 다른 로직임
 			Calendar pass_start = Calendar.getInstance();
