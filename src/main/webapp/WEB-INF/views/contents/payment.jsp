@@ -375,13 +375,13 @@
         </div>
         
 		<div class="n-target-mobilebtn n-on-mobile">
-			<button class="btn btn-primary" onclick="pay()"
+			<button class="btn btn-primary" onclick="pay()" name="submitBtn"
 			style="width:100%;height:100%;font-size:20px;font-weight:bold">
 				<span class="totalp1"><%=finalPrice %></span>원 결제하기
 			</button>
 		</div>
         <div class="n-center n-on-pc" style="margin-bottom: 64px; margin-top:32px">
-            <button class="btn btn-primary" onclick="pay()"
+            <button class="btn btn-primary" onclick="pay()" name="submitBtn"
             style="width:40%;font-size:20px;font-weight:bold">
             	<span class="totalp1"><%=finalPrice %></span>원 결제하기
             </button>
@@ -407,6 +407,53 @@
 	$('#ob-mobileCartBtn').hide();
 	changeTime();
 	
+	function LoadingWithMask() {
+	    //화면의 높이와 너비
+	    var maskHeight = $(document).height();
+	    var maskWidth  = window.document.body.clientWidth;
+	     
+	    //화면에 출력할 마스크를 설정
+	    var mask       = "<div id='mask' style='position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:0;'></div>";
+	    var loadingImg = '';
+	      
+	    loadingImg += "<div id='loadingImg'>";
+	    loadingImg += " <img src='resources/img/LoadingImg.gif' style='display: block; margin: 0px auto;  '/>";
+	    loadingImg += "</div>"; 
+	  
+	    //화면에 레이어 추가
+	    $('body')
+	        .append(mask);
+	       $('body')
+	        .append(loadingImg);
+	        
+	    //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채움
+	    $('#mask').css({
+	            'width' : maskWidth
+	            , 'height': maskHeight
+	            , 'opacity' : '0.3'
+	    });
+	    
+	    $('#loadingImg').css({
+	    	'position' : 'absolute',
+	    
+	       'top' : (($(window).height()-200)/2+$(window).scrollTop())+'px',
+	       'left' : (($(window).width()-200)/2+$(window).scrollLeft())+'px',
+	    
+	       'opacity' : '1'
+	    });
+
+	  
+	    //마스크 표시
+	    $('#mask').show();  
+	  
+	    //로딩중 이미지 표시
+	    $('#loadingImg').show();
+	}
+
+	function closeLoadingWithMask() {
+	    $('#mask, #loadingImg').hide();
+	    $('#mask, #loadingImg').remove(); 
+	}
 	
 	function pay() {
 		if(!$('input:checkbox[id="agree"]').is(":checked")) {
@@ -446,6 +493,10 @@
 		}
 		<%}%>
 		
+		LoadingWithMask();
+		$('button[name=submitBtn]').html('결제 진행 중...');
+		$('button[name=submitBtn]').attr('disabled', true);
+		
 		var idxList = []; 
 		cartList.forEach(function(cart) {
 			//console.log(cart);
@@ -463,10 +514,16 @@
 						if (status.code / 100 == 2) {
 							idxList.push(parseInt(status.message));
 						} else {
+							closeLoadingWithMask();
+							$('button[name=submitBtn]').html('다시 시도');
+							$('button[name=submitBtn]').attr('disabled', false);
 							toast('포만감',status.message,'warning');
 						}
 					},
 					function() {
+						closeLoadingWithMask();
+						$('button[name=submitBtn]').html('다시 시도');
+						$('button[name=submitBtn]').attr('disabled', false);
 						toast('포만감','네트워크 오류','warning');
 					}
 			);
@@ -503,10 +560,16 @@
 					if (status.code / 100 == 2) {
 						checkPG();
 					} else {
+						closeLoadingWithMask();
+						$('button[name=submitBtn]').html('다시 시도');
+						$('button[name=submitBtn]').attr('disabled', false);
 						toast('포만감',status.message,'warning');
 					}
 				},
 				function() {
+					closeLoadingWithMask();
+					$('button[name=submitBtn]').html('다시 시도');
+					$('button[name=submitBtn]').attr('disabled', false);
 					toast('포만감','네트워크 오류','warning');
 				}
 		);
@@ -526,6 +589,9 @@
 					}
 				},
 				function() {
+					closeLoadingWithMask();
+					$('button[name=submitBtn]').html('다시 시도');
+					$('button[name=submitBtn]').attr('disabled', false);
 					toast('포만감','네트워크 오류','warning');
 				}
 		);

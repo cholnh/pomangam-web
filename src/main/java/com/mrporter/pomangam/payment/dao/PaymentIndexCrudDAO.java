@@ -139,7 +139,8 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 		
 		//System.out.println(text);
 		
-		Object obj = BizmApi.send(phone_number, text, tmplId).getBody();
+		BizmApi.send(phone_number, text, tmplId);
+		/*
 		Gson gson = new Gson();
 		List<ApiResultBean> bean = gson.fromJson(obj+"", new TypeToken<List<ApiResultBean>>() {}.getType());
 		if(!bean.get(0).getCode().equals("success")) {
@@ -147,6 +148,7 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 		} else {
 			// success
 		}
+		*/
 		
 	}
 	

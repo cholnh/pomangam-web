@@ -158,7 +158,7 @@
 								<b>항공대학교</b>
 							</p>
 							<p class="n-opacity" style="font-size: 11px;">
-								경기도 고양시 덕양구 항공대학로 76<br>누적 주문 수 <B><%=decimalFormat.format(countMap.get(1)) %>건</B>
+								경기도 고양시 덕양구 항공대학로 76<br>누적 주문 수 <B><%=countMap.get(1) == null ? 0 : decimalFormat.format(countMap.get(1)) %>건</B>
 							</p>
 						</div>
 					</div>
@@ -174,7 +174,7 @@
 								<b>군산대학교</b>
 							</p>
 							<p class="n-opacity" style="font-size: 11px;">
-								전라북도 군산시 나운3동 대학로 558<br>누적 주문 수 <B><%=decimalFormat.format(countMap.get(2)) %>건</B>
+								전라북도 군산시 나운3동 대학로 558<br>누적 주문 수 <B><%=countMap.get(2) == null ? 0 : decimalFormat.format(countMap.get(2)) %>건</B>
 							</p>
 						</div>
 					</div>
