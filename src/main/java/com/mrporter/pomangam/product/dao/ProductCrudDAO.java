@@ -321,7 +321,8 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			// 휴식시간 2시 ~ 4시  <-- 이부분만 평일과 다른 로직임
 			Calendar pass_start = Calendar.getInstance();
 			pass_start.set(Calendar.AM_PM, Calendar.PM);
-			pass_start.set(Calendar.HOUR, 1);
+			pass_start.set(Calendar.HOUR, 0);
+			//pass_start.set(Calendar.HOUR, 1);
 			pass_start.set(Calendar.MINUTE, 29);
 			
 			Calendar pass_end = Calendar.getInstance();
@@ -395,7 +396,8 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 			// 휴식시간 2시 ~ 4시
 			Calendar pass_start = Calendar.getInstance();
 			pass_start.set(Calendar.AM_PM, Calendar.PM);
-			pass_start.set(Calendar.HOUR, 1);
+			pass_start.set(Calendar.HOUR, 0);
+			//pass_start.set(Calendar.HOUR, 1);
 			pass_start.set(Calendar.MINUTE, 29);
 			
 			Calendar pass_end = Calendar.getInstance();
