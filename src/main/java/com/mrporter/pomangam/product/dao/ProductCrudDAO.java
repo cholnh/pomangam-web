@@ -124,7 +124,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 	public List<OrderTimeBean> getAllOrderTimeList(Integer idx_target) throws Exception {
 		List<OrderTimeBean> orderList = null;
 		List<Map<String, Object>> lom = sqlQuery(
-				"SELECT DISTINCT arrivalTime, pickUpTime, orderEndTime FROM order_time ot WHERE idx_target = ? AND state_active = 1 ORDER BY arrivalTime", idx_target);
+				"SELECT DISTINCT arrivalTime, pickUpTime, orderEndTime, category FROM order_time ot WHERE idx_target = ? AND state_active = 1 ORDER BY arrivalTime", idx_target);
 		if(!lom.isEmpty()) {
 			Gson gson = new Gson();
 			orderList = new Gson().fromJson(gson.toJson(lom), 
@@ -136,7 +136,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 	public List<OrderTimeBean> getOrderTimeList(Integer idx_restaurant, Integer type) throws Exception {
 		List<OrderTimeBean> orderList = null;
 		List<Map<String, Object>> lom = sqlQuery(
-				"SELECT arrivalTime, pickUpTime, orderEndTime FROM order_time WHERE idx_restaurant = ? AND state_active = 1 AND type = ? ORDER BY sequence;", idx_restaurant, type);
+				"SELECT idx, arrivalTime, pickUpTime, orderEndTime, category FROM order_time WHERE idx_restaurant = ? AND state_active = 1 AND type = ? ORDER BY sequence;", idx_restaurant, type);
 		if(!lom.isEmpty()) {
 			Gson gson = new Gson();
 			orderList = new Gson().fromJson(gson.toJson(lom), 

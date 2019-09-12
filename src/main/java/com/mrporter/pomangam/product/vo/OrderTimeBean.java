@@ -18,10 +18,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class OrderTimeBean {
 	
+	private Integer idx;
 	private LocalDate arrivalDate;
 	private Time arrivalTime;
 	private Time pickUpTime;
 	private Time orderEndTime;
+	private Integer category;
 	
 	/**
 	 * @param arrivalTime
@@ -39,6 +41,9 @@ public class OrderTimeBean {
 		this.arrivalDate = LocalDate.now();
 	}
 
+	public Integer getIdx() {
+		return idx;
+	}
 	public LocalDate getArrivalDate() {
 		return arrivalDate;
 	}
@@ -50,6 +55,9 @@ public class OrderTimeBean {
 	}
 	public LocalTime getOrderEndTime() {
 		return orderEndTime.toLocalTime();
+	}
+	public Integer getCategory() {
+		return category;
 	}
 	
 	public long getArrivalDateInMillis() {

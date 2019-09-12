@@ -563,6 +563,10 @@
 			}
 		}
 		//console.log(cpno);
+		
+		var receive_time = $('#ob-time').val().split("-")[0];
+		var idx_order_time = $('#ob-time').val().split("-")[1];
+		
 		ajax('./payment/insertindex.do', 
 				{
 					<%if(user == null) {%>
@@ -572,11 +576,12 @@
 					idxes_payment : idxList.toString(),
 					idx_target : curTarget,
 					receive_date : date.getDate() - cur.getDate(),
-					receive_time : $('#ob-time').val(),
+					receive_time : receive_time,
 					password : $('#password').val(),
 					cashreceipt : $("input:checkbox[id='cashReceipt']").is(":checked") ? 'true' : 'false',
 					where : $('#ob-where').val(),
-					cpno : cpno
+					cpno : cpno,
+					idx_order_time : idx_order_time
 				},
 				false,
 				function(status) {
@@ -662,23 +667,23 @@
 						arrivalTime.setMilliseconds(0);
 						
 						var t = orderTime.arrivalTime.split(" ")[1] + ' ' + arrivalTime.getHours()+'시 '+(arrivalTime.getMinutes()>0?arrivalTime.getMinutes()+'분':'');
-						var value = twoDigits(((orderTime.arrivalTime.split(" ")[1] == '오후' ? 12 : 0) + arrivalTime.getHours())) + ':' + twoDigits(arrivalTime.getMinutes()) + ':00';
+						var value = twoDigits(((orderTime.arrivalTime.split(" ")[1] == '오후' && arrivalTime.getHours() != 12 ? 12 : 0) + arrivalTime.getHours())) + ':' + twoDigits(arrivalTime.getMinutes()) + ':00';
 							
 						if(d < arrivalTime) {
 							$('#ob-time').append($('<option>', {
-								value: value,
+								value: value+'-'+orderTime.idx,
 							    text: t,
 							    disabled : true
 							}));
 						} else if(d.getHours() == arrivalTime.getHours()) {
 							$('#ob-time').append($('<option>', {
-								value: value,
+								value: value+'-'+orderTime.idx,
 							    text: t,
 							    selected : true
 							}));
 						} else {
 							$('#ob-time').append($('<option>', {
-								value: value,
+								value: value+'-'+orderTime.idx,
 							    text: t,
 							    selected : false
 							}));

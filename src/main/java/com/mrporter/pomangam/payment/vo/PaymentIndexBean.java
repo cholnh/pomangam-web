@@ -20,4 +20,5 @@ public class PaymentIndexBean {
 	String username, member_name, location, phonenumber, guestname; // username : 유저 아이디, member_name : 유저 이름
 	Integer totalprice;
 	String cashreceipt, where, cpno;
+	Integer idx_order_time;
 }
