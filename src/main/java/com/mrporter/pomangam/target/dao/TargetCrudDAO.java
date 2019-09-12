@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mrporter.pomangam.common.pattern.dao.Crud;
 import com.mrporter.pomangam.target.vo.TargetBean;
+import com.mrporter.pomangam.target.vo.TargetDetailBean;
 
 /**
  * LiveCrudDAO
@@ -50,6 +53,18 @@ public class TargetCrudDAO extends Crud<TargetBean> {
 		}
 		
 		return map;
+	}
+	
+	public List<TargetDetailBean> getDetailList(Integer idx_target) throws Exception {
+		List<TargetDetailBean> detailList = null;
+		List<Map<String, Object>> lom = sqlQuery(
+				"SELECT * FROM target_delivery_detail WHERE idx_target = ?", idx_target);
+		if(!lom.isEmpty()) {
+			Gson gson = new Gson();
+			detailList = new Gson().fromJson(gson.toJson(lom), 
+					new TypeToken<List<TargetDetailBean>>() {}.getType());
+		}
+		return detailList;
 	}
 	
 	public void addCountOrder(Integer idx) throws Exception {

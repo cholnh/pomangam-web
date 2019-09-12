@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
 import com.google.gson.Gson;
@@ -235,6 +236,20 @@ public class Crud<T> {
 		}
 		return listOfMaps;
 	}
+	
+	public <E> List<E> sqlQuery(String sql, BeanListHandler<E> beanListHandler, Object...obj) throws Exception {
+		List<E> listOfMaps = null;
+		Connection conn = Config.getInstance().sqlLogin();
+		try {
+			QueryRunner queryRunner = new QueryRunner();
+			listOfMaps = queryRunner.query(conn, sql, beanListHandler, obj);
+		} finally {
+			DbUtils.closeQuietly(conn);
+		}
+		return listOfMaps;
+	}
+	
+
 	/*
 	public List<Map<String, Object>> sqlQuery(String sql) throws Exception {
 		return sqlQuery(sql);

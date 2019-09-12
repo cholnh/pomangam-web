@@ -1,7 +1,6 @@
 package com.mrporter.pomangam.product.controller;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -104,12 +103,15 @@ public class ProductController {
 			@RequestParam(value = "amount", required = false) Integer amount,
 			@RequestParam(value = "idx_restaurant", required = false) Integer idx_restaurant) throws Exception {
 
+		return new ProductCrudDAO().getAvailableOrderTime(idx_product, amount, idx_restaurant);
+		/*
 		Calendar cal = new ProductCrudDAO().getTime(Calendar.getInstance(), idx_product, amount, idx_restaurant);
 		if(cal == null) {
 			return -1;
 		} else {
 			return cal.getTimeInMillis();
 		}
+		*/
 	}
 	
 	@RequestMapping(value = "/"+MAPPINGNAME+"/getmaxtime.do", 
@@ -124,7 +126,7 @@ public class ProductController {
 			int amount = Integer.parseInt(obj.split("-")[1]);
 			int idx_restaurant = Integer.parseInt(obj.split("-")[2]);
 			
-			long millis = new ProductCrudDAO().getTime(Calendar.getInstance(), idx_product, amount, idx_restaurant).getTimeInMillis();
+			long millis = new ProductCrudDAO().getAvailableOrderTime(idx_product, amount, idx_restaurant);
 			max = max < millis ? millis : max;
 		}
 		return max;
@@ -164,6 +166,7 @@ public class ProductController {
 				ioe.printStackTrace();
 			}
 		}
+		e.printStackTrace();
 		logger.info("Exception Handler - " + e.getMessage());
 		return new Status(400, "Exception handled!");
 	}

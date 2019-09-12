@@ -9,6 +9,8 @@
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.mrporter.pomangam.cart.vo.CartBean"%>
 <%@page import="com.mrporter.pomangam.product.vo.ProductBean"%>
+<%@page import="com.mrporter.pomangam.product.vo.OrderTimeBean"%>
+<%@page import="com.mrporter.pomangam.target.vo.TargetDetailBean"%>
 <%@page import="com.google.gson.reflect.TypeToken"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.mrporter.pomangam.target.dao.TargetCrudDAO"%>
@@ -29,9 +31,15 @@
 	
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<CartBean> directList = (List) request.getAttribute("directList");
-
+		
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<OrderTimeBean> orderTimeList = (List) request.getAttribute("orderTimeList");
+		
 		List<CartBean> cartList = new ArrayList<>();
 		Object obj = session.getAttribute("cartList");
+		
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<TargetDetailBean> detailList = (List) request.getAttribute("detailList");
 		
 		if(directList != null && !directList.isEmpty()) {
 			cartList = directList;
@@ -266,7 +274,7 @@
 	            	<tbody>
 	            		<tr>
 		            		<td>
-		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 날짜
+		            			<i class="fa fa-asterisk" style="color:#FF866F"></i> 받는 날짜
 		            		</td>
 		            		<td>
 		            			<select class="form-control n-payment-select" style="width:150px" id="ob-date">
@@ -275,7 +283,7 @@
 	            		</tr>
 	            		<tr>
 		            		<td>
-		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 시간
+		            			<i class="fa fa-asterisk" style="color:#FF866F"></i> 받는 시간
 		            		</td>
 		            		<td>
 		            			<select class="form-control n-payment-select" style="width:150px" id="ob-time">
@@ -284,24 +292,22 @@
 	            		</tr>
 	            		<tr>
 		            		<td>
-		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 받는 위치
+		            			<i class="fa fa-asterisk" style="color:#FF866F"></i> 받는 위치
 		            		</td>
 		            		<td>
 		            			<select id="ob-where" class="form-control n-payment-select" style="width:150px">
-		            				<%if(curTarget.equals("1")) {%>
-		            					<option>학생회관 뒤</option>
-		            					<option>기숙사 식당 (도착시간 +10분)</option>
-		            				<%} else if(curTarget.equals("2")) {%>
-		            					<option>기숙사 정문</option>
-		            					<option>제2학생회관 (도착시간 +5분)</option>
-		            					<option>아카데미홀 (도착시간 +10분)</option>
-		            				<%}%>
+		            				<%for(TargetDetailBean bean : detailList) { %>
+		            					<option value="<%=bean.getIdx()%>"><%=bean.getName() %></option>
+		            				<%} %>
 			                    </select>
+		            		</td>
+		            		<td>
+		            			<span id="increasingTxt" style="color:red;margin-left:10px"></span>
 		            		</td>
 	            		</tr>
 	            		<tr>
 		            		<td>
-		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 결제 수단
+		            			<i class="fa fa-asterisk" style="color:#FF866F"></i> 결제 수단
 		            		</td>
 		            		<td>
 		            			<select class="form-control n-payment-select" style="width:150px">
@@ -326,7 +332,7 @@
 	            		</tr>
 	            		<tr>
 		            		<td>
-		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 이름
+		            			<i class="fa fa-asterisk" style="color:#FF866F"></i> 이름
 		            		</td>
 		            		<td>
 		            			<input class="form-control" type="text" id="guestname" required>
@@ -334,7 +340,7 @@
 	            		</tr>
 	            		<tr>
 		            		<td>
-		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 핸드폰 번호
+		            			<i class="fa fa-asterisk" style="color:#FF866F"></i> 핸드폰 번호
 		            		</td>
 		            		<td>
 		            			<input class="form-control" type="tel" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}|[0-9]{11}"  id="phoneNumber" required>
@@ -342,7 +348,7 @@
 	            		</tr>
 	            		<tr>
 		            		<td>
-		            			<i class="fa fa-asterisk" style="color:#eb613e"></i> 비밀번호 4자리
+		            			<i class="fa fa-asterisk" style="color:#FF866F"></i> 비밀번호 4자리
 		            		</td>
 		            		<td>
 		            			<input class="form-control" type="tel" id="password" required>
@@ -364,7 +370,7 @@
         
         <div class="center agree-center" style="margin-bottom:64px;">
 	        <label class="custom-control custom-checkbox" style="">
-	           <input type="checkbox" id="agree" class="custom-control-input" required>
+	           <input type="checkbox" id="agree" class="custom-control-input" checked="true" required>
 	           <span class="custom-control-indicator"></span>
 	           <span style="font-size:15px;font-weight:bold">약관 및 개인정보처리방침 동의 
 	           <a onclick="$('#terms').show();$('#privacy').show();"><b style="font-size:11px;font-weight:bold">보기▽</b></a>
@@ -398,6 +404,8 @@
 	<script>
 	var curTarget = <%=curTarget%>;
 	var cartList = <%=new Gson().toJson(cartList)%>;
+	var orderTimeList = <%=new Gson().toJson(orderTimeList)%>;
+	var detailList = <%=new Gson().toJson(detailList)%>;
 	
 	$('#header-home').hide();
 	$('#header-back').show();
@@ -406,6 +414,20 @@
 	
 	$('#ob-mobileCartBtn').hide();
 	changeTime();
+	
+	$('#ob-where').change(function() {
+		var selectedIdx = $('#ob-where option:selected').val();
+		for(var i=0; i<detailList.length; i++) {
+			var detail = detailList[i];
+			if(detail.idx == selectedIdx) {
+				var txt;
+				var min = detail.increasing_time.split(' ')[0].split(':')[1];
+				txt = (min==0?"":"  +"+min+"분 추가");
+			}
+		}
+		$('#increasingTxt').text(txt);
+	});
+
 	
 	function LoadingWithMask() {
 	    //화면의 높이와 너비
@@ -483,12 +505,13 @@
 				return;
 			}
 		}
+		var selected = $('#ob-where option:selected');
 		<%if(user==null){%>
-		if(!confirm('입금자 성함 : ' + $('#guestname').val() + '\n' + '받는 위치 : ' + $('#ob-where').val() + '\n\n' + '계속하시겠습니까?' )) {
+		if(!confirm('입금자 성함 : ' + $('#guestname').val() + '\n' + '받는 위치 : ' + selected.text() + '\n\n' + '계속하시겠습니까?' )) {
 			return;
 		}
 		<%} else {%>
-		if(!confirm('입금자 성함 : <%=user.getName()%> \n' + '받는 위치 : ' + $('#ob-where').val() + '\n\n' + '계속하시겠습니까?' )) {
+		if(!confirm('입금자 성함 : <%=user.getName()%> \n' + '받는 위치 : ' + selected.text() + '\n\n' + '계속하시겠습니까?' )) {
 			return;
 		}
 		<%}%>
@@ -539,7 +562,7 @@
 				cpno = $('#cpselect').val();
 			}
 		}
-		console.log(cpno);
+		//console.log(cpno);
 		ajax('./payment/insertindex.do', 
 				{
 					<%if(user == null) {%>
@@ -597,10 +620,18 @@
 		);
 	}
 	
+	function twoDigits(input) {
+		if(input.toString().length < 2) {
+			return '0' + input;
+		}
+		return input;
+	}
+	
 	var time_start = '<%=time_start %>'.split(':');
 	var time_end = '<%=time_end %>'.split(':');
 	var date;
 	function changeTime() {
+		//console.log(orderTimeList);
 		var products = '<%=products %>';
 		if(products.length <= 0) return;
 		ajax('./product/getmaxtime.do', 
@@ -609,39 +640,54 @@
 				},
 				true,
 				function(millis) {
+					if(millis==-1) {
+						alert('getmaxtime 오류');
+						return;
+					}
 					var d = new Date(millis);
+					d.setMilliseconds(0);
 					date = d;
 					$('#ob-date').append($('<option>', {
 					    text: d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일',
 					    selected : true
 					}));
 					
-					var curWeek = d.getDay();
-					if(curWeek==0 || curWeek==6) {
-						// 주말
+					for(var i=0; i<orderTimeList.length; i++) {
+						var orderTime = orderTimeList[i];
+						var text = orderTime.arrivalTime.split(" ")[0].split(":");
+						var arrivalTime = new Date();
+						arrivalTime.setHours(text[0]);
+						arrivalTime.setMinutes(text[1]);
+						arrivalTime.setSeconds(text[2]);
+						arrivalTime.setMilliseconds(0);
 						
-						/*
-						console.log(d);
-						
-						if(d.getHours() == 12) {
+						var t = orderTime.arrivalTime.split(" ")[1] + ' ' + arrivalTime.getHours()+'시 '+(arrivalTime.getMinutes()>0?arrivalTime.getMinutes()+'분':'');
+						var value = twoDigits(((orderTime.arrivalTime.split(" ")[1] == '오후' ? 12 : 0) + arrivalTime.getHours())) + ':' + twoDigits(arrivalTime.getMinutes()) + ':00';
+							
+						if(d < arrivalTime) {
 							$('#ob-time').append($('<option>', {
-							    text: '12시 30분 ', //+(time_start[1]>0?time_start[1]+'분':''),
-							    selected : true
-							}));
-							$('#ob-time').append($('<option>', {
-							    text: '18시 30분 ', //+(time_start[1]>0?time_start[1]+'분':''),
-							}));
-						} else if(d.getHours() == 18) {
-							$('#ob-time').append($('<option>', {
-							    text: '12시 30분 ', //+(time_start[1]>0?time_start[1]+'분':''),
+								value: value,
+							    text: t,
 							    disabled : true
 							}));
+						} else if(d.getHours() == arrivalTime.getHours()) {
 							$('#ob-time').append($('<option>', {
-							    text: '18시 30분 ', //+(time_start[1]>0?time_start[1]+'분':''),
+								value: value,
+							    text: t,
 							    selected : true
 							}));
+						} else {
+							$('#ob-time').append($('<option>', {
+								value: value,
+							    text: t,
+							    selected : false
+							}));
 						}
-						*/
+					}
+					
+					
+					/*
+					if(curWeek==0 || curWeek==6) {
 						
 						for(var i=time_start[0]+1; i<d.getHours(); i++) {
 							$('#ob-time').append($('<option>', {
@@ -680,6 +726,7 @@
 							}));
 						}
 					}
+					*/
 						
 					
 					

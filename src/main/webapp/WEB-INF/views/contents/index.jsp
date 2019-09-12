@@ -6,7 +6,7 @@
 <%@page import="java.util.List"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.mrporter.pomangam.target.vo.TargetBean"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -37,90 +37,7 @@
 
 	<a class="position-relative" name="home"></a>
 	<div id="landing-hero" class="text-xs-center clearfix">
-
-		<div class="container" style="margin-top: 0px">
-			<!-- Header -->
-			<!--<h1 class="font-weight-semibold">포 만 감</h1>-->
-			
-			<h3 class="n-font" style="color: black; font-size: 18px; ">정해진 시간과 장소로 배달해
-				드립니다.<br>'우리학교 테이크아웃 대행 서비스'</h3>
-			<img class="lazyload image n-mainlogo"
-				src="resources/img/main/logo2.png" alt="logo"><br> 
-				
-			<!-- 	
-			<span
-				class="font-weight-semibold" style="color: black"> <span
-				class="n-title-bigchar"> 포 </span> <span
-				style="font-size: 18px; margin-right: 12px"> 터가 </span> <span
-				class="n-title-bigchar"> 만 </span> <span
-				style="font-size: 18px; margin-right: 12px"> 나러 </span> <span
-				class="n-title-bigchar"> 감 </span>
-			</span>
-			 -->
-			 
-			<img class="lazyload image logotxt"
-				src="resources/img/main/logotxt.png" alt="txt">
-			
-			
-			<!-- Buttons -->
-			<div class="row">
-				<div class="col-md-2"></div>
-				<div class="col-md-8">
-					<!-- 
-			<form action="./target.do" class="input-group input-group-lg">
-				<input type="text" class="form-control" placeholder="어디로 배달해 드릴까요?" style="margin:10px">
-				<span class="input-group-btn">
-				  <button type="submit" class="btn btn-primary font-weight-semibold">검색</button>
-				</span>
-			</form>
-			-->
-					<!-- 
-			<div class="n-border" onclick="location.href='./target.do'" style="background-color:white">
-				<img class="lazyload image" src="resources/img/main/school.jpg" alt="kau" style="height:150px; width:100%">
-				<div class="n-container" >
-					<p style="font-size: 18px;">
-						<b>한국항공대학교</b>
-					</p>
-					<p class="" style="font-size: 11px;">
-						경기도 고양시 덕양구 항공대학로 76<br>누적 주문 수 <B>14,723건</B>
-					</p>
-				</div>
-			</div>
-			-->
-					<button class="btn btn-primary btn-3d"
-						onclick="location.href='./target.do?idx=1'"
-						style="width: 200px; font-size: 18px; line-height:25px; ">
-						항공대학교 <br>주문하기
-					</button>
-					<button class="btn btn-primary btn-3d"
-						onclick="location.href='./target.do?idx=2'"
-						style="width: 200px; font-size: 18px; line-height:25px; ">
-						군산대학교 <br>주문하기
-					</button>
-				</div>
-				<div class="col-md-2"></div> 
-			</div>
-			<div
-				style="font-size: 38px !important; margin-top: 16px !important; margin-bottom: 12px !important;">
-				<a href="https://www.facebook.com/pomangam" title="facebook"> <img
-					src="resources/img/icon/facebook.png">
-				</a> <a href="https://www.instagram.com/pomangam_official"
-					title="instagram"> <img src="resources/img/icon/instagram.png">
-				</a> 
-				<a href="https://pf.kakao.com/_xlxbhlj" title="kakaoplus"> <img
-					src="resources/img/icon/kakao.png">
-				</a>
-				<br> <span style="font-size: 11px;">Pomangam Official</span>
-			</div>
-
-			<!-- 광고 sample -->
-			<div class="sample">
-				<!-- 
-      		<img class="n-on-pc" src="resources/img/main/test1.jpg" width="100%" height="200px">
-      		<img class="n-on-mobile" src="resources/img/main/test2.jpg" width="auto" height="350px">
-      	 -->
-			</div>
-		</div>
+		<jsp:include page="main-ground-floor.jsp"></jsp:include>
 	</div>
 
 	<!-- Features -->
@@ -181,15 +98,15 @@
 				</div>
 				<div class="col-md-4">
 					<div class="n-card" style="cursor: pointer;"
-						onclick="toast('죄송합니다...','제휴 준비 중 입니다.','warning');">
+						onclick="location.href='./target.do?idx=3'">
 						<img class="n-school-img lazyload image"
-							src="resources/img/main/school2.jpg" alt="kau">
+							src="resources/img/main/hu.jpg" alt="hu">
 						<div class="n-container">
 							<p style="font-size: 18px;">
-								<b>강원대학교</b>
+								<b>호원대학교</b>
 							</p>
 							<p class="n-opacity" style="font-size: 11px;">
-								강원도 춘천시 석사동 강원대학길 1<br>누적 주문 수 <B>5,050건</B>
+								전라북도 군산시 임피면 호원대3길 64<br>누적 주문 수 <B><%=countMap.get(3) == null ? 0 : decimalFormat.format(countMap.get(3)) %>건</B>
 							</p>
 						</div>
 					</div>
@@ -273,7 +190,7 @@
 				<div>
 					<h1 class="n-font landing-heading text-xs-center">
 						<a href="javascript:void(0)" onclick="showMobileSupport()"
-							style="color: #f3753a"><i class="fa fa-download"
+							style="color: #FF866F"><i class="fa fa-download"
 							style="font-size: 24px;"></i> 포만감 앱 받기</a>
 					</h1>
 					<h3 class="n-font landing-subheading text-muted text-xs-center"
@@ -285,7 +202,7 @@
 						<div id="forfocus"
 							class="container text-xs-center n-mobilesupport">
 							<h3 class="n-font">
-								전화번호를 입력하시면<br>
+								전화번호를 입력하시면<br>	
 								<u>설치 주소</u>를 보내드립니다.
 							</h3>
 							<div class="n-mobilesupport-form">

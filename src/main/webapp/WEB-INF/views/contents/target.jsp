@@ -4,6 +4,8 @@
 <%@page import="com.google.gson.Gson"%>
 <%@page import="com.google.gson.reflect.TypeToken"%>
 <%@page import="com.mrporter.pomangam.target.vo.TargetBean"%>
+<%@page import="com.mrporter.pomangam.product.vo.OrderTimeBean"%>
+<%@page import="com.mrporter.pomangam.target.vo.TargetDetailBean"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mrporter.pomangam.restaurant.vo.RestaurantBean"%>
 <%@page import="com.mrporter.pomangam.common.util.Number"%>
@@ -24,12 +26,18 @@
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		List<TargetAdBean> targetAdList = (List) request.getAttribute("targetAdList");
 		
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<OrderTimeBean> orderTimeList = (List) request.getAttribute("orderTimeList");
+		
+		@SuppressWarnings({"unchecked", "rawtypes"})
+		List<TargetDetailBean> detailList = (List) request.getAttribute("detailList");
 		
 		String json = (String) request.getAttribute("target");
 		List<TargetBean> list = new Gson().fromJson(
 				json, 
 				new TypeToken<List<TargetBean>>() {}.getType());
 		TargetBean target = list.get(0);
+		
 	%>
 	
 	<!-- Navbar -->
@@ -37,7 +45,7 @@
 	
 	<!-- Content -->
 	<div class="container center" style="margin-top:40px; margin-bottom: 1px">
-		<!-- Target Info -->
+		<!-- Target Info 
 		<div class="n-center n-padding-24">
 			<a href="" style="text-decoration:none; !important">
 				<span class="n-xlarge n-bottombar" style="padding:5px">
@@ -47,8 +55,8 @@
 				</span>
 			</a>
 		</div>
-		
-		<div class="n-center">
+		-->
+		<div class="n-center" style="margin-top:28px">
 			<table style="display:inline-block">
 			<colgroup>
 				<col style="width: 70px;">
@@ -106,7 +114,15 @@
 													<td>
 														오후 5시 / 6시 / 7시
 													</td>
-					            				<%}%>
+					            				<%} else if(curTarget.equals("3")) {%>
+					            					<td>
+														연암관
+													</td>
+													<td>
+														오후 9시 20분
+													</td>
+					            				
+					            				<%} %>
 											</tr>
 											<tr>
 												<%if(curTarget.equals("1")) {%>
@@ -131,8 +147,15 @@
 													<td>
 														오후 5시 / 6시 / 7시  (+5분)
 													</td>
-					            				<%}%>
-												
+					            				<%} else if(curTarget.equals("3")) {%>
+					            					<td>
+														다산관 / 반계관
+													</td>
+													<td>
+														오후 9시 23분
+													</td>
+					            				
+					            				<%} %>
 											</tr>
 											<tr>
 												<%if(curTarget.equals("1")) {%>
@@ -146,7 +169,15 @@
 													<td>
 														오후 5시 / 6시 / 7시  (+10분)
 													</td>
-					            				<%}%>
+					            				<%} else if(curTarget.equals("3")) {%>
+					            					<td>
+														오륜관 / 난설허관
+													</td>
+													<td>
+														오후 9시 26분
+													</td>
+					            				
+					            				<%} %>
 											</tr>
 										</tbody>
 									</table>
@@ -180,7 +211,7 @@
 			</tbody>
 			</table>
 		</div>
-		
+		 
 		<%if(targetAdList!=null && targetAdList.size()>0) {%>
 		<hr>
 		<div class="n-center">
@@ -193,6 +224,7 @@
 				<%} %>
 			</div>
 		</div>
+		
 		<%} %>
 		<hr>
 		<!-- Parter -->
@@ -204,6 +236,7 @@
 			<ul class="list-group n-target-center">
 		<%
 		boolean tf = true;
+		if(restaurantList != null) {
 		for(int i=0; i<restaurantList.size(); i++) {
 			RestaurantBean bean = restaurantList.get(i);
 			if(bean.getIsActive() == 0) continue;
@@ -265,7 +298,8 @@
 					</div>
 				</li>
 			<%} tf = !tf;%>	
-		<%}%>
+		<%}
+		}%>
 
 			</ul>
 		</div>
@@ -339,7 +373,14 @@
 									<td>
 										오후 5시 / 6시 / 7시
 									</td>
-	            				<%}%>
+	            				<%} else if(curTarget.equals("3")) {%>
+	            					<td>
+										연암관
+									</td>
+									<td>
+										오후 9시 20분
+									</td>
+	            				<%} %>
 							</tr>
 							<tr>
 								<%if(curTarget.equals("1")) {%>
@@ -364,7 +405,14 @@
 									<td>
 										오후 5시 / 6시 / 7시  (+5분)
 									</td>
-	            				<%}%>
+	            				<%} else if(curTarget.equals("3")) {%>
+	            					<td>
+										다산관 / 반계관
+									</td>
+									<td>
+										오후 9시 23분
+									</td>
+	            				<%} %>
 								
 							</tr>
 							<tr>
@@ -379,7 +427,14 @@
 									<td>
 										오후 5시 / 6시 / 7시  (+10분)
 									</td>
-	            				<%}%>
+	            				<%} else if(curTarget.equals("3")) {%>
+	            					<td>
+										오륜관 / 난설허관
+									</td>
+									<td>
+										오후 9시 26분
+									</td>
+	            				<%} %>
 							</tr>
 						</tbody>
 					</table>
@@ -423,6 +478,9 @@
 
 	<script>
 	
+	$('#header-home').text('<%=target.getName() %>'); 
+	//$('#header-home').prop('href', '');
+	
 	var curTarget = <%=curTarget%>;
 	
 	if(mobilecheck()) {
@@ -446,7 +504,7 @@
 			autoplay:        true,
 			autoplayTimeout: 4000,
 			
-			responsive:{
+			responsive: {
 				0:    { items: 1 },
 				600:  { items: 1 },
 				1000: { items: 1 },

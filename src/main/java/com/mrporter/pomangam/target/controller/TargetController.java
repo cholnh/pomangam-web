@@ -21,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mrporter.pomangam.common.login.dao.UserCrudDAO;
 import com.mrporter.pomangam.common.pattern.vo.Status;
 import com.mrporter.pomangam.common.security.model.domain.User;
+import com.mrporter.pomangam.product.dao.ProductCrudDAO;
 import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
 import com.mrporter.pomangam.restaurant.vo.RestaurantBean;
 import com.mrporter.pomangam.target.dao.TargetCrudDAO;
@@ -52,10 +53,12 @@ public class TargetController {
 			session.removeAttribute("cartList");
 		}
 		
+		RestaurantCrudDAO rDao = new RestaurantCrudDAO();
+		
 		ModelAndView model = new ModelAndView();
 		String target = defaultDAO.getBean(idx);
-		List<RestaurantBean> restaurantList = new RestaurantCrudDAO().getBeanWithLimitCount(idx);
-		List<TargetAdBean> targetAdList = new RestaurantCrudDAO().getAdList(idx);
+		List<RestaurantBean> restaurantList = rDao.getBeanWithLimitCount(idx);
+		List<TargetAdBean> targetAdList = rDao.getAdList(idx);
 		if(target.equals("[]")) { // is empty
 			response.sendRedirect("./");
 			return null;
@@ -65,6 +68,8 @@ public class TargetController {
 			model.addObject("target", target);
 			model.addObject("restaurantList", restaurantList);
 			model.addObject("targetAdList", targetAdList);
+			model.addObject("orderTimeList", new ProductCrudDAO().getAllOrderTimeList(idx));
+			model.addObject("detailList", new TargetCrudDAO().getDetailList(idx));
 			
 			Object obj = session.getAttribute("user");
 			if(obj != null) {

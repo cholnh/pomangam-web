@@ -44,7 +44,7 @@ public class RestaurantCrudDAO extends Crud<RestaurantBean> {
 	public List<TargetAdBean> getAdList(Integer idx) throws Exception {
 		List<TargetAdBean> result = null;
 		List<Map<String, Object>> lom = sqlQuery(
-				"SELECT * FROM target_ad WHERE idx_target = ? ORDER BY sequence", idx);
+				"SELECT * FROM target_ad WHERE idx_target = ? AND isactive = 1 ORDER BY sequence", idx);
 		if(!lom.isEmpty()) {
 			Gson gson = new Gson();
 			result = new Gson().fromJson(gson.toJson(lom), 

@@ -56,7 +56,7 @@
 							</div>
 							<div class="n-third">
 								<button id="submitBtn" class="n-btn n-round n-loginBtn" 
-										style="background-color: #eb613e; color: white">로그인</button>
+										style="background-color: #FF866F; color: white">로그인</button>
 							</div>
 						</div>
 						
@@ -136,7 +136,7 @@
 										
 									</div>
 									<button type="submit" class="n-btn n-round n-signupBtn" 
-											style="background-color: #eb613e; color: white">회원가입</button>
+											style="background-color: #FF866F; color: white">회원가입</button>
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								</form>
 								<!-- 

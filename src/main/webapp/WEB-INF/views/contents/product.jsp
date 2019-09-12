@@ -208,6 +208,18 @@
 				</div>
 				
 				<div class="modal-body" style="padding:5%">
+					<%if(product.getIdx_restaurant().intValue() == 26){ %>
+					<div style="text-align:center; margin-top:32px;margin-bottom:12px">
+						<span style="font-weight:bold;font-size:18px;">매운맛 조절</span>
+					</div>
+					<div class="slider-danger">
+						<input id="nouislider" type="text" data-slider-value="2" data-slider-ticks-snap-bounds="1" >
+					</div>
+					<br>
+					
+					<%} %>
+					
+				
 					<%if(additionalList!=null && !additionalList.isEmpty()){ %>
 					<div style="text-align:center; margin-top:32px;margin-bottom:12px">
 						<span style="font-weight:bold;font-size:18px;">추가사항</span>
@@ -574,6 +586,38 @@
 	<script src="resources/js/pixeladmin.min.js"></script>
 	
 	<script>
+	$(function() {
+		var _isRtl = $('html').attr('dir') === 'rtl';
+		if (_isRtl) { $('#').wrap('<div class="slider-reversed"></div>') }
+	
+		$('#nouislider').slider({
+			ticks:        [0, 1, 2, 3, 4],
+			ticks_labels: ['<span style="color:red">착한맛<br>🌶</span>', 
+							'<span style="color:red">엽떡초보맛<br>🌶🌶</span>', 
+							'<span style="color:red">덜매운맛<br>🌶🌶🌶</span>', 
+							'<span style="color:red">오리지널<br>🌶🌶🌶🌶</span>', 
+							'<span style="color:red">매운맛<br>🌶🌶🌶🌶🌶</span>'],
+			reversed:     _isRtl,
+			tooltip:      'hide'
+		});
+		
+	
+		$('#modal').on('shown.bs.modal', function (event) {
+		  setTimeout(function() {
+			  $("#nouislider").slider('relayout');
+		  }, 0);
+		});
+		
+	});
+	
+	
+	</script>
+	
+	<script>
+	
+	$('#header-center').text('<%=product.getName() %>');
+	$('#header-center').prop('href', '');
+	
 	var cartAmount = <%=cartAmount%>;
 	var curTarget = <%=curTarget%>;
 	var curRestaurant = <%=curRestaurant%>;
@@ -711,11 +755,29 @@
 		}
 		<%}%>
 		
+		
 		if($('#ob_requirement').val().length > 0) {
-			requirement += '기타 요구사항 : '+$('#ob_requirement').val().trim();
+			requirement += ''+$('#ob_requirement').val().trim();
 		}
 		
+		
+		<%if(product.getIdx_restaurant().intValue() == 26){ %>
+			requirement += '\n맵기선택 : ';
+			var ht = $("#nouislider").slider('getValue');		
+			switch(ht) {
+			case 0: requirement += '착한맛'; break;
+			case 1: requirement += '엽떡초보맛'; break;
+			case 2: requirement += '덜매운맛'; break;
+			case 3: requirement += '오리지널'; break;
+			case 4: requirement += '매운맛'; break;
+			default : requirement += '덜매운맛'; break;
+			}
+		
+		<%}%>
+		
 		//console.log('goNext: '+ detail + ' ' + requirement);
+		
+		
 		
 		if(where == 'direct') {
 			goDirect(detail, requirement);
@@ -894,6 +956,7 @@
 		}
 
 	});
+	
 	</script>
 </body>
 </html>

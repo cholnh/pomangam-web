@@ -37,7 +37,7 @@
 	<jsp:include page="../parts/header.jsp" /> 
 
 	<div class="container center" style="margin-top:50px">
-		<!-- Target Info -->
+		<!-- Target Info 
 		<div class="n-center n-padding-32 n-margin-bottom">
 			<a href="" style="text-decoration:none; !important">
 				<span class="n-xlarge n-bottombar" style="padding:5px">
@@ -47,6 +47,8 @@
                 </span>
 			</a>
 		</div>
+		-->
+		
 		<div class="n-center" style="font-size:13px">
 			<!-- 
             <b>
@@ -186,6 +188,10 @@
 	<script src="resources/js/pixeladmin.min.js"></script>
 	
 	<script>
+	
+	$('#header-center').text('<%=restaurant.getName() %>');
+	$('#header-center').prop('href', '');
+	
 	var curTarget = <%=curTarget%>;
 	var curRestaurant = <%=curRestaurant%>;
 	

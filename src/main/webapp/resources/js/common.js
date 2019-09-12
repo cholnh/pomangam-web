@@ -149,13 +149,17 @@ function getTime(idx_product, amount, idx_restaurant, tf) {
 			},
 			tf,
 			function(t) {
-				var d = new Date(t);
-				var text = '';
-				
-				if(d.getDate() != new Date().getDate()) {
-					text = '다음날 ';
+				if(t==-1) {
+					$('#ob-time').text('오류');
+				} else {
+					var d = new Date(t);
+					var text = '';
+					
+					if(d.getDate() != new Date().getDate()) {
+						text = '다음날 ';
+					}
+					$('#ob-time').text(text + d.getHours()+'시 '+(d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
 				}
-				$('#ob-time').text(text + d.getHours()+'시 '+(d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
 			},
 			function() {
 				toast('포만감','네트워크 오류','warning');

@@ -81,9 +81,9 @@ img.lazyloaded { opacity: 1; }
 
   .px-navbar a {
     height: 60px !important;
-
     line-height: 60px !important;
   }
+
 
 .px-navbar .navbar-nav a:hover{
 	color:black;

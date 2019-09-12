@@ -1,6 +1,8 @@
 package com.mrporter.pomangam.payment.controller;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +89,15 @@ public class PaymentController {
 		model.addObject("bank_name", map.getValue("bank_name"));
 		model.addObject("bank_account", map.getValue("bank_account"));
 		model.addObject("bank_username", map.getValue("bank_username"));
+		model.addObject("detailList", new TargetCrudDAO().getDetailList(curTarget));
+		
+		LocalDate curDate = LocalDate.now();
+		DayOfWeek curWeek = curDate.getDayOfWeek();
+		if( curWeek == DayOfWeek.SUNDAY || curWeek == DayOfWeek.SATURDAY ) {
+			model.addObject("orderTimeList", new ProductCrudDAO().getOrderTimeList(curRestaurant, 2));
+		} else {
+			model.addObject("orderTimeList", new ProductCrudDAO().getOrderTimeList(curRestaurant, 1));
+		}
 		
 		String userjson = (String) session.getAttribute("user");
 		User user = new Gson().fromJson(userjson, new TypeToken<User>() {}.getType());

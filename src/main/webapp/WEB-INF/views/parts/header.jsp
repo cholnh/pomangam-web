@@ -23,16 +23,16 @@
 	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 
 	<link rel="canonical" href="https://www.pomangam.com">
-	<meta name="description" content="행복은 배부름에서 온다 - 푸드 딜리버리 서비스 플랫폼, 포터가 만나러 감">
+	<meta name="description" content="전국 대학교를 중심으로 한 로컬 핫딜 & 맛집 배달 서비스 플랫폼. 포만감">
 	
 	<!-- open graph -->
 	<meta property="og:type" content="website">
 	<meta property="og:title" content="포만감">
-	<meta property="og:description" content="행복은 배부름에서 온다 - 푸드 딜리버리 서비스 플랫폼, 포터가 만나러 감">
+	<meta property="og:description" content="전국 대학교를 중심으로 한 로컬 핫딜 & 맛집 배달 서비스 플랫폼. 포만감">
 	<meta property="og:image" content="https://www.pomangam.com/resources/img/main/logo.png">
 	<meta property="og:url" content="https://www.pomangam.com">
 
-	<title>행복은 배부름에서 온다. 포만감</title>
+	<title>포만감</title>
 	
 	<!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin" rel="stylesheet" type="text/css">
 	 -->
@@ -47,7 +47,7 @@
 	<link href="resources/css/widgets.min.css" rel="stylesheet" type="text/css">
 	
 	<!-- Theme -->
-	<link href="resources/css/themes/candy-orange.min.css" rel="stylesheet" type="text/css">
+	<link href="resources/css/themes/white.min.css" rel="stylesheet" type="text/css">
 	
 	<!-- Landing page CSS -->
 	<link href="resources/css/landing.css" rel="stylesheet" type="text/css">
@@ -80,12 +80,16 @@
 	<nav id="nav" class="navbar px-navbar sticky">
 		<div class="container">
 			<div class="navbar-header">
-				<a id="header-home" href="./" class="scroll-to navbar-brand"><b>Mr. Porter</b></a>
+				<a id="header-home" href="./" class="scroll-to navbar-brand">
+					<b>포 만 감</b>
+				</a>
 				<a id="header-back" href="javascript:history.back()" class="scroll-to navbar-brand" style="display:none">
 					<i class="fa fa-arrow-left" style="font-size:20px!important"></i>
 				</a>
 			</div>
-			<a id="header-center" href="./" class="n-header-center" style="display:none"><b>Mr. Porter</b></a>
+			<a id="header-center" href="./" class="n-header-center" style="display:none">
+				<b>포 만 감</b>
+			</a>
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target=".navbar-collapse"
 				aria-expanded="false">
@@ -273,11 +277,16 @@
 				},
 				tf,
 				function(t) {
-					maxtime = maxtime < t ? t : maxtime;
-					var d = new Date(t);
-					$('.ob-time-'+idx_product).text(d.getHours()+'시 '+ (d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
-					var max = new Date(maxtime);
-					$('.ob-time-max').text(max.getHours()+'시 '+(max.getMinutes() > 0 ? max.getMinutes()+'분' : ''))
+					if(t==-1) {
+						$('.ob-time-'+idx_product).text('오류');
+						$('.ob-time-max').text('오류');
+					} else {
+						maxtime = maxtime < t ? t : maxtime;
+						var d = new Date(t);
+						$('.ob-time-'+idx_product).text(d.getHours()+'시 '+ (d.getMinutes() > 0 ? d.getMinutes()+'분' : ''));
+						var max = new Date(maxtime);
+						$('.ob-time-max').text(max.getHours()+'시 '+(max.getMinutes() > 0 ? max.getMinutes()+'분' : ''));
+					}
 				},
 				function() {
 					alert('네트워크 오류');

@@ -38,7 +38,7 @@
 								</div>
 								<div class="n-third">
 									<button type="submit" id="submitBtn" class="n-btn n-round n-loginBtn" 
-											style="background-color: #eb613e; color: white">주문확인</button>
+											style="background-color: #FF866F; color: white">주문확인</button>
 								</div>
 							</div>
 						</form>

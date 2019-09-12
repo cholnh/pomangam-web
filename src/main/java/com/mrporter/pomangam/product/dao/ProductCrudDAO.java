@@ -1,8 +1,9 @@
 package com.mrporter.pomangam.product.dao;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,8 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mrporter.pomangam.common.pattern.dao.Crud;
+import com.mrporter.pomangam.product.vo.OrderTimeBean;
 import com.mrporter.pomangam.product.vo.ProductBean;
-import com.mrporter.pomangam.restaurant.dao.RestaurantCrudDAO;
 
 /**
  * ProductCrudDAO
@@ -120,7 +121,31 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		return amount>0?amount:0;
 	}
 	
-	public Calendar getTime(Calendar cur, Integer idx_product, int amount, Integer idx_restaurant) throws Exception {
+	public List<OrderTimeBean> getAllOrderTimeList(Integer idx_target) throws Exception {
+		List<OrderTimeBean> orderList = null;
+		List<Map<String, Object>> lom = sqlQuery(
+				"SELECT DISTINCT arrivalTime, pickUpTime, orderEndTime FROM order_time ot WHERE idx_target = ? AND state_active = 1 ORDER BY arrivalTime", idx_target);
+		if(!lom.isEmpty()) {
+			Gson gson = new Gson();
+			orderList = new Gson().fromJson(gson.toJson(lom), 
+					new TypeToken<List<OrderTimeBean>>() {}.getType());
+		}
+		return orderList;
+	}
+	
+	public List<OrderTimeBean> getOrderTimeList(Integer idx_restaurant, Integer type) throws Exception {
+		List<OrderTimeBean> orderList = null;
+		List<Map<String, Object>> lom = sqlQuery(
+				"SELECT arrivalTime, pickUpTime, orderEndTime FROM order_time WHERE idx_restaurant = ? AND state_active = 1 AND type = ? ORDER BY sequence;", idx_restaurant, type);
+		if(!lom.isEmpty()) {
+			Gson gson = new Gson();
+			orderList = new Gson().fromJson(gson.toJson(lom), 
+					new TypeToken<List<OrderTimeBean>>() {}.getType());
+		}
+		return orderList;
+	}
+	
+	private int getCapacitySeconds(int amount, Integer idx_restaurant) throws Exception {
 		List<Map<String, Object>> lom = sqlQuery(
 				"SELECT " + 
 					"TRUNCATE(((?*unit_time/unit_amount) + " + 
@@ -129,344 +154,415 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 				"FROM " + 
 					"restaurant " +
 				"WHERE idx = ?;", amount, idx_restaurant, idx_restaurant);
-		int seconds = Integer.parseInt(lom.get(0).get("seconds")+"");
-		
-		Calendar start;
-		Calendar end;
-		String[] starttime = new RestaurantCrudDAO().getStartTime(idx_restaurant).split(":");
-		String[] endtime = new RestaurantCrudDAO().getEndTime(idx_restaurant).split(":");
-				
-		int start_hour = Integer.parseInt(starttime[0]);
-		int start_minute = Integer.parseInt(starttime[1]);
-		int end_hour = Integer.parseInt(endtime[0]);
-		int end_minute = Integer.parseInt(endtime[1]);
-		start = Calendar.getInstance();
-		start.set(Calendar.SECOND, 0);
-		start.set(Calendar.MINUTE, start_minute);
-		if(start_hour>=12) {
-			start.set(Calendar.AM_PM, Calendar.PM);
-			start.set(Calendar.HOUR, start_hour-12);
-		} else {
-			start.set(Calendar.AM_PM, Calendar.AM);
-			start.set(Calendar.HOUR, start_hour);
-		}
-		end = Calendar.getInstance();
-		end.set(Calendar.SECOND, 0);
-		end.set(Calendar.MINUTE, end_minute-1);
-		if(end_hour>=12) {
-			end.set(Calendar.AM_PM, Calendar.PM);
-			end.set(Calendar.HOUR, end_hour-12);
-		} else {
-			end.set(Calendar.AM_PM, Calendar.AM);
-			end.set(Calendar.HOUR, end_hour);
-		}
-		
-		cur.add(Calendar.SECOND, seconds);
-		
-		
-		/* 이삭토스트 커스텀 시간 시작 
-		if(idx_restaurant == 15) {
-			Calendar pass_start = Calendar.getInstance();
-			pass_start.set(Calendar.AM_PM, Calendar.PM);
-			pass_start.set(Calendar.HOUR, 12);
-			pass_start.set(Calendar.MINUTE, 30);
-			
-			Calendar pass_end = Calendar.getInstance();
-			pass_end.set(Calendar.AM_PM, Calendar.PM);
-			pass_end.set(Calendar.HOUR, 4);
-			pass_end.set(Calendar.MINUTE, 30);
-			
-			if(cur.compareTo(pass_start) < 0) {
-				cur.set(Calendar.HOUR, 1);
-				cur.set(Calendar.AM_PM, Calendar.PM);
-				cur.set(Calendar.MINUTE, 0);
-				cur.set(Calendar.SECOND, 0);
-				return cur;
-			} else if((cur.compareTo(pass_start) >= 0) && (cur.compareTo(pass_end) < 0)) {
-				cur.set(Calendar.HOUR, 5);
-				cur.set(Calendar.AM_PM, Calendar.PM);
-				cur.set(Calendar.MINUTE, 0);
-				cur.set(Calendar.SECOND, 0);
-				return cur;
-			} else if(cur.compareTo(pass_end) >= 0) {
-				cur.add(Calendar.DATE, 1);
-				cur.set(Calendar.HOUR, 1);
-				cur.set(Calendar.AM_PM, Calendar.PM);
-				cur.set(Calendar.MINUTE, 0);
-				cur.set(Calendar.SECOND, 0);
-				return cur;
-			}
-			
-		}
-		 이삭토스트 커스텀 시간 끝 */
-		
-		int curWeek = cur.get(Calendar.DAY_OF_WEEK);
-		if( curWeek==Calendar.SUNDAY || curWeek==Calendar.SATURDAY ) {
-			// 주말
-			
-			/*
-			// 종료시간
-			Calendar holy_end = Calendar.getInstance();
-			holy_end.set(Calendar.DATE, cur.get(Calendar.DATE));
-			holy_end.set(Calendar.AM_PM, Calendar.PM);
-			holy_end.set(Calendar.HOUR, 6);
-			holy_end.set(Calendar.MINUTE, 0);
-			
-			if(cur.compareTo(holy_end) >= 0) {
-				cur.add(Calendar.DATE, 1);
-				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
-				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
-				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
-				cur.set(Calendar.SECOND, 0);
-			}
-			
-			// 시작시간			
-			if(cur.compareTo(start) < 0) {
-				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
-				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
-				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
-				cur.set(Calendar.SECOND, 0);
-			}
-			*/
-			
-			// 종료시간
-			if(cur.compareTo(end) >= 0) {
-				cur.add(Calendar.DATE, 1);
-				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
-				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
-				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
-				cur.set(Calendar.SECOND, 0);
-			}
-			
-			// 시작시간
-			if(cur.compareTo(start) < 0) {
-				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
-				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
-				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
-				cur.set(Calendar.SECOND, 0);
-			}
-			
-		} else {
-			// 평일
-			
-			// 종료시간
-			if(cur.compareTo(end) >= 0) {
-				cur.add(Calendar.DATE, 1);
-				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
-				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
-				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
-				cur.set(Calendar.SECOND, 0);
-			}
-			
-			// 시작시간
-			if(cur.compareTo(start) < 0) {
-				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
-				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
-				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
-				cur.set(Calendar.SECOND, 0);
-			}
-		}
-		
-		Calendar next = getNext(cur, idx_restaurant);
-		
-		return next;
+		return Integer.parseInt(lom.get(0).get("seconds")+"");
 	}
 	
-	public Calendar getNext(Integer idx_restaurant) throws Exception {
-		return getNext(Calendar.getInstance(), idx_restaurant);
-	}
-	
-	public Calendar getNext(Calendar cal, Integer idx_restaurant) throws Exception {
-	
-		int curWeek = cal.get(Calendar.DAY_OF_WEEK);
-		if( curWeek==Calendar.SUNDAY || curWeek==Calendar.SATURDAY ) {
-			// 주말
-			//System.out.println("주말");
-			
-			/*
-			// 첫 주문 마감
-			Calendar firstorder = Calendar.getInstance();
-			firstorder.set(Calendar.DATE, cal.get(Calendar.DATE));
-			firstorder.set(Calendar.AM_PM, Calendar.PM);
-			firstorder.set(Calendar.HOUR, 0);
-			firstorder.set(Calendar.MINUTE, 0);
-			
-			if(cal.compareTo(firstorder) < 0) {
-				cal.set(Calendar.AM_PM, Calendar.PM);
-				cal.set(Calendar.HOUR, 0);
-				cal.set(Calendar.MINUTE, 30);
-				cal.set(Calendar.SECOND, 0);
-				return cal;
-			}
-			
-			// 휴식시간 12시 30분 ~ 17시 30분
-			Calendar pass_end = Calendar.getInstance();
-			pass_end.set(Calendar.DATE, cal.get(Calendar.DATE));
-			pass_end.set(Calendar.AM_PM, Calendar.PM);
-			pass_end.set(Calendar.HOUR, 6);
-			pass_end.set(Calendar.MINUTE, 0);
-			
-			if((cal.compareTo(firstorder) >= 0) && (cal.compareTo(pass_end) < 0)) {
-				cal.set(Calendar.AM_PM, Calendar.PM);
-				cal.set(Calendar.HOUR, 6);
-				cal.set(Calendar.MINUTE, 30);
-				cal.set(Calendar.SECOND, 0);
-				return cal;
-			}
-			
-			return cal;
-			*/
-			
-			
-			// 휴식시간 2시 ~ 4시  <-- 이부분만 평일과 다른 로직임
-			Calendar pass_start = Calendar.getInstance();
-			pass_start.set(Calendar.AM_PM, Calendar.PM);
-			pass_start.set(Calendar.HOUR, 0);
-			//pass_start.set(Calendar.HOUR, 1);
-			pass_start.set(Calendar.MINUTE, 29);
-			
-			Calendar pass_end = Calendar.getInstance();
-			pass_end.set(Calendar.AM_PM, Calendar.PM);
-			pass_end.set(Calendar.HOUR, 3);
-			pass_end.set(Calendar.MINUTE, 30);
-			
-			if((cal.compareTo(pass_start) >= 0) && (cal.compareTo(pass_end) < 0)) {
-				cal.set(Calendar.HOUR, 5);
-				cal.set(Calendar.MINUTE, 0);
-				cal.set(Calendar.SECOND, 0);
-				return cal;
-			}
-			// end 
-			
-			/*
-			// 휴식시간 7시 ~ 8시
-			Calendar pass_start2 = Calendar.getInstance();
-			pass_start2.set(Calendar.AM_PM, Calendar.PM);
-			pass_start2.set(Calendar.HOUR, 6);
-			pass_start2.set(Calendar.MINUTE, 30);
-			pass_start2.set(Calendar.SECOND, 0);
-			
-			Calendar pass_end2 = Calendar.getInstance();
-			pass_end2.set(Calendar.AM_PM, Calendar.PM);
-			pass_end2.set(Calendar.HOUR, 7);
-			pass_end2.set(Calendar.MINUTE, 30);
-			pass_end2.set(Calendar.SECOND, 0);
-			
-			//System.out.println("cur : "+new Date(cal.getTimeInMillis()).toString());
-			//System.out.println("pass_start2 : "+new Date(pass_start2.getTimeInMillis()).toString());
-			
-			if((cal.compareTo(pass_start2) >= 0) && (cal.compareTo(pass_end2) < 0)) {
-				cal.set(Calendar.HOUR, 9);
-				cal.set(Calendar.MINUTE, 0);
-				cal.set(Calendar.SECOND, 0);
-				return cal;
-			}
-			*/
-			
-			// 첫 배달
-			Calendar firstPorter = Calendar.getInstance();
-			firstPorter.setTime(cal.getTime());
-			firstPorter.set(Calendar.HOUR, 11);
-			firstPorter.set(Calendar.AM_PM, Calendar.AM);
-			firstPorter.set(Calendar.MINUTE, 30);
-			//firstPorter.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-			//firstPorter.set(Calendar.DATE, cal.get(Calendar.DATE));
-			
-			if(cal.compareTo(firstPorter) < 0) {
-				cal.set(Calendar.HOUR, firstPorter.get(Calendar.HOUR));
-				cal.set(Calendar.AM_PM, firstPorter.get(Calendar.AM_PM));
-				cal.set(Calendar.MINUTE, firstPorter.get(Calendar.MINUTE)-1);
-			}
-			
-			cal.set(Calendar.SECOND, 0);
-			if(cal.get(Calendar.MINUTE) >= 30) {
-				cal.set(Calendar.HOUR, (cal.get(Calendar.HOUR)+1));
-				cal.set(Calendar.MINUTE, 30);
-			} else {
-				cal.set(Calendar.MINUTE, 30);
-			}
-			
-			cal.add(Calendar.MINUTE, 30); // 배달시간 +30분
-			return cal;
-			
+	public long getAvailableOrderTime(Integer idx_product, int amount, Integer idx_restaurant) throws Exception {
+		// data
+		LocalDate curDate = LocalDate.now();
+		LocalTime curTime = LocalTime.now();
+		List<OrderTimeBean> orderTimeList;
+		DayOfWeek curWeek = curDate.getDayOfWeek();
+		if( curWeek == DayOfWeek.SUNDAY || curWeek == DayOfWeek.SATURDAY ) {
+			orderTimeList = getOrderTimeList(idx_restaurant, 2);
 		} else {
-			// 평일
-			//System.out.println("평일");
-			
-			// 휴식시간 2시 ~ 4시
-			Calendar pass_start = Calendar.getInstance();
-			pass_start.set(Calendar.AM_PM, Calendar.PM);
-			pass_start.set(Calendar.HOUR, 0);
-			//pass_start.set(Calendar.HOUR, 1);
-			pass_start.set(Calendar.MINUTE, 29);
-			
-			Calendar pass_end = Calendar.getInstance();
-			pass_end.set(Calendar.AM_PM, Calendar.PM);
-			pass_end.set(Calendar.HOUR, 3);
-			pass_end.set(Calendar.MINUTE, 30);
-			
-			if((cal.compareTo(pass_start) >= 0) && (cal.compareTo(pass_end) < 0)) {
-				cal.set(Calendar.HOUR, 5);
-				cal.set(Calendar.MINUTE, 0);
-				cal.set(Calendar.SECOND, 0);
-				return cal;
-			}
-			
-			/*
-			// 휴식시간 7시 ~ 8시
-			Calendar pass_start2 = Calendar.getInstance();
-			pass_start2.set(Calendar.AM_PM, Calendar.PM);
-			pass_start2.set(Calendar.HOUR, 6);
-			pass_start2.set(Calendar.MINUTE, 30);
-			pass_start2.set(Calendar.SECOND, 0);
-			
-			Calendar pass_end2 = Calendar.getInstance();
-			pass_end2.set(Calendar.AM_PM, Calendar.PM);
-			pass_end2.set(Calendar.HOUR, 7);
-			pass_end2.set(Calendar.MINUTE, 30);
-			pass_end2.set(Calendar.SECOND, 0);
-			
-			//System.out.println("cur : "+new Date(cal.getTimeInMillis()).toString());
-			//System.out.println("pass_start2 : "+new Date(pass_start2.getTimeInMillis()).toString());
-			
-			if((cal.compareTo(pass_start2) >= 0) && (cal.compareTo(pass_end2) < 0)) {
-				cal.set(Calendar.HOUR, 9);
-				cal.set(Calendar.MINUTE, 0);
-				cal.set(Calendar.SECOND, 0);
-				return cal;
-			}
-			*/
-			
-			// 첫 배달
-			Calendar firstPorter = Calendar.getInstance();
-			firstPorter.setTime(cal.getTime());
-			firstPorter.set(Calendar.HOUR, 11);
-			firstPorter.set(Calendar.AM_PM, Calendar.AM);
-			firstPorter.set(Calendar.MINUTE, 30);
-			//firstPorter.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-			//firstPorter.set(Calendar.DATE, cal.get(Calendar.DATE));
-			
-			if(cal.compareTo(firstPorter) < 0) {
-				cal.set(Calendar.HOUR, firstPorter.get(Calendar.HOUR));
-				cal.set(Calendar.AM_PM, firstPorter.get(Calendar.AM_PM));
-				cal.set(Calendar.MINUTE, firstPorter.get(Calendar.MINUTE)-1);
-			}
-			
-			cal.set(Calendar.SECOND, 0);
-			if(cal.get(Calendar.MINUTE) >= 30) {
-				cal.set(Calendar.HOUR, (cal.get(Calendar.HOUR)+1));
-				cal.set(Calendar.MINUTE, 30);
-			} else {
-				cal.set(Calendar.MINUTE, 30);
-			}
-			
-			cal.add(Calendar.MINUTE, 30); // 배달시간 +30분
-			return cal;
+			orderTimeList = getOrderTimeList(idx_restaurant, 1);
 		}
+		
+		// logic
+		if(orderTimeList == null || orderTimeList.isEmpty()) return -1;
+		for(OrderTimeBean orderTime : orderTimeList) {
+			LocalTime orderEndTime = orderTime
+					.adjustOrderEndTime(getCapacitySeconds(amount, idx_restaurant))
+					.getOrderEndTime();
+			
+			if(curTime.isBefore(orderEndTime)) {
+				return orderTime.getArrivalDateInMillis();
+			}
+		}
+		OrderTimeBean firstOrder = orderTimeList.get(0);
+		firstOrder.nextDay();
+		return firstOrder.getArrivalDateInMillis();
 	}
+	
+//	public Calendar getTime(Calendar cur, Integer idx_product, int amount, Integer idx_restaurant) throws Exception {
+//		List<Map<String, Object>> lom = sqlQuery(
+//				"SELECT " + 
+//					"TRUNCATE(((?*unit_time/unit_amount) + " + 
+//					"(SELECT (cnt_sell*unit_time/unit_amount) FROM restaurant WHERE idx = ?)) * 60, 0) " + 
+//					"as seconds " + 
+//				"FROM " + 
+//					"restaurant " +
+//				"WHERE idx = ?;", amount, idx_restaurant, idx_restaurant);
+//		int seconds = Integer.parseInt(lom.get(0).get("seconds")+"");
+//		
+//		Calendar start;
+//		Calendar end;
+//		String[] starttime = new RestaurantCrudDAO().getStartTime(idx_restaurant).split(":");
+//		String[] endtime = new RestaurantCrudDAO().getEndTime(idx_restaurant).split(":");
+//				
+//		int start_hour = Integer.parseInt(starttime[0]);
+//		int start_minute = Integer.parseInt(starttime[1]);
+//		int end_hour = Integer.parseInt(endtime[0]);
+//		int end_minute = Integer.parseInt(endtime[1]);
+//		start = Calendar.getInstance();
+//		start.set(Calendar.SECOND, 0);
+//		start.set(Calendar.MINUTE, start_minute);
+//		if(start_hour>=12) {
+//			start.set(Calendar.AM_PM, Calendar.PM);
+//			start.set(Calendar.HOUR, start_hour-12);
+//		} else {
+//			start.set(Calendar.AM_PM, Calendar.AM);
+//			start.set(Calendar.HOUR, start_hour);
+//		}
+//		end = Calendar.getInstance();
+//		end.set(Calendar.SECOND, 0);
+//		end.set(Calendar.MINUTE, end_minute-1);
+//		if(end_hour>=12) {
+//			end.set(Calendar.AM_PM, Calendar.PM);
+//			end.set(Calendar.HOUR, end_hour-12);
+//		} else {
+//			end.set(Calendar.AM_PM, Calendar.AM);
+//			end.set(Calendar.HOUR, end_hour);
+//		}
+//		
+//		cur.add(Calendar.SECOND, seconds);
+//		
+//		
+//		/* 이삭토스트 커스텀 시간 시작 
+//		if(idx_restaurant == 15) {
+//			Calendar pass_start = Calendar.getInstance();
+//			pass_start.set(Calendar.AM_PM, Calendar.PM);
+//			pass_start.set(Calendar.HOUR, 12);
+//			pass_start.set(Calendar.MINUTE, 30);
+//			
+//			Calendar pass_end = Calendar.getInstance();
+//			pass_end.set(Calendar.AM_PM, Calendar.PM);
+//			pass_end.set(Calendar.HOUR, 4);
+//			pass_end.set(Calendar.MINUTE, 30);
+//			
+//			if(cur.compareTo(pass_start) < 0) {
+//				cur.set(Calendar.HOUR, 1);
+//				cur.set(Calendar.AM_PM, Calendar.PM);
+//				cur.set(Calendar.MINUTE, 0);
+//				cur.set(Calendar.SECOND, 0);
+//				return cur;
+//			} else if((cur.compareTo(pass_start) >= 0) && (cur.compareTo(pass_end) < 0)) {
+//				cur.set(Calendar.HOUR, 5);
+//				cur.set(Calendar.AM_PM, Calendar.PM);
+//				cur.set(Calendar.MINUTE, 0);
+//				cur.set(Calendar.SECOND, 0);
+//				return cur;
+//			} else if(cur.compareTo(pass_end) >= 0) {
+//				cur.add(Calendar.DATE, 1);
+//				cur.set(Calendar.HOUR, 1);
+//				cur.set(Calendar.AM_PM, Calendar.PM);
+//				cur.set(Calendar.MINUTE, 0);
+//				cur.set(Calendar.SECOND, 0);
+//				return cur;
+//			}
+//			
+//		}
+//		 이삭토스트 커스텀 시간 끝 */
+//		
+//		
+//		/* 호원대 커스텀 */
+//		if(idx_restaurant.intValue() == 24 || 
+//			idx_restaurant.intValue() == 25 ||
+//			idx_restaurant.intValue() == 26 ||
+//			idx_restaurant.intValue() == 27 ||
+//			idx_restaurant.intValue() == 28 ||
+//			idx_restaurant.intValue() == 29) {
+//			
+//			
+//			// 종료시간
+//			if(cur.compareTo(end) >= 0) {
+//				cur.add(Calendar.DATE, 1);
+//			}
+//			
+//			cur.set(Calendar.HOUR, 9);
+//			cur.set(Calendar.AM_PM, Calendar.PM);
+//			cur.set(Calendar.MINUTE, 20);
+//			cur.set(Calendar.SECOND, 0);
+//			
+//			return cur;
+//		}
+//		
+//		int curWeek = cur.get(Calendar.DAY_OF_WEEK);
+//		if( curWeek==Calendar.SUNDAY || curWeek==Calendar.SATURDAY ) {
+//			// 주말
+//			
+//			/*
+//			// 종료시간
+//			Calendar holy_end = Calendar.getInstance();
+//			holy_end.set(Calendar.DATE, cur.get(Calendar.DATE));
+//			holy_end.set(Calendar.AM_PM, Calendar.PM);
+//			holy_end.set(Calendar.HOUR, 6);
+//			holy_end.set(Calendar.MINUTE, 0);
+//			
+//			if(cur.compareTo(holy_end) >= 0) {
+//				cur.add(Calendar.DATE, 1);
+//				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+//				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+//				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+//				cur.set(Calendar.SECOND, 0);
+//			}
+//			
+//			// 시작시간			
+//			if(cur.compareTo(start) < 0) {
+//				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+//				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+//				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+//				cur.set(Calendar.SECOND, 0);
+//			}
+//			*/
+//			
+//			// 종료시간
+//			if(cur.compareTo(end) >= 0) {
+//				cur.add(Calendar.DATE, 1);
+//				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+//				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+//				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+//				cur.set(Calendar.SECOND, 0);
+//			}
+//			
+//			// 시작시간
+//			if(cur.compareTo(start) < 0) {
+//				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+//				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+//				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+//				cur.set(Calendar.SECOND, 0);
+//			}
+//			
+//		} else {
+//			// 평일
+//			
+//			// 종료시간
+//			if(cur.compareTo(end) >= 0) {
+//				cur.add(Calendar.DATE, 1);
+//				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+//				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+//				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+//				cur.set(Calendar.SECOND, 0);
+//			}
+//			
+//			// 시작시간
+//			if(cur.compareTo(start) < 0) {
+//				cur.set(Calendar.HOUR, start.get(Calendar.HOUR));
+//				cur.set(Calendar.AM_PM, start.get(Calendar.AM_PM));
+//				cur.set(Calendar.MINUTE, start.get(Calendar.MINUTE));
+//				cur.set(Calendar.SECOND, 0);
+//			}
+//		}
+//		
+//		Calendar next = getNext(cur, idx_restaurant);
+//		
+//		return next;
+//	}
+//	
+//	public Calendar getNext(Integer idx_restaurant) throws Exception {
+//		return getNext(Calendar.getInstance(), idx_restaurant);
+//	}
+//	
+//	public Calendar getNext(Calendar cal, Integer idx_restaurant) throws Exception {
+//	
+//		int curWeek = cal.get(Calendar.DAY_OF_WEEK);
+//		if( curWeek==Calendar.SUNDAY || curWeek==Calendar.SATURDAY ) {
+//			// 주말
+//			//System.out.println("주말");
+//			
+//			/*
+//			// 첫 주문 마감
+//			Calendar firstorder = Calendar.getInstance();
+//			firstorder.set(Calendar.DATE, cal.get(Calendar.DATE));
+//			firstorder.set(Calendar.AM_PM, Calendar.PM);
+//			firstorder.set(Calendar.HOUR, 0);
+//			firstorder.set(Calendar.MINUTE, 0);
+//			
+//			if(cal.compareTo(firstorder) < 0) {
+//				cal.set(Calendar.AM_PM, Calendar.PM);
+//				cal.set(Calendar.HOUR, 0);
+//				cal.set(Calendar.MINUTE, 30);
+//				cal.set(Calendar.SECOND, 0);
+//				return cal;
+//			}
+//			
+//			// 휴식시간 12시 30분 ~ 17시 30분
+//			Calendar pass_end = Calendar.getInstance();
+//			pass_end.set(Calendar.DATE, cal.get(Calendar.DATE));
+//			pass_end.set(Calendar.AM_PM, Calendar.PM);
+//			pass_end.set(Calendar.HOUR, 6);
+//			pass_end.set(Calendar.MINUTE, 0);
+//			
+//			if((cal.compareTo(firstorder) >= 0) && (cal.compareTo(pass_end) < 0)) {
+//				cal.set(Calendar.AM_PM, Calendar.PM);
+//				cal.set(Calendar.HOUR, 6);
+//				cal.set(Calendar.MINUTE, 30);
+//				cal.set(Calendar.SECOND, 0);
+//				return cal;
+//			}
+//			
+//			return cal;
+//			*/
+//			
+//			
+//			// 휴식시간 2시 ~ 4시  <-- 이부분만 평일과 다른 로직임
+//			Calendar pass_start = Calendar.getInstance();
+//			pass_start.set(Calendar.AM_PM, Calendar.PM);
+//			pass_start.set(Calendar.HOUR, 0);
+//			//pass_start.set(Calendar.HOUR, 1);
+//			pass_start.set(Calendar.MINUTE, 29);
+//			
+//			Calendar pass_end = Calendar.getInstance();
+//			pass_end.set(Calendar.AM_PM, Calendar.PM);
+//			pass_end.set(Calendar.HOUR, 4);
+//			pass_end.set(Calendar.MINUTE, 30);
+//			
+//			if((cal.compareTo(pass_start) >= 0) && (cal.compareTo(pass_end) < 0)) {
+//				cal.set(Calendar.HOUR, 6);
+//				cal.set(Calendar.MINUTE, 0);
+//				cal.set(Calendar.SECOND, 0);
+//				return cal;
+//			}
+//			// end 
+//			
+//			/*
+//			// 휴식시간 7시 ~ 8시
+//			Calendar pass_start2 = Calendar.getInstance();
+//			pass_start2.set(Calendar.AM_PM, Calendar.PM);
+//			pass_start2.set(Calendar.HOUR, 6);
+//			pass_start2.set(Calendar.MINUTE, 30);
+//			pass_start2.set(Calendar.SECOND, 0);
+//			
+//			Calendar pass_end2 = Calendar.getInstance();
+//			pass_end2.set(Calendar.AM_PM, Calendar.PM);
+//			pass_end2.set(Calendar.HOUR, 7);
+//			pass_end2.set(Calendar.MINUTE, 30);
+//			pass_end2.set(Calendar.SECOND, 0);
+//			
+//			//System.out.println("cur : "+new Date(cal.getTimeInMillis()).toString());
+//			//System.out.println("pass_start2 : "+new Date(pass_start2.getTimeInMillis()).toString());
+//			
+//			if((cal.compareTo(pass_start2) >= 0) && (cal.compareTo(pass_end2) < 0)) {
+//				cal.set(Calendar.HOUR, 9);
+//				cal.set(Calendar.MINUTE, 0);
+//				cal.set(Calendar.SECOND, 0);
+//				return cal;
+//			}
+//			*/
+//			
+//			// 첫 배달
+//			Calendar firstPorter = Calendar.getInstance();
+//			firstPorter.setTime(cal.getTime());
+//			firstPorter.set(Calendar.HOUR, 11);
+//			firstPorter.set(Calendar.AM_PM, Calendar.AM);
+//			firstPorter.set(Calendar.MINUTE, 30);
+//			//firstPorter.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+//			//firstPorter.set(Calendar.DATE, cal.get(Calendar.DATE));
+//			
+//			if(cal.compareTo(firstPorter) < 0) {
+//				cal.set(Calendar.HOUR, firstPorter.get(Calendar.HOUR));
+//				cal.set(Calendar.AM_PM, firstPorter.get(Calendar.AM_PM));
+//				cal.set(Calendar.MINUTE, firstPorter.get(Calendar.MINUTE)-1);
+//			}
+//			
+//			cal.set(Calendar.SECOND, 0);
+//			if(cal.get(Calendar.MINUTE) >= 30) {
+//				cal.set(Calendar.HOUR, (cal.get(Calendar.HOUR)+1));
+//				cal.set(Calendar.MINUTE, 30);
+//			} else {
+//				cal.set(Calendar.MINUTE, 30);
+//			}
+//			
+//			cal.add(Calendar.MINUTE, 30); // 배달시간 +30분
+//			return cal;
+//			
+//		} else {
+//			// 평일
+//			//System.out.println("평일");
+//			
+//			// 휴식시간 2시 ~ 4시
+//			Calendar pass_start = Calendar.getInstance();
+//			pass_start.set(Calendar.AM_PM, Calendar.PM);
+//			pass_start.set(Calendar.HOUR, 0);
+//			//pass_start.set(Calendar.HOUR, 1);
+//			pass_start.set(Calendar.MINUTE, 29);
+//			
+//			Calendar pass_end = Calendar.getInstance();
+//			pass_end.set(Calendar.AM_PM, Calendar.PM);
+//			pass_end.set(Calendar.HOUR, 4);
+//			pass_end.set(Calendar.MINUTE, 30);
+//			
+//			if((cal.compareTo(pass_start) >= 0) && (cal.compareTo(pass_end) < 0)) {
+//				cal.set(Calendar.HOUR, 6);
+//				cal.set(Calendar.MINUTE, 0);
+//				cal.set(Calendar.SECOND, 0);
+//				return cal;
+//			}
+//			
+//			/*
+//			// 휴식시간 7시 ~ 8시
+//			Calendar pass_start2 = Calendar.getInstance();
+//			pass_start2.set(Calendar.AM_PM, Calendar.PM);
+//			pass_start2.set(Calendar.HOUR, 6);
+//			pass_start2.set(Calendar.MINUTE, 30);
+//			pass_start2.set(Calendar.SECOND, 0);
+//			
+//			Calendar pass_end2 = Calendar.getInstance();
+//			pass_end2.set(Calendar.AM_PM, Calendar.PM);
+//			pass_end2.set(Calendar.HOUR, 7);
+//			pass_end2.set(Calendar.MINUTE, 30);
+//			pass_end2.set(Calendar.SECOND, 0);
+//			
+//			//System.out.println("cur : "+new Date(cal.getTimeInMillis()).toString());
+//			//System.out.println("pass_start2 : "+new Date(pass_start2.getTimeInMillis()).toString());
+//			
+//			if((cal.compareTo(pass_start2) >= 0) && (cal.compareTo(pass_end2) < 0)) {
+//				cal.set(Calendar.HOUR, 9);
+//				cal.set(Calendar.MINUTE, 0);
+//				cal.set(Calendar.SECOND, 0);
+//				return cal;
+//			}
+//			*/
+//			
+//			// 첫 배달
+//			Calendar firstPorter = Calendar.getInstance();
+//			firstPorter.setTime(cal.getTime());
+//			firstPorter.set(Calendar.HOUR, 11);
+//			firstPorter.set(Calendar.AM_PM, Calendar.AM);
+//			firstPorter.set(Calendar.MINUTE, 30);
+//			//firstPorter.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+//			//firstPorter.set(Calendar.DATE, cal.get(Calendar.DATE));
+//			
+//			if(cal.compareTo(firstPorter) < 0) {
+//				cal.set(Calendar.HOUR, firstPorter.get(Calendar.HOUR));
+//				cal.set(Calendar.AM_PM, firstPorter.get(Calendar.AM_PM));
+//				cal.set(Calendar.MINUTE, firstPorter.get(Calendar.MINUTE)-1);
+//			}
+//			
+//			cal.set(Calendar.SECOND, 0);
+//			if(cal.get(Calendar.MINUTE) >= 30) {
+//				cal.set(Calendar.HOUR, (cal.get(Calendar.HOUR)+1));
+//				cal.set(Calendar.MINUTE, 30);
+//			} else {
+//				cal.set(Calendar.MINUTE, 30);
+//			}
+//			
+//			cal.add(Calendar.MINUTE, 30); // 배달시간 +30분
+//			return cal;
+//		}
+//	}
 	
 	public static void main(String...args) {
 		try {
+			System.out.println(new ProductCrudDAO().getOrderTimeList(5, 1));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		/*
+		try {
+			
 			ProductCrudDAO d = new ProductCrudDAO();
 	
 			//Calendar cur = Calendar.getInstance();
@@ -498,7 +594,7 @@ public class ProductCrudDAO extends Crud<ProductBean> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		*/
 	}
 	
 }

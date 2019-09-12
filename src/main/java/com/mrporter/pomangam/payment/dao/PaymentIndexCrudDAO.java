@@ -82,6 +82,18 @@ public class PaymentIndexCrudDAO extends Crud<PaymentIndexBean> {
 					"SELECT pm.idx as idx, pd.name as name, pm.amount as amount, pm.additional as additional, pm.idx_restaurant as idx_restaurant, pm.requirement as requirement FROM payment pm, product pd " + 
 					"WHERE pm.idx_product = pd.idx and pm.idx_payment_index = ? AND pm.idx_restaurant = ?", idx, idx_restaurant);
 			
+			/* 호원대 커스텀 */
+			if(idx_restaurant.equals("24") || 
+				idx_restaurant.equals("25") ||
+				idx_restaurant.equals("26") ||
+				idx_restaurant.equals("27") ||
+				idx_restaurant.equals("28") ||
+				idx_restaurant.equals("29")) {
+				
+				subinfo = "연암관을 제외한 기숙사는 5~10분 차이가 있습니다.";
+				
+			}
+			
 			builder
 			.append(getNumIcon(i+1)+" ")
 			.append(map2.get("name")+" (")
